@@ -4,6 +4,8 @@ CLAUDE.md
 AGENTS.md
 .env
 .env.local
+references/
+tools/
 
 # Added by cargo
 
