@@ -6,7 +6,8 @@ use futures::stream::{self, StreamExt};
 use walkdir::WalkDir;
 use sds_converter_core::{
     converter::{AnthropicBackend, LlmBackend, LlmConfig, OpenAiCompatBackend, openai_compat_url},
-    convert_from_json, convert_to_json, extract_text, validate, ConvertConfig, Language,
+    convert_from_json, convert_from_template, convert_to_json, extract_text, validate,
+    ConvertConfig, Language,
     SdsError, SdsRoot,
 };
 
@@ -232,9 +233,14 @@ enum Commands {
         #[arg(long, conflicts_with = "output")]
         output_dir: Option<PathBuf>,
 
-        /// Output document language
+        /// Output document language (used only without --template)
         #[arg(long, value_enum, default_value = "ja")]
         lang: CliLanguage,
+
+        /// Word template (.docx) with {{FieldName}} placeholders.
+        /// When set, fills the template instead of generating from scratch.
+        #[arg(long)]
+        template: Option<PathBuf>,
     },
 
     /// Validate a MHLW standard JSON file and report structural issues
@@ -320,7 +326,7 @@ async fn main() -> anyhow::Result<()> {
             }
         }
 
-        Commands::ToDocx { input, input_dir, output, output_dir, lang } => {
+        Commands::ToDocx { input, input_dir, output, output_dir, lang, template } => {
             let config = ConvertConfig {
                 source_language: None,
                 output_language: Language::from(lang),
@@ -335,7 +341,12 @@ async fn main() -> anyhow::Result<()> {
                     eprintln!("Reading JSON from {} ...", input.display());
                     let json = std::fs::read_to_string(&input)?;
                     let sds: SdsRoot = serde_json::from_str(&json)?;
-                    convert_from_json(&sds, &output, &config)?;
+                    if let Some(tmpl) = &template {
+                        eprintln!("Filling template {} ...", tmpl.display());
+                        convert_from_template(&sds, tmpl, &output)?;
+                    } else {
+                        convert_from_json(&sds, &output, &config)?;
+                    }
                     eprintln!("Saved DOCX to {}", output.display());
                 }
                 (None, Some(dir)) => {
@@ -343,7 +354,7 @@ async fn main() -> anyhow::Result<()> {
                         anyhow::anyhow!("--output-dir is required when using --input-dir")
                     })?;
                     std::fs::create_dir_all(&out_dir)?;
-                    batch_to_docx(&dir, &out_dir, &config)?;
+                    batch_to_docx(&dir, &out_dir, &config, template.as_deref())?;
                 }
                 _ => anyhow::bail!("Specify either --input or --input-dir"),
             }
@@ -483,6 +494,7 @@ fn batch_to_docx(
     input_dir: &Path,
     output_dir: &Path,
     config: &ConvertConfig,
+    template: Option<&Path>,
 ) -> anyhow::Result<()> {
     let mut files: Vec<PathBuf> = WalkDir::new(input_dir)
         .into_iter()
@@ -507,7 +519,13 @@ fn batch_to_docx(
         let result = std::fs::read_to_string(path)
             .map_err(anyhow::Error::from)
             .and_then(|raw| serde_json::from_str::<SdsRoot>(&raw).map_err(anyhow::Error::from))
-            .and_then(|sds| convert_from_json(&sds, &out_path, config).map_err(anyhow::Error::from));
+            .and_then(|sds| {
+                if let Some(tmpl) = template {
+                    convert_from_template(&sds, tmpl, &out_path).map_err(anyhow::Error::from)
+                } else {
+                    convert_from_json(&sds, &out_path, config).map_err(anyhow::Error::from)
+                }
+            });
         match result {
             Ok(_) => ok += 1,
             Err(e) => {

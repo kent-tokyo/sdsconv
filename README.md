@@ -73,30 +73,32 @@ See the [`sds-converter` README](./sds_converter/README.md) for full CLI referen
 
 ### Open-source tools
 
-| Tool | Language | AI/LLM | MHLW JSON | Bidirectional | Multilingual |
-|---|---|---|---|---|---|
-| **sds-converter** (this) | Rust | Yes (pluggable) | Yes | Yes (↔ DOCX) | ja / en / zh-CN / zh-TW |
-| [sds_parser](https://github.com/astepe/sds_parser) | Python | No (regex) | No | No | Limited |
-| [tungsten](https://github.com/CrucibleSDS/tungsten) | Python | No (rule-based) | No | No | English only |
+| | **sds-converter** (this) | [sds_parser](https://github.com/astepe/sds_parser) | [tungsten](https://github.com/CrucibleSDS/tungsten) |
+|---|---|---|---|
+| Language | Rust | Python | Python |
+| AI/LLM | Yes (pluggable) | No (regex) | No (rule-based) |
+| MHLW JSON | Yes | No | No |
+| Bidirectional | Yes (↔ DOCX) | No | No |
+| Multilingual | ja / en / zh-CN / zh-TW | Limited | English only |
 
 ### Commercial products (Japan)
 
-| Product | Provider | AI | MHLW JSON | Source PDF → JSON | Open-source |
-|---|---|---|---|---|---|
-| **sds-converter** (this) | — | Yes (your API key) | Yes | Yes | Yes (MIT/Apache-2.0) |
-| [SDS Meister](https://www.kcs.co.jp/ja/service/ind/general/chemical/sds.html) | さくらケーシーエス | No | Yes | No (authoring only) | No |
-| [SmartSDS](https://smartsds.jp/) | テクノヒル | Yes (translation) | Yes | Partial (JP only) | No |
-| [Dr.EHS Chemical](https://www.iad.co.jp/drehs/chemical2/) | アイアンドディー | AI-OCR | Yes | Yes | No |
+| | **sds-converter** (this) | [SDS Meister](https://www.kcs.co.jp/ja/service/ind/general/chemical/sds.html) | [SmartSDS](https://smartsds.jp/) | [Dr.EHS Chemical](https://www.iad.co.jp/drehs/chemical2/) |
+|---|---|---|---|---|
+| Provider | — | さくらケーシーエス | テクノヒル | アイアンドディー |
+| AI | Yes (your API key) | No | Yes (translation) | AI-OCR |
+| MHLW JSON | Yes | Yes | Yes | Yes |
+| Source PDF → JSON | Yes | No (authoring only) | Partial (JP only) | Yes |
+| Open-source | Yes (MIT/Apache-2.0) | No | No | No |
 
 ### Commercial products (Global)
 
-| Product | AI/LLM | Input | Output | Open-source |
-|---|---|---|---|---|
-| **sds-converter** (this) | Pluggable LLM | PDF / DOCX | MHLW JSON + DOCX | Yes |
-| [Affinda](https://www.affinda.com/documents/material-safety-data-sheet) | LLM (adaptive) | PDF / Word | Custom JSON | No |
-| [SDS Manager API](https://sdsmanager.com/) | NLP/ML | PDF | JSON / XML | No |
-| [safetydatasheetapi.com](https://safetydatasheetapi.com/) | ML + OCR | PDF (incl. scanned) | JSON / XML / CSV | No |
-| [EcoOnline Smart Extraction](https://www.ecoonline.com/) | AI/NLP | PDF | Internal only | No |
+| | **sds-converter** (this) | [Affinda](https://www.affinda.com/documents/material-safety-data-sheet) | [SDS Manager API](https://sdsmanager.com/) | [safetydatasheetapi.com](https://safetydatasheetapi.com/) | [EcoOnline](https://www.ecoonline.com/) |
+|---|---|---|---|---|---|
+| AI/LLM | Pluggable LLM | LLM (adaptive) | NLP/ML | ML + OCR | AI/NLP |
+| Input | PDF / DOCX | PDF / Word | PDF | PDF (incl. scanned) | PDF |
+| Output | MHLW JSON + DOCX | Custom JSON | JSON / XML | JSON / XML / CSV | Internal only |
+| Open-source | Yes | No | No | No | No |
 
 **Key advantages:** the only open-source solution that supports the MHLW standard JSON, bidirectional conversion (JSON → DOCX), local execution without cloud subscriptions, and a pluggable LLM backend.
 

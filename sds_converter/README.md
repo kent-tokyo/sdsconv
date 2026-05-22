@@ -55,8 +55,8 @@ sds-converter to-json --input extracted.txt --output output.json --lang ja
 | `--output` | — | Output JSON file |
 | `--output-dir` | — | Output directory (batch — created if absent) |
 | `--provider` | `anthropic` | LLM provider: `anthropic`, `openai`, `gemini`, `mistral`, `groq`, `cohere`, `local` |
-| `--api-key` | env var | API key (see environment variables table below) |
-| `--model` | per-provider | Model name override (see defaults below) |
+| `--api-key` | env var | API key (see provider defaults below) |
+| `--model` | per-provider | Model name override |
 | `--base-url` | — | Custom OpenAI-compatible endpoint (for `--provider local`) |
 | `--lang` | auto-detect | Source document language: `ja`, `en`, `zh-cn`, `zh-tw` |
 | `--quality` | `medium` | Preset: `low` (fast/cheap), `medium`, `high` (accurate) |
@@ -77,12 +77,38 @@ sds-converter to-json --input extracted.txt --output output.json --lang ja
 ### `to-docx` — Convert MHLW standard JSON → Word document
 
 ```bash
-# Single file
+# Single file (built-in layout)
 sds-converter to-docx --input output.json --output result.docx --lang ja
 
-# Batch mode
+# Batch mode (built-in layout)
 sds-converter to-docx --input-dir ./json/ --output-dir ./docx/ --lang en
+
+# Fill a Word template with {{Placeholder}} substitution
+sds-converter to-docx --input output.json --output result.docx \
+  --template my_template.docx
+
+# Batch mode with template
+sds-converter to-docx --input-dir ./json/ --output-dir ./docx/ \
+  --template my_template.docx
 ```
+
+#### Word template format
+
+Prepare a `.docx` file with `{{FieldName}}` placeholders where `FieldName` is
+a leaf key from the MHLW JSON schema. The full dot-path is also accepted for
+disambiguation.
+
+```
+{{TradeNameJP}}          → 製品和名
+{{CompanyName}}          → 会社名
+{{Phone}}                → 電話番号
+{{IssueDate}}            → 発行日
+{{Identification.SupplierInformation.CompanyName}}  → フルパス指定
+```
+
+Placeholders can appear anywhere in the document — paragraphs, table cells,
+headers, and footers. Word sometimes splits typed text across internal runs;
+the tool automatically merges such splits before substitution.
 
 | Flag | Default | Description |
 |---|---|---|
@@ -90,7 +116,8 @@ sds-converter to-docx --input-dir ./json/ --output-dir ./docx/ --lang en
 | `--input-dir` | — | Input directory (batch — processes all `.json`) |
 | `--output` | — | Output DOCX file |
 | `--output-dir` | — | Output directory (batch) |
-| `--lang` | `ja` | Output language: `ja`, `en`, `zh-cn`, `zh-tw` |
+| `--lang` | `ja` | Output language: `ja`, `en`, `zh-cn`, `zh-tw` (without `--template`) |
+| `--template` | — | Word template with `{{FieldName}}` placeholders |
 
 ### `extract-text` — Extract raw text from PDF/DOCX
 

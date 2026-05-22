@@ -1,6 +1,7 @@
 pub mod extractor;
 pub mod generator;
 pub mod llm;
+pub mod template;
 pub mod validator;
 
 use std::path::Path;
@@ -12,6 +13,7 @@ use crate::schema::SdsRoot;
 pub use extractor::InputFormat;
 pub use generator::generate_docx;
 pub use llm::{openai_compat_url, AnthropicBackend, LlmBackend, LlmConfig, OpenAiCompatBackend};
+pub use template::fill_template;
 
 /// Configuration for document conversion.
 #[derive(Debug, Clone)]
@@ -58,11 +60,25 @@ pub async fn convert_to_json<B: LlmBackend + Sync>(
     Ok((sds, warnings))
 }
 
-/// Convert an [`SdsRoot`] to a `.docx` file.
+/// Convert an [`SdsRoot`] to a `.docx` file using the built-in layout.
 pub fn convert_from_json(
     sds: &SdsRoot,
     output_path: &Path,
     config: &ConvertConfig,
 ) -> Result<(), SdsError> {
     generate_docx(sds, output_path, config.output_language)
+}
+
+/// Fill a Word template (`.docx`) with data from an [`SdsRoot`].
+///
+/// Placeholders in the template use `{{FieldName}}` syntax where `FieldName` is
+/// the leaf key from the MHLW JSON schema (e.g. `{{TradeNameJP}}`,
+/// `{{CompanyName}}`). Full dot-path keys are also accepted for disambiguation
+/// (e.g. `{{Identification.SupplierInformation.CompanyName}}`).
+pub fn convert_from_template(
+    sds: &SdsRoot,
+    template_path: &Path,
+    output_path: &Path,
+) -> Result<(), SdsError> {
+    fill_template(sds, template_path, output_path)
 }

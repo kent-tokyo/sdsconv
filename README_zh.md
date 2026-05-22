@@ -73,30 +73,32 @@ sds-converter to-docx --input output.json --output result.docx --lang zh-cn
 
 ### 开源工具
 
-| 工具 | 语言 | AI/LLM | MHLW JSON | 双向转换 | 多语言 |
-|---|---|---|---|---|---|
-| **sds-converter**（本工具） | Rust | 有（可替换） | 有 | 有（↔ DOCX） | ja / en / zh-CN / zh-TW |
-| [sds_parser](https://github.com/astepe/sds_parser) | Python | 无（正则表达式） | 无 | 无 | 有限 |
-| [tungsten](https://github.com/CrucibleSDS/tungsten) | Python | 无（规则驱动） | 无 | 无 | 仅英文 |
+| | **sds-converter**（本工具） | [sds_parser](https://github.com/astepe/sds_parser) | [tungsten](https://github.com/CrucibleSDS/tungsten) |
+|---|---|---|---|
+| 语言 | Rust | Python | Python |
+| AI/LLM | 有（可替换） | 无（正则表达式） | 无（规则驱动） |
+| MHLW JSON | 有 | 无 | 无 |
+| 双向转换 | 有（↔ DOCX） | 无 | 无 |
+| 多语言 | ja / en / zh-CN / zh-TW | 有限 | 仅英文 |
 
 ### 商业产品（日本）
 
-| 产品 | 提供商 | AI | MHLW JSON | PDF→JSON | 开源 |
-|---|---|---|---|---|---|
-| **sds-converter**（本工具） | — | 有（自备API密钥） | 有 | 有 | 有（MIT/Apache-2.0） |
-| [SDS Meister](https://www.kcs.co.jp/ja/service/ind/general/chemical/sds.html) | さくらケーシーエス | 无 | 有 | 无（仅创作） | 无 |
-| [SmartSDS](https://smartsds.jp/) | テクノヒル | 有（翻译） | 有 | 部分（仅日语） | 无 |
-| [Dr.EHS Chemical](https://www.iad.co.jp/drehs/chemical2/) | アイアンドディー | AI-OCR | 有 | 有 | 无 |
+| | **sds-converter**（本工具） | [SDS Meister](https://www.kcs.co.jp/ja/service/ind/general/chemical/sds.html) | [SmartSDS](https://smartsds.jp/) | [Dr.EHS Chemical](https://www.iad.co.jp/drehs/chemical2/) |
+|---|---|---|---|---|
+| 提供商 | — | さくらケーシーエス | テクノヒル | アイアンドディー |
+| AI | 有（自备API密钥） | 无 | 有（翻译） | AI-OCR |
+| MHLW JSON | 有 | 有 | 有 | 有 |
+| PDF→JSON | 有 | 无（仅创作） | 部分（仅日语） | 有 |
+| 开源 | 有（MIT/Apache-2.0） | 无 | 无 | 无 |
 
 ### 商业产品（全球）
 
-| 产品 | AI/LLM | 输入 | 输出 | 开源 |
-|---|---|---|---|---|
-| **sds-converter**（本工具） | 可替换LLM | PDF / DOCX | MHLW JSON + DOCX | 有 |
-| [Affinda](https://www.affinda.com/documents/material-safety-data-sheet) | LLM（自适应） | PDF / Word | 自定义JSON | 无 |
-| [SDS Manager API](https://sdsmanager.com/) | NLP/ML | PDF | JSON / XML | 无 |
-| [safetydatasheetapi.com](https://safetydatasheetapi.com/) | ML + OCR | PDF（含扫描件） | JSON / XML / CSV | 无 |
-| [EcoOnline Smart Extraction](https://www.ecoonline.com/) | AI/NLP | PDF | 仅内部数据 | 无 |
+| | **sds-converter**（本工具） | [Affinda](https://www.affinda.com/documents/material-safety-data-sheet) | [SDS Manager API](https://sdsmanager.com/) | [safetydatasheetapi.com](https://safetydatasheetapi.com/) | [EcoOnline](https://www.ecoonline.com/) |
+|---|---|---|---|---|---|
+| AI/LLM | 可替换LLM | LLM（自适应） | NLP/ML | ML + OCR | AI/NLP |
+| 输入 | PDF / DOCX | PDF / Word | PDF | PDF（含扫描件） | PDF |
+| 输出 | MHLW JSON + DOCX | 自定义JSON | JSON / XML | JSON / XML / CSV | 仅内部数据 |
+| 开源 | 有 | 无 | 无 | 无 | 无 |
 
 **本工具的核心优势**：唯一支持MHLW标准JSON、双向转换（JSON→DOCX）、无需云订阅的本地运行以及可替换LLM后端的开源解决方案。
 
