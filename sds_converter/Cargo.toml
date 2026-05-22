@@ -1,6 +1,6 @@
 [package]
 name = "sds-converter"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "CLI tool for converting SDS documents (PDF/Word) ↔ MHLW standard JSON. Powered by sds-converter-core."
 license = "MIT OR Apache-2.0"
