@@ -4,6 +4,8 @@ A Rust library for **bidirectional conversion** between Safety Data Sheet (SDS) 
 
 Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **Traditional Chinese**.
 
+[日本語](README_ja.md) | [中文](README_zh.md)
+
 > **Looking for the CLI?** Install [`sds-converter`](https://crates.io/crates/sds-converter) instead.
 
 ---
@@ -200,6 +202,13 @@ The schema covers all 16 sections of JIS Z 7253 with ~200 structured fields.
 - Input files must be **text-based** PDF or DOCX
   - Encrypted PDFs are not supported (text extraction will fail)
   - Scanned/image-only PDFs are not supported (no text to extract)
+
+---
+
+## References
+
+- [MHLW — SDS Standard Data Exchange Format (official page)](https://www.mhlw.go.jp/stf/newpage_56484.html) (Japanese)
+- [SDS Data Exchange Format Developer Manual (PDF)](https://www.mhlw.go.jp/content/11305000/001467068.pdf) (Japanese)
 
 ---
 

@@ -4,6 +4,8 @@ CLI tool for **bidirectional conversion** between Safety Data Sheet (SDS) docume
 
 Supports **Japanese**, **English**, **Simplified Chinese**, and **Traditional Chinese**.
 
+[日本語](README_ja.md) | [中文](README_zh.md)
+
 > **Embedding in your Rust project?** Use [`sds-converter-core`](https://crates.io/crates/sds-converter-core) directly.
 
 ---
@@ -173,6 +175,13 @@ Checks that key sections (Identification, HazardIdentification, ToxicologicalInf
 - Input files must be **text-based** PDF or DOCX
   - Encrypted PDFs are not supported
   - Scanned/image-only PDFs are not supported (no text to extract)
+
+---
+
+## References
+
+- [MHLW — SDS Standard Data Exchange Format (official page)](https://www.mhlw.go.jp/stf/newpage_56484.html) (Japanese)
+- [SDS Data Exchange Format Developer Manual (PDF)](https://www.mhlw.go.jp/content/11305000/001467068.pdf) (Japanese)
 
 ---
 

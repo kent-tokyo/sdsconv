@@ -4,6 +4,8 @@ A Rust workspace for **bidirectional conversion** between Safety Data Sheet (SDS
 
 Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **Traditional Chinese**.
 
+[日本語](README_ja.md) | [中文](README_zh.md)
+
 ---
 
 ## Crates
@@ -101,6 +103,13 @@ See the [`sds-converter` README](./sds_converter/README.md) for full CLI referen
 | Open-source | Yes | No | No | No | No |
 
 **Key advantages:** the only open-source solution that supports the MHLW standard JSON, bidirectional conversion (JSON → DOCX), local execution without cloud subscriptions, and a pluggable LLM backend.
+
+---
+
+## References
+
+- [MHLW — SDS Standard Data Exchange Format (official page)](https://www.mhlw.go.jp/stf/newpage_56484.html) (Japanese)
+- [SDS Data Exchange Format Developer Manual (PDF)](https://www.mhlw.go.jp/content/11305000/001467068.pdf) (Japanese)
 
 ---
 

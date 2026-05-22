@@ -203,6 +203,13 @@ impl LlmBackend for MyLlmBackend {
 
 ---
 
+## 参考链接
+
+- [厚生劳动省 — SDS信息交换标准格式发布页面](https://www.mhlw.go.jp/stf/newpage_56484.html)（日语）
+- [SDS数据交换格式开发者手册（PDF）](https://www.mhlw.go.jp/content/11305000/001467068.pdf)（日语）
+
+---
+
 ## 许可证
 
 以下两种许可证任选其一：

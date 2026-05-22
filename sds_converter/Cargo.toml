@@ -2,13 +2,14 @@
 name = "sds-converter"
 version = "0.1.1"
 edition = "2021"
-description = "CLI tool for converting SDS documents (PDF/Word) ↔ MHLW standard JSON. Powered by sds-converter-core."
+description = "CLI for converting chemical safety SDS documents (PDF/DOCX) ↔ MHLW/JIS Z 7253 standard JSON via LLM (Claude/GPT/Gemini). Batch mode, multilingual."
 license = "MIT OR Apache-2.0"
-keywords = ["sds", "safety-data-sheet", "cli", "mhlw"]
-categories = ["command-line-utilities"]
+keywords = ["sds", "safety-data-sheet", "ghs", "llm", "cli"]
+categories = ["command-line-utilities", "text-processing"]
 readme = "README.md"
 repository = "https://github.com/kent-tokyo/sds-converter"
 homepage = "https://github.com/kent-tokyo/sds-converter"
+documentation = "https://docs.rs/sds-converter"
 
 [[bin]]
 name = "sds-converter"
