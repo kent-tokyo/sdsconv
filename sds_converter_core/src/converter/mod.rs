@@ -61,6 +61,45 @@ pub async fn convert_to_json<B: LlmBackend + Sync>(
     Ok((sds, warnings))
 }
 
+/// Convert raw document bytes to [`SdsRoot`] via LLM.
+///
+/// Writes the bytes to a temporary file (preserving the original extension for format
+/// detection), then delegates to [`convert_to_json`].  The temp file is deleted on return.
+///
+/// This is the primary entry point for web / API callers that receive file bytes directly.
+pub async fn convert_bytes_to_json<B: LlmBackend + Sync>(
+    data: &[u8],
+    filename: &str,
+    backend: &B,
+    config: &ConvertConfig,
+) -> Result<(SdsRoot, Vec<String>), SdsError> {
+    let suffix = Path::new(filename)
+        .extension()
+        .and_then(|e| e.to_str())
+        .map(|e| format!(".{}", e.to_ascii_lowercase()))
+        .unwrap_or_default();
+
+    // Write to a named temp file so format detection (by extension) works.
+    let data_owned = data.to_vec();
+    let tmp = tokio::task::spawn_blocking(move || {
+        use std::io::Write as _;
+        let mut f = tempfile::Builder::new()
+            .suffix(&suffix)
+            .tempfile()
+            .map_err(|e| SdsError::Extract(format!("tempfile create: {e}")))?;
+        f.write_all(&data_owned)
+            .map_err(|e| SdsError::Extract(format!("tempfile write: {e}")))?;
+        f.flush()
+            .map_err(|e| SdsError::Extract(format!("tempfile flush: {e}")))?;
+        Ok::<_, SdsError>(f)
+    })
+    .await
+    .map_err(|e| SdsError::Extract(format!("spawn_blocking panicked: {e}")))??;
+
+    convert_to_json(tmp.path(), backend, config).await
+    // `tmp` is dropped here — the temp file is deleted automatically.
+}
+
 /// Convert an [`SdsRoot`] to a `.docx` file using the built-in layout.
 pub fn convert_from_json(
     sds: &SdsRoot,

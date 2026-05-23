@@ -45,7 +45,8 @@ pub mod language;
 pub mod schema;
 
 pub use converter::{
-    convert_from_json, convert_from_template, convert_to_json, convert_url_to_json,
+    convert_bytes_to_json, convert_from_json, convert_from_template,
+    convert_to_json, convert_url_to_json,
     fill_template, openai_compat_url,
     AnthropicBackend, LlmBackend, LlmConfig, ConvertConfig, OpenAiCompatBackend,
 };

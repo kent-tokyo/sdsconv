@@ -1,5 +1,5 @@
 [workspace]
-members = ["sds_converter_core", "sds_converter"]
+members = ["sds_converter_core", "sds_converter", "sds_converter_server"]
 resolver = "2"
 
 [workspace.dependencies]

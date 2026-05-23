@@ -1,0 +1,25 @@
+[package]
+name = "sds-converter-server"
+version = "0.1.0"
+edition = "2021"
+description = "REST API server for sds-converter (axum)"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[[bin]]
+name = "sds-converter-server"
+path = "src/main.rs"
+
+[dependencies]
+sds-converter-core = { path = "../sds_converter_core", version = "0.2" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+reqwest = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+axum = { version = "0.7", features = ["multipart"] }
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+tempfile = "3"
