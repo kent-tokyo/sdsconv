@@ -1,6 +1,6 @@
 # sds-converter
 
-A Rust workspace for **bidirectional conversion** between Safety Data Sheet (SDS) documents (Word/PDF) and the Japanese Ministry of Health, Labour and Welfare (MHLW) standard JSON format.
+GUI + CLI tool for **bidirectional conversion** between Safety Data Sheet (SDS) documents (Word/PDF) and the Japanese Ministry of Health, Labour and Welfare (MHLW) standard JSON format.
 
 Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **Traditional Chinese**.
 
@@ -8,12 +8,42 @@ Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **T
 
 ---
 
-## Crates
+## Download
 
-| Crate | Description |
+| Platform | Download |
 |---|---|
-| [`sds-converter-core`](./sds_converter_core/) | Rust library — LLM-based extraction, DOCX/HTML generation, MHLW schema |
-| [`sds-converter`](./sds_converter/) | CLI + GUI binary — `to-json`, `to-docx`, `to-html`, `to-pdf`, `validate`, `extract-text` subcommands |
+| **macOS** (Universal — Apple Silicon + Intel) | [sds-converter-macos.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-macos.zip) |
+| **Windows** (Portable .exe — no install required) | [sds-converter-windows-portable.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-windows-portable.zip) |
+| **Rust / CLI** | `cargo install sds-converter` |
+
+→ [All releases & changelogs](https://github.com/kent-tokyo/sds-converter/releases)
+
+---
+
+## GUI
+
+Launch the graphical interface by running `sds-converter` **without any arguments**, or double-click the downloaded app:
+
+```bash
+sds-converter
+```
+
+The GUI window opens with five tabs:
+
+| Tab | Function |
+|---|---|
+| **Convert** | SDS document (PDF/DOCX/XLSX/HTML/URL) → MHLW standard JSON |
+| **Generate** | MHLW JSON → DOCX / HTML / PDF (with optional DOCX template) |
+| **Validate** | Structural validation of MHLW JSON with colored ✅⚠❌ results |
+| **Extract Text** | Raw text extraction from documents — no LLM API required |
+| **Settings** | API key, model name, base URL, quality, language, UI language |
+
+| Convert tab | Generate tab | Extract Text tab |
+|---|---|---|
+| ![Convert tab](docs/tab_convert.png) | ![Generate tab](docs/tab_generate.png) | ![Extract Text tab](docs/tab_extract.png) |
+
+**Drag & drop** files onto any tab to fill the input field automatically.
+Settings are saved to `~/.config/sds-converter/config.toml` and restored on next launch.
 
 ---
 
@@ -23,7 +53,6 @@ Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **T
 - **JSON → DOCX**: Generates a JIS Z 7253-compliant 16-section Word document from the standard JSON, with localized section headings.
 - **JSON → HTML**: Generates a self-contained UTF-8 HTML5 document with inline CSS and `@media print` support (`to-html`).
 - **JSON → PDF**: Converts to PDF via LibreOffice CLI (`to-pdf`). Requires `soffice` in PATH.
-- **GUI application** (eframe/egui): Cross-platform graphical interface. Launches automatically when invoked without arguments. Includes Convert, Generate, Validate, Extract Text, and Settings tabs with drag-and-drop support and persistent configuration.
 - **GHS/CAS validation**: Validates H-codes (H200–H420) and P-codes (P101–P503) against GHS Rev.10. Validates CAS number format and check-digit. Optional PubChem enrichment (`--enrich`) for composition cross-checking.
 - **Multilingual**: Handles source documents in `ja` / `en` / `zh-CN` / `zh-TW`.
 - **Extensible LLM backend**: Ships with Anthropic Claude, OpenAI GPT, Google Gemini, Mistral, Groq, and Cohere backends. Bring your own by implementing `LlmBackend`.
@@ -75,7 +104,7 @@ sds-converter validate --input output.json
 sds-converter to-json --input input.pdf --output output.json --enrich
 ```
 
-See the [`sds-converter` README](./sds_converter/README.md) for full CLI reference and [`sds-converter-core` README](./sds_converter_core/README.md) for library API.
+See the [`sds-converter` CLI README](./sds_converter/README.md) for full CLI reference and the [`sds-converter-core` README](./sds_converter_core/README.md) for the Rust library API.
 
 ---
 
@@ -127,14 +156,29 @@ See the [`sds-converter` README](./sds_converter/README.md) for full CLI referen
 
 ---
 
+## For Developers
+
+| Crate | Description |
+|---|---|
+| [`sds-converter`](https://crates.io/crates/sds-converter) | CLI + GUI binary — this tool |
+| [`sds-converter-core`](https://crates.io/crates/sds-converter-core) | Rust library — LLM extraction, DOCX/HTML generation, MHLW schema |
+
+```toml
+# Cargo.toml
+[dependencies]
+sds-converter-core = "0.2"
+```
+
+---
+
 ## Roadmap
 
 ### Next (0.3.x)
 - [ ] DOCX table layout — Section 3 Composition (4-column), Section 2 H/P codes (2-column), Section 9 physical properties (2-column)
-- [ ] Publish to crates.io (`sds-converter-core` + `sds-converter`)
 
 ### Planned
 - [x] GUI application (eframe/egui) — Convert / Generate / Validate / Extract Text / Settings tabs with drag-and-drop, persistent config, and 3-language UI
+- [x] Published to crates.io (`sds-converter-core` + `sds-converter`)
 - [ ] GHS pictogram embedding in HTML and DOCX output
 
 ### External dependency

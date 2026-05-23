@@ -1,17 +1,49 @@
 # sds-converter
 
-用于**双向转换**安全数据表（SDS）文档（Word/PDF）与日本厚生劳动省（MHLW）标准JSON格式的Rust工作区。
+用于**双向转换**安全数据表（SDS）文档（Word/PDF）与日本厚生劳动省（MHLW）标准JSON格式的GUI + CLI工具。
 
 支持**日语、英语、简体中文、繁体中文**的SDS文档处理。
 
+[English](README.md) | [日本語](README_ja.md)
+
 ---
 
-## 包结构
+## 下载
 
-| 包 | 说明 |
+| 平台 | 下载 |
 |---|---|
-| [`sds-converter-core`](./sds_converter_core/) | Rust库 — 基于LLM的提取、DOCX/HTML生成、MHLW模式 |
-| [`sds-converter`](./sds_converter/) | CLI工具 + GUI应用程序 — `to-json`、`to-docx`、`to-html`、`to-pdf`、`validate`、`extract-text` 子命令 |
+| **macOS**（通用版 — Apple Silicon + Intel） | [sds-converter-macos.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-macos.zip) |
+| **Windows**（便携版 .exe — 无需安装） | [sds-converter-windows-portable.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-windows-portable.zip) |
+| **Rust / CLI** | `cargo install sds-converter` |
+
+→ [全部版本与更新日志](https://github.com/kent-tokyo/sds-converter/releases)
+
+---
+
+## GUI界面
+
+无参数运行 `sds-converter`（或双击下载的应用程序）即可启动图形界面：
+
+```bash
+sds-converter
+```
+
+将打开包含五个标签页的窗口：
+
+| 标签页 | 功能 |
+|---|---|
+| **转换** | SDS文档（PDF/DOCX/XLSX/HTML/URL）→ MHLW标准JSON |
+| **文档生成** | MHLW JSON → DOCX / HTML / PDF（支持DOCX模板） |
+| **验证** | MHLW JSON结构验证（✅⚠❌彩色显示） |
+| **文本提取** | 从文档提取原始文本（无需LLM API） |
+| **设置** | API密钥、模型名称、Base URL、质量、语言、界面语言 |
+
+| 转换标签页 | 文档生成标签页 | 文本提取标签页 |
+|---|---|---|
+| ![转换标签页](docs/tab_convert.png) | ![文档生成标签页](docs/tab_generate.png) | ![文本提取标签页](docs/tab_extract.png) |
+
+将文件**拖放**至任意标签页可自动填充输入字段。
+设置保存至 `~/.config/sds-converter/config.toml`，下次启动时自动恢复。
 
 ---
 
@@ -21,7 +53,6 @@
 - **JSON → DOCX**: 从标准JSON生成符合JIS Z 7253规范的16节Word文档，支持多语言节标题。
 - **JSON → HTML**: 生成包含内联CSS和`@media print`支持的自包含UTF-8 HTML5文档（`to-html`）。
 - **JSON → PDF**: 通过LibreOffice CLI转换为PDF（`to-pdf`，需要`soffice`）。
-- **GUI应用程序**（eframe/egui）：无参数启动时自动显示图形界面。包含转换、文档生成、验证、文本提取、设置五个标签页，支持拖放操作和配置持久化。
 - **GHS/CAS验证**: 依据GHS Rev.10验证H码（H200–H420）和P码（P101–P503），验证CAS编号格式及校验位。支持`--enrich`标志通过PubChem交叉核验成分信息。
 - **多语言支持**: 支持 `ja` / `en` / `zh-CN` / `zh-TW` 的输入和输出。
 - **可扩展LLM后端**: 内置Anthropic Claude、OpenAI GPT、Google Gemini、Mistral、Groq、Cohere实现。通过实现 `LlmBackend` trait可接入任意LLM。
@@ -77,6 +108,22 @@ sds-converter to-json --input input.pdf --output output.json --enrich
 
 ---
 
+## 开发者
+
+| 包 | 说明 |
+|---|---|
+| [`sds-converter`](https://crates.io/crates/sds-converter) | CLI + GUI工具（本工具） |
+| [`sds-converter-core`](https://crates.io/crates/sds-converter-core) | Rust库 — LLM提取、DOCX/HTML生成、MHLW模式 |
+
+嵌入Rust项目：
+
+```toml
+[dependencies]
+sds-converter-core = "0.2"
+```
+
+---
+
 ## 语言支持
 
 | 语言 | `--lang` | 源文档格式 | 输出DOCX标题 |
@@ -129,10 +176,10 @@ sds-converter to-json --input input.pdf --output output.json --enrich
 
 ### 下一版本（0.3.x）
 - [ ] DOCX表格布局 — 第3节成分信息（4列）、第2节H/P编码（2列）、第9节物化性质（2列）
-- [ ] 发布至crates.io（`sds-converter-core` → `sds-converter`）
 
 ### 计划中
 - [x] GUI应用程序（eframe/egui）— 转换/生成/验证/文本提取/设置标签页，支持拖放、配置持久化和三语言界面
+- [x] 发布至crates.io（`sds-converter-core` + `sds-converter`）
 - [ ] 在HTML和DOCX输出中嵌入GHS象形图
 
 ### 依赖外部进展

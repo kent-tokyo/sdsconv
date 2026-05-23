@@ -1,6 +1,6 @@
 # sds-converter
 
-CLI tool for **bidirectional conversion** between Safety Data Sheet (SDS) documents (Word/PDF) and the Japanese Ministry of Health, Labour and Welfare (MHLW) standard JSON format.
+GUI + CLI tool for **bidirectional conversion** between Safety Data Sheet (SDS) documents (Word/PDF) and the Japanese Ministry of Health, Labour and Welfare (MHLW) standard JSON format.
 
 Supports **Japanese**, **English**, **Simplified Chinese**, and **Traditional Chinese**.
 
@@ -10,11 +10,15 @@ Supports **Japanese**, **English**, **Simplified Chinese**, and **Traditional Ch
 
 ---
 
-## Installation
+## Download
 
-```bash
-cargo install sds-converter
-```
+| Platform | Download |
+|---|---|
+| **macOS** (Universal — Apple Silicon + Intel) | [sds-converter-macos.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-macos.zip) |
+| **Windows** (Portable .exe — no install required) | [sds-converter-windows-portable.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-windows-portable.zip) |
+| **Rust / CLI** | `cargo install sds-converter` |
+
+→ [All releases & changelogs](https://github.com/kent-tokyo/sds-converter/releases)
 
 ---
 
@@ -204,6 +208,21 @@ Checks that key sections (Identification, HazardIdentification, ToxicologicalInf
 - Input files must be **text-based** PDF or DOCX
   - Encrypted PDFs are not supported
   - Scanned/image-only PDFs are not supported (no text to extract)
+
+---
+
+## Rust Library
+
+The conversion engine is available as a standalone library:
+
+| Crate | crates.io | Description |
+|---|---|---|
+| `sds-converter-core` | [`sds-converter-core`](https://crates.io/crates/sds-converter-core) | LLM-based extraction, DOCX/HTML generation, MHLW schema |
+
+```toml
+[dependencies]
+sds-converter-core = "0.2"
+```
 
 ---
 

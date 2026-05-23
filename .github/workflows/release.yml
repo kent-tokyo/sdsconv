@@ -1,0 +1,137 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # macOS universal .app bundle (arm64 + x86_64)
+  build-macos:
+    name: macOS App Bundle
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: macos-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: macos-cargo-
+
+      - name: Build arm64
+        run: cargo build --release --target aarch64-apple-darwin -p sds-converter
+
+      - name: Build x86_64
+        run: cargo build --release --target x86_64-apple-darwin -p sds-converter
+
+      - name: Create universal binary and app bundle
+        run: |
+          lipo -create \
+            target/aarch64-apple-darwin/release/sds-converter \
+            target/x86_64-apple-darwin/release/sds-converter \
+            -output target/sds-converter-universal
+
+          APP="sds-converter.app"
+          mkdir -p "$APP/Contents/MacOS"
+          cp target/sds-converter-universal "$APP/Contents/MacOS/sds-converter"
+          chmod +x "$APP/Contents/MacOS/sds-converter"
+
+          VERSION=$(grep '^version' sds_converter/Cargo.toml | head -1 | sed 's/.*"\(.*\)".*/\1/')
+
+          cat > "$APP/Contents/Info.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleIdentifier</key>
+              <string>com.sds-converter.app</string>
+              <key>CFBundleName</key>
+              <string>sds-converter</string>
+              <key>CFBundleDisplayName</key>
+              <string>SDS Converter</string>
+              <key>CFBundleExecutable</key>
+              <string>sds-converter</string>
+              <key>CFBundleVersion</key>
+              <string>${VERSION}</string>
+              <key>CFBundleShortVersionString</key>
+              <string>${VERSION}</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>NSHighResolutionCapable</key>
+              <true/>
+              <key>LSMinimumSystemVersion</key>
+              <string>12.0</string>
+              <key>NSHumanReadableCopyright</key>
+              <string>MIT OR Apache-2.0</string>
+          </dict>
+          </plist>
+          PLIST
+
+          zip -r sds-converter-macos.zip "$APP"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sds-converter-macos
+          path: sds-converter-macos.zip
+
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sds-converter-macos.zip
+
+  # Windows portable .exe
+  build-windows:
+    name: Windows Portable
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: windows-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: windows-cargo-
+
+      - name: Build
+        run: cargo build --release -p sds-converter
+
+      - name: Package portable zip
+        shell: pwsh
+        run: |
+          Compress-Archive -Path target\release\sds-converter.exe `
+            -DestinationPath sds-converter-windows-portable.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sds-converter-windows
+          path: sds-converter-windows-portable.zip
+
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sds-converter-windows-portable.zip

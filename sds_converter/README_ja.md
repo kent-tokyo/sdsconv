@@ -1,6 +1,6 @@
 # sds-converter
 
-安全データシート（SDS）文書（Word/PDF）と厚生労働省が定める標準フォーマット（JSON）を**双方向に変換**するCLIツールです。
+安全データシート（SDS）文書（Word/PDF）と厚生労働省が定める標準フォーマット（JSON）を**双方向に変換**するGUI + CLIツールです。
 
 **日本語**・英語・簡体字中国語・繁体字中国語のSDS文書に対応。
 
@@ -10,11 +10,15 @@
 
 ---
 
-## インストール
+## ダウンロード
 
-```bash
-cargo install sds-converter
-```
+| プラットフォーム | ダウンロード |
+|---|---|
+| **macOS**（ユニバーサル — Apple Silicon + Intel） | [sds-converter-macos.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-macos.zip) |
+| **Windows**（ポータブル .exe — インストール不要） | [sds-converter-windows-portable.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-windows-portable.zip) |
+| **Rust / CLI** | `cargo install sds-converter` |
+
+→ [全リリース・更新履歴](https://github.com/kent-tokyo/sds-converter/releases)
 
 ---
 

@@ -1,6 +1,6 @@
 # sds-converter
 
-用于**双向转换**安全数据表（SDS）文档（Word/PDF）与日本厚生劳动省（MHLW）标准JSON格式的CLI工具。
+用于**双向转换**安全数据表（SDS）文档（Word/PDF）与日本厚生劳动省（MHLW）标准JSON格式的GUI + CLI工具。
 
 支持**日语、英语、简体中文、繁体中文**的SDS文档处理。
 
@@ -10,11 +10,15 @@
 
 ---
 
-## 安装
+## 下载
 
-```bash
-cargo install sds-converter
-```
+| 平台 | 下载 |
+|---|---|
+| **macOS**（通用版 — Apple Silicon + Intel） | [sds-converter-macos.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-macos.zip) |
+| **Windows**（便携版 .exe — 无需安装） | [sds-converter-windows-portable.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-windows-portable.zip) |
+| **Rust / CLI** | `cargo install sds-converter` |
+
+→ [全部版本与更新日志](https://github.com/kent-tokyo/sds-converter/releases)
 
 ---
 
