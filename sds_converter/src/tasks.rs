@@ -6,7 +6,9 @@ use walkdir::WalkDir;
 
 use sds_converter_core::{
     converter::{AnthropicBackend, LlmBackend, LlmConfig, OpenAiCompatBackend, openai_compat_url},
-    convert_from_json, convert_from_template, convert_to_json, convert_url_to_json,
+    convert_from_json, convert_from_template, convert_pdf_to_json_vision,
+    convert_to_json, convert_url_to_json,
+    detect_language_from_file, detect_language_from_url,
     enrich_composition, validate,
     extract_text, extract_text_from_url,
     ConvertConfig, Language, SdsError, SdsRoot,
@@ -238,8 +240,25 @@ pub async fn run_to_json(params: ToJsonParams, log: LogFn) -> anyhow::Result<()>
         model: params.model.clone(),
         max_tokens: params.quality.max_tokens(),
     };
+    let is_url = params.input.starts_with("http://") || params.input.starts_with("https://");
+
+    // Auto-detect source language when not specified by the user.
+    let source_language = if params.lang.is_some() {
+        params.lang
+    } else {
+        let detected = if is_url {
+            detect_language_from_url(&params.input).await.ok()
+        } else {
+            detect_language_from_file(Path::new(&params.input)).await.ok()
+        };
+        if let Some(lang) = detected {
+            log(format!("Detected language: {} — pass --lang to override", lang.name_en()));
+        }
+        detected
+    };
+
     let convert_config = ConvertConfig {
-        source_language: params.lang,
+        source_language,
         output_language: Language::default(),
         max_chars: params.quality.max_chars(),
     };
@@ -251,11 +270,29 @@ pub async fn run_to_json(params: ToJsonParams, log: LogFn) -> anyhow::Result<()>
     ));
 
     log(format!("Extracting text from {} ...", params.input));
-    let is_url = params.input.starts_with("http://") || params.input.starts_with("https://");
-    let (sds, warnings) = if is_url {
-        convert_url_to_json(&params.input, &*backend, &convert_config).await?
+    let result = if is_url {
+        convert_url_to_json(&params.input, &*backend, &convert_config).await
     } else {
-        convert_to_json(Path::new(&params.input), &*backend, &convert_config).await?
+        convert_to_json(Path::new(&params.input), &*backend, &convert_config).await
+    };
+    let (sds, warnings) = match result {
+        Ok(pair) => pair,
+        Err(SdsError::ImageOnlyPdf(_)) if !is_url && params.provider == Provider::Anthropic => {
+            log("PDF appears image-only — retrying with Claude vision OCR...".to_string());
+            let vision_config = LlmConfig {
+                model: params.model.clone(),
+                max_tokens: params.quality.max_tokens(),
+            };
+            convert_pdf_to_json_vision(
+                Path::new(&params.input),
+                &params.api_key,
+                &vision_config,
+                &convert_config,
+            )
+            .await
+            .context("vision OCR failed")?
+        }
+        Err(e) => return Err(e.into()),
     };
     for w in &warnings {
         log(format!("WARN: {w}"));

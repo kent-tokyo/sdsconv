@@ -680,6 +680,9 @@ fn lenient_deserialize(json_str: &str) -> Result<(SdsRoot, Vec<String>), SdsErro
     use crate::schema::*;
     use tracing::warn;
 
+    // Strip code fences that some models add despite instructions.
+    let json_str = &strip_code_fences(json_str);
+
     // Try parsing as-is first; only run repair if needed (avoids unnecessary allocations).
     let val: Value = serde_json::from_str(json_str)
         .or_else(|_| serde_json::from_str(&repair_json(json_str)))
@@ -732,6 +735,206 @@ fn lenient_deserialize(json_str: &str) -> Result<(SdsRoot, Vec<String>), SdsErro
     };
 
     Ok((sds, skipped.into_iter().map(str::to_string).collect()))
+}
+
+// ---------------------------------------------------------------------------
+// PDF vision OCR (Anthropic native PDF document API)
+// ---------------------------------------------------------------------------
+
+const MAX_PDF_VISION_BYTES: usize = 32 * 1024 * 1024; // 32 MB limit for Anthropic PDF API
+
+/// Build the system prompt for PDF vision extraction (no XML document-tag reference).
+fn build_vision_system_prompt(lang: Option<Language>) -> String {
+    let lang_hint = match lang {
+        Some(l) => format!(
+            "The source document is written in {} ({}).\n",
+            l.name_en(),
+            l.bcp47()
+        ),
+        None => "The source document may be in Japanese, English, Simplified Chinese, or Traditional Chinese — detect the language automatically.\n".to_string(),
+    };
+
+    let section_hint = match lang {
+        Some(Language::Japanese) | None => {
+            "Section headings follow JIS Z 7253 (第1節〜第16節).\n"
+        }
+        Some(Language::English) => {
+            "Section headings follow GHS/OSHA HazCom (SECTION 1–16).\n"
+        }
+        Some(Language::ChineseSimplified) => {
+            "Section headings follow GB/T 16483 (第1部分〜第16部分).\n"
+        }
+        Some(Language::ChineseTraditional) => {
+            "Section headings follow CNS 15030 (第1節〜第16節).\n"
+        }
+    };
+
+    format!(
+        "You are an expert in extracting Safety Data Sheet (SDS) information.\n\
+         {lang_hint}\
+         {section_hint}\
+         You are given a PDF document directly. Read all text in the PDF and output the \
+         requested SDS information as a JSON object conforming to the Japanese Ministry of \
+         Health, Labour and Welfare (MHLW) SDS data exchange format v1.0.\n\
+         Rules:\n\
+         - Output raw JSON only — no markdown, no code fences, no explanation\n\
+         - Your response must begin immediately with '{{' — the first character must be '{{'\n\
+         - CRITICAL: Extract ALL sections listed in the user message. Never silently omit a section.\n\
+         - Pay special attention to Section 9 (PhysicalChemicalProperties): always include it if the document has any physical/chemical property data\n\
+         - For Section 9 numeric properties: use NumericRangeWithUnitAndQualifier with a numeric Value. If the value is text only, use AdditionalInfo: {{\"FullText\": [\"text\"]}} instead\n\
+         - Omit keys that have no information (empty strings, null, and empty objects {{}} are forbidden)\n\
+         - Dates in YYYY-MM-DD format\n\
+         - Numeric values as numeric types (not strings) inside NumericRangeWithUnitAndQualifier\n\
+         - For qualitative text values in PhysicalChemicalProperties, use AdditionalInfo: {{\"FullText\": [\"text\"]}} — note FullText is an ARRAY of strings\n\
+         - Reproduce text exactly as written in the source document; do not infer or fill in missing data\n\
+         - JSON keys must match EXACTLY the key names shown in the schema example below\n\
+         {TYPO_WARNINGS}\n\
+         \nSchema example (use these EXACT key names):\n{MHLW_SCHEMA_HINT}"
+    )
+}
+
+/// Send a single Anthropic vision request with a base64-encoded PDF and a section list.
+async fn send_pdf_vision_request(
+    client: &Client,
+    api_key: &str,
+    config: &LlmConfig,
+    pdf_b64: &str,
+    system: &str,
+    sections: &[&str],
+    lang_prefix: &str,
+) -> Result<String, SdsError> {
+    let user_text = format!(
+        "{lang_prefix}Extract ONLY these sections: {}.\n\
+         Output as JSON. Do not include any other sections.",
+        sections.join(", ")
+    );
+
+    let body = serde_json::json!({
+        "model": config.model,
+        "max_tokens": config.max_tokens,
+        "temperature": 0,
+        "system": [{
+            "type": "text",
+            "text": system,
+            "cache_control": { "type": "ephemeral" }
+        }],
+        "messages": [{
+            "role": "user",
+            "content": [
+                {
+                    "type": "document",
+                    "source": {
+                        "type": "base64",
+                        "media_type": "application/pdf",
+                        "data": pdf_b64
+                    }
+                },
+                {
+                    "type": "text",
+                    "text": user_text
+                }
+            ]
+        }]
+    });
+
+    let response = send_with_retry(|| {
+        client
+            .post(ANTHROPIC_API_URL)
+            .header("x-api-key", api_key)
+            .header("anthropic-version", ANTHROPIC_VERSION)
+            .header("anthropic-beta", "extended-cache-ttl-2025-04-11,pdfs-2024-09-25")
+            .header("content-type", "application/json")
+            .json(&body)
+    })
+    .await?;
+
+    let resp: Value = response.json().await?;
+    let text = resp["content"][0]["text"]
+        .as_str()
+        .ok_or_else(|| SdsError::LlmParse("missing content[0].text".to_string()))?;
+
+    Ok(text.to_string())
+}
+
+/// Extract SDS data from a PDF by sending the raw bytes to the Anthropic vision API.
+///
+/// Unlike [`extract_sds_from_text`], this bypasses text extraction entirely — the PDF is
+/// base64-encoded and passed directly to the model as an Anthropic document content block.
+/// This handles image-only (scanned) PDFs without requiring poppler or tesseract.
+///
+/// Size limit: 32 MB. Only works with Anthropic API keys and claude-* models.
+pub async fn extract_sds_from_pdf_vision(
+    api_key: &str,
+    config: &LlmConfig,
+    pdf_bytes: &[u8],
+    source_language: Option<Language>,
+) -> Result<(SdsRoot, Vec<String>), SdsError> {
+    if pdf_bytes.len() > MAX_PDF_VISION_BYTES {
+        return Err(SdsError::Extract(format!(
+            "PDF too large for vision OCR ({} bytes, limit 32 MB)",
+            pdf_bytes.len()
+        )));
+    }
+
+    use base64::Engine as _;
+    let pdf_b64 = base64::engine::general_purpose::STANDARD.encode(pdf_bytes);
+
+    let system = build_vision_system_prompt(source_language);
+    let lang_prefix = match source_language {
+        Some(l) => format!("This document is in {}. ", l.name_en()),
+        None => String::new(),
+    };
+
+    let client = Client::builder()
+        .timeout(Duration::from_secs(180))
+        .connect_timeout(Duration::from_secs(10))
+        .build()
+        .expect("reqwest client build");
+
+    let (raw_a, raw_b) = tokio::join!(
+        send_pdf_vision_request(&client, api_key, config, &pdf_b64, &system, GROUP_A, &lang_prefix),
+        send_pdf_vision_request(&client, api_key, config, &pdf_b64, &system, GROUP_B, &lang_prefix),
+    );
+
+    let json_a = raw_a?;
+    let json_b = raw_b?;
+    tracing::trace!("Vision Group A JSON:\n{json_a}");
+    tracing::trace!("Vision Group B JSON:\n{json_b}");
+
+    let (sds_a, skipped_a) = lenient_deserialize(&json_a)?;
+    let (sds_b, skipped_b) = lenient_deserialize(&json_b)?;
+    let mut sds = merge_sds(sds_a, sds_b);
+    let mut all_skipped = [skipped_a, skipped_b].concat();
+
+    if !all_skipped.is_empty() {
+        let retry_keys: Vec<&str> = all_skipped.iter().map(String::as_str).collect();
+        tracing::warn!(
+            "Vision retry: {} skipped sections: {}",
+            retry_keys.len(),
+            retry_keys.join(", ")
+        );
+        match send_pdf_vision_request(
+            &client, api_key, config, &pdf_b64, &system, &retry_keys, &lang_prefix,
+        )
+        .await
+        {
+            Ok(raw_retry) => {
+                tracing::trace!("Vision retry JSON:\n{raw_retry}");
+                if let Ok((retry_sds, retry_skipped)) = lenient_deserialize(&raw_retry) {
+                    sds = merge_sds(sds, retry_sds);
+                    all_skipped = retry_skipped;
+                }
+            }
+            Err(e) => tracing::warn!("Vision LLM retry call failed: {e}"),
+        }
+    }
+
+    let warnings: Vec<String> = all_skipped
+        .into_iter()
+        .map(|k| format!("{k}: skipped (schema mismatch — check logs for details)"))
+        .collect();
+
+    Ok((sds, warnings))
 }
 
 // ---------------------------------------------------------------------------

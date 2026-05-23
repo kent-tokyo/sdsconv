@@ -184,6 +184,12 @@ enum Commands {
         #[arg(short, long)]
         output: Option<PathBuf>,
     },
+
+    /// Detect the language of an SDS document or URL
+    DetectLang {
+        #[arg(short, long)]
+        input: String,
+    },
 }
 
 // ---------------------------------------------------------------------------
@@ -333,6 +339,17 @@ async fn run_cli() -> anyhow::Result<()> {
                 }
                 None => print!("{text}"),
             }
+        }
+
+        Commands::DetectLang { input } => {
+            use sds_converter_core::{detect_language_from_file, detect_language_from_url};
+            let is_url = input.starts_with("http://") || input.starts_with("https://");
+            let lang = if is_url {
+                detect_language_from_url(&input).await?
+            } else {
+                detect_language_from_file(Path::new(&input)).await?
+            };
+            println!("{} ({})", lang.name_en(), lang.bcp47());
         }
     }
 

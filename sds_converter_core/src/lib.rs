@@ -46,14 +46,16 @@ pub mod schema;
 
 pub use converter::{
     convert_bytes_to_json, convert_from_json, convert_from_template,
-    convert_to_json, convert_url_to_json,
-    fill_template, openai_compat_url,
+    convert_pdf_to_json_vision, convert_to_json, convert_url_to_json,
+    extract_sds_from_pdf_vision, fill_template, openai_compat_url,
     AnthropicBackend, AnyBackend, build_any_backend,
     LlmBackend, LlmConfig, ConvertConfig, OpenAiCompatBackend,
 };
 pub use converter::extractor::{
-    detect_format_str, extract_text, extract_text_from_url, extract_text_limited,
+    detect_format_str, detect_language_from_file, detect_language_from_url,
+    extract_text, extract_text_from_url, extract_text_limited,
 };
+pub use language::detect_language;
 pub use converter::validator::validate;
 pub use enrichment::{enrich_composition, lookup_cas, CasInfo, CasWarning};
 pub use error::SdsError;

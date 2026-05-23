@@ -17,7 +17,7 @@ pub use generator::generate_docx;
 pub use pdf::generate_pdf;
 pub use llm::{
     openai_compat_url, AnthropicBackend, AnyBackend, build_any_backend,
-    LlmBackend, LlmConfig, OpenAiCompatBackend,
+    extract_sds_from_pdf_vision, LlmBackend, LlmConfig, OpenAiCompatBackend,
 };
 pub use template::fill_template;
 
@@ -130,6 +130,30 @@ pub async fn convert_url_to_json<B: LlmBackend + Sync>(
     }
     let (sds, mut warnings) =
         llm::extract_sds_from_text(backend, &text, config.source_language).await?;
+    let validation_warnings = validator::validate(&sds);
+    warnings.extend(validation_warnings);
+    Ok((sds, warnings))
+}
+
+/// Read a PDF file and extract SDS data using Anthropic's native PDF document API.
+///
+/// This bypasses text extraction entirely — the raw PDF bytes are base64-encoded and passed
+/// directly to the model as a document content block. Use this as a fallback when
+/// [`convert_to_json`] fails with [`crate::error::SdsError::ImageOnlyPdf`] (i.e. the PDF is
+/// image-only and tesseract is not installed).
+///
+/// Size limit: 32 MB. Requires an Anthropic API key and a `claude-*` model.
+pub async fn convert_pdf_to_json_vision(
+    input_path: &Path,
+    api_key: &str,
+    llm_config: &LlmConfig,
+    config: &ConvertConfig,
+) -> Result<(SdsRoot, Vec<String>), SdsError> {
+    let bytes = std::fs::read(input_path)
+        .map_err(|e| SdsError::Extract(format!("reading PDF: {e}")))?;
+    let (sds, mut warnings) =
+        llm::extract_sds_from_pdf_vision(api_key, llm_config, &bytes, config.source_language)
+            .await?;
     let validation_warnings = validator::validate(&sds);
     warnings.extend(validation_warnings);
     Ok((sds, warnings))

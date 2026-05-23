@@ -52,6 +52,21 @@ pub async fn extract_text(path: &Path) -> Result<String, SdsError> {
     extract_text_limited(path, DEFAULT_MAX_LLM_CHARS).await
 }
 
+/// Detect the language of a document by extracting a small text sample and running heuristics.
+///
+/// Uses the first 5 000 characters — sufficient for language detection without a full extraction.
+/// Returns an error only if the file cannot be read or has an unsupported format.
+pub async fn detect_language_from_file(path: &Path) -> Result<crate::language::Language, SdsError> {
+    let sample = extract_text_limited(path, 5_000).await.unwrap_or_default();
+    Ok(crate::language::detect_language(&sample))
+}
+
+/// Detect the language of an HTML page fetched from a URL.
+pub async fn detect_language_from_url(url: &str) -> Result<crate::language::Language, SdsError> {
+    let sample = extract_text_from_url_limited(url, 5_000).await.unwrap_or_default();
+    Ok(crate::language::detect_language(&sample))
+}
+
 /// Extract text from a URL (fetches HTML and strips tags).
 pub async fn extract_text_from_url(url: &str) -> Result<String, SdsError> {
     extract_text_from_url_limited(url, DEFAULT_MAX_LLM_CHARS).await
@@ -114,16 +129,11 @@ pub async fn extract_text_limited(path: &Path, max_chars: usize) -> Result<Strin
 
                 match ocr {
                     Ok(text) if !text.trim().is_empty() => text,
-                    Err(e) if raw.trim().is_empty() => {
-                        // Nothing at all — surface the OCR error so the user
-                        // knows they need to install tesseract / poppler.
-                        return Err(e);
-                    }
                     Err(e) => {
-                        tracing::info!("OCR fallback unavailable ({e}); using sparse PDF text");
-                        raw
+                        // Tesseract is unavailable — signal that vision OCR may help.
+                        return Err(SdsError::ImageOnlyPdf(e.to_string()));
                     }
-                    Ok(_) => raw, // OCR returned empty, keep original sparse text
+                    Ok(_) => raw, // tesseract ran but produced nothing; keep sparse text
                 }
             }
         }

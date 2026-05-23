@@ -102,6 +102,7 @@ struct Strings {
     btn_extract: &'static str,
     btn_extracting: &'static str,
     lbl_extract_result: &'static str,
+    btn_detect_lang: &'static str,
     // Drag & drop
     msg_drop_files: &'static str,
     // Welcome screen
@@ -219,6 +220,7 @@ Multiple files can be selected at once.
             btn_extract:          "Extract",
             btn_extracting:       "Extracting...",
             lbl_extract_result:   "Extracted text:",
+            btn_detect_lang:      "Detect",
             msg_drop_files:            "Drop files here",
             welcome_subtitle:          "Convert SDS documents to/from MHLW standard JSON",
             welcome_btn_convert_title: "SDS → JSON",
@@ -329,6 +331,7 @@ Multiple files can be selected at once.
             btn_extract:          "提取",
             btn_extracting:       "提取中...",
             lbl_extract_result:   "提取结果:",
+            btn_detect_lang:      "检测",
             msg_drop_files:            "拖放文件到此处",
             welcome_subtitle:          "将SDS文档与MHLW标准JSON双向转换",
             welcome_btn_convert_title: "SDS → JSON",
@@ -441,6 +444,7 @@ JSONファイルを選択して「検証実行」をクリックすると警告�
             btn_extract:          "テキスト抽出",
             btn_extracting:       "抽出中...",
             lbl_extract_result:   "抽出結果:",
+            btn_detect_lang:      "検出",
             msg_drop_files:            "ここにドロップ",
             welcome_subtitle:          "SDS文書とMHLW標準JSONを双方向に変換",
             welcome_btn_convert_title: "SDS → JSON 変換",
@@ -495,6 +499,7 @@ pub struct SdsApp {
     conv_provider: String,
     conv_quality: String,
     conv_lang: String,
+    conv_lang_pending: Arc<Mutex<Option<String>>>,
     conv_enrich: bool,
 
     // Generate tab
@@ -529,7 +534,8 @@ impl SdsApp {
         Self {
             conv_provider: config.provider.clone(),
             conv_quality:  config.quality.clone(),
-            conv_lang:     config.language.clone(),
+            conv_lang:     "auto".to_string(),
+            conv_lang_pending: Arc::new(Mutex::new(None)),
             conv_enrich:   config.enrich,
             gen_lang:      config.language.clone(),
             config,
@@ -690,7 +696,14 @@ impl SdsApp {
                 });
             ui.add_space(8.0);
             ui.label(s.lbl_lang);
-            lang_combo(ui, "conv_lang", &mut self.conv_lang);
+            lang_combo(ui, "conv_lang", &mut self.conv_lang, true);
+            let can_detect = !self.conv_input.is_empty() && !self.is_busy();
+            if ui.add_enabled(can_detect, egui::Button::new(s.btn_detect_lang))
+                .on_hover_text("Detect language from file")
+                .clicked()
+            {
+                self.start_detect_lang(ctx);
+            }
         });
 
         ui.checkbox(&mut self.conv_enrich, s.lbl_enrich);
@@ -885,7 +898,7 @@ impl SdsApp {
                 });
             ui.add_space(12.0);
             ui.label(s.lbl_lang);
-            lang_combo(ui, "gen_lang", &mut self.gen_lang);
+            lang_combo(ui, "gen_lang", &mut self.gen_lang, false);
         });
 
         ui.add_space(8.0);
@@ -1145,6 +1158,38 @@ impl SdsApp {
         });
     }
 
+    fn start_detect_lang(&mut self, ctx: &egui::Context) {
+        let input = self.conv_input.trim().to_string();
+        if input.is_empty() { return; }
+
+        let pending  = Arc::clone(&self.conv_lang_pending);
+        let log_fn   = self.make_log_fn();
+        let busy     = Arc::clone(&self.busy);
+        let ctx2     = ctx.clone();
+        busy.store(true, Ordering::Relaxed);
+
+        self.rt.spawn(async move {
+            use sds_converter_core::{detect_language_from_file, detect_language_from_url};
+            let is_url = input.starts_with("http://") || input.starts_with("https://");
+            let result = if is_url {
+                detect_language_from_url(&input).await.ok()
+            } else {
+                detect_language_from_file(std::path::Path::new(&input)).await.ok()
+            };
+            match result {
+                Some(lang) => {
+                    log_fn(format!("Detected: {} ({})", lang.name_en(), lang.bcp47()));
+                    if let Ok(mut slot) = pending.lock() {
+                        *slot = Some(lang.bcp47().to_lowercase());
+                    }
+                }
+                None => log_fn("Could not detect language".to_string()),
+            }
+            busy.store(false, Ordering::Relaxed);
+            ctx2.request_repaint();
+        });
+    }
+
     // -----------------------------------------------------------------------
     // Settings tab
     // -----------------------------------------------------------------------
@@ -1193,7 +1238,7 @@ impl SdsApp {
             ui.end_row();
 
             ui.label(s.lbl_def_lang);
-            lang_combo(ui, "settings_lang", &mut self.config.language);
+            lang_combo(ui, "settings_lang", &mut self.config.language, false);
             ui.end_row();
 
             ui.label(s.lbl_def_quality);
@@ -1405,6 +1450,13 @@ impl eframe::App for SdsApp {
             }
         }
 
+        // Drain language detection result
+        if let Ok(mut slot) = self.conv_lang_pending.try_lock() {
+            if let Some(lang) = slot.take() {
+                self.conv_lang = lang;
+            }
+        }
+
         // B11: Escape key closes modals
         if ctx.input(|i| i.key_pressed(egui::Key::Escape)) {
             if self.error_modal.is_some() { self.error_modal = None; }
@@ -1599,14 +1651,22 @@ impl eframe::App for SdsApp {
 // Helpers
 // ---------------------------------------------------------------------------
 
-fn lang_combo(ui: &mut egui::Ui, id: &str, value: &mut String) {
-    let langs = [("ja", "日本語"), ("en", "English"), ("zh-cn", "简体中文"), ("zh-tw", "繁體中文")];
-    let label = langs.iter().find(|(k, _)| *k == value.as_str()).map(|(_, v)| *v).unwrap_or("日本語");
+fn lang_combo(ui: &mut egui::Ui, id: &str, value: &mut String, with_auto: bool) {
+    const AUTO_LANGS: &[(&str, &str)] = &[
+        ("auto", "Auto"),
+        ("ja", "日本語"), ("en", "English"), ("zh-cn", "简体中文"), ("zh-tw", "繁體中文"),
+    ];
+    const LANGS: &[(&str, &str)] = &[
+        ("ja", "日本語"), ("en", "English"), ("zh-cn", "简体中文"), ("zh-tw", "繁體中文"),
+    ];
+    let langs = if with_auto { AUTO_LANGS } else { LANGS };
+    let fallback = if with_auto { "Auto" } else { "日本語" };
+    let label = langs.iter().find(|(k, _)| *k == value.as_str()).map(|(_, v)| *v).unwrap_or(fallback);
     egui::ComboBox::from_id_salt(id)
         .selected_text(label)
         .width(110.0)
         .show_ui(ui, |ui| {
-            for (k, v) in langs {
+            for &(k, v) in langs {
                 ui.selectable_value(value, k.to_string(), v);
             }
         });

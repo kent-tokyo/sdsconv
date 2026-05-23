@@ -28,4 +28,7 @@ pub enum SdsError {
 
     #[error("LLM response parse error: {0}")]
     LlmParse(String),
+
+    #[error("PDF appears to be image-only (OCR unavailable): {0}")]
+    ImageOnlyPdf(String),
 }

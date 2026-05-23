@@ -4765,6 +4765,7 @@ name = "sds-converter-core"
 version = "0.2.0"
 dependencies = [
  "anyhow",
+ "base64",
  "calamine",
  "docx-rs",
  "docx-rust",
