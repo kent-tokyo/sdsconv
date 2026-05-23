@@ -182,7 +182,7 @@ sds-converter-core = "0.2"
 - [ ] GHS pictogram embedding in HTML and DOCX output
 
 ### External dependency
-- [ ] Pure-Rust PDF generation via `harumi::render_html_to_pdf` (pending upstream API)
+- [x] Pure-Rust PDF generation — `harumi::render_html_to_pdf` now available in [`harumi`](https://crates.io/crates/harumi) v0.4.0 (`html` feature)
 - [ ] OCR support for scanned PDFs (Tesseract integration)
 
 ---

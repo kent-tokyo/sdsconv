@@ -183,7 +183,7 @@ sds-converter-core = "0.2"
 - [ ] 在HTML和DOCX输出中嵌入GHS象形图
 
 ### 依赖外部进展
-- [ ] 纯Rust PDF生成：等待`harumi::render_html_to_pdf` API上游支持
+- [x] 纯Rust PDF生成 — [`harumi`](https://crates.io/crates/harumi) v0.4.0 的 `html` feature 中 `render_html_to_pdf` 现已可用
 - [ ] 扫描PDF的OCR支持（Tesseract集成）
 
 ---
