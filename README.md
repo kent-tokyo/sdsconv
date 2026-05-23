@@ -18,6 +18,10 @@ Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **T
 
 → [All releases & changelogs](https://github.com/kent-tokyo/sds-converter/releases)
 
+> **macOS note:** On first launch, right-click the app and choose **"Open"** instead of double-clicking.
+> If a warning appears, click **"Open"** in the dialog.
+> Alternatively, run `xattr -cr /path/to/sds-converter.app` in Terminal.
+
 ---
 
 ## GUI

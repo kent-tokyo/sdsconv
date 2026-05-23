@@ -18,6 +18,10 @@
 
 → [全部版本与更新日志](https://github.com/kent-tokyo/sds-converter/releases)
 
+> **macOS 注意事项：** 首次启动时，请**右键点击**应用程序并选择**「打开」**，而不是直接双击。
+> 若出现警告对话框，点击**「打开」**即可启动。
+> 或在终端中执行 `xattr -cr /path/to/sds-converter.app`。
+
 ---
 
 ## GUI界面
