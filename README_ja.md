@@ -182,7 +182,7 @@ sds-converter-core = "0.2"
 
 ### 外部依存待ち
 - [x] 純Rust PDF生成 — [`harumi`](https://crates.io/crates/harumi) v0.4.0 の `html` feature で `render_html_to_pdf` が利用可能になりました
-- [ ] スキャンPDFのOCR対応（Tesseract統合）
+- [x] スキャンPDFのOCR対応 — `pdftoppm` + `tesseract` CLI でフォールバック（テキスト抽出が200文字未満のとき自動起動）
 
 ---
 

@@ -9,6 +9,9 @@ const DEFAULT_MAX_LLM_CHARS: usize = 80_000;
 const MAX_BINARY_INPUT_BYTES: u64 = 500 * 1024 * 1024; // 500 MB for binary formats
 const MAX_TEXT_INPUT_BYTES: u64 = 100 * 1024 * 1024; // 100 MB for text formats
 
+/// Character count below which we assume a PDF is image-only and attempt OCR.
+const OCR_FALLBACK_THRESHOLD: usize = 200;
+
 pub enum InputFormat {
     Pdf,
     Docx,
@@ -90,12 +93,39 @@ pub async fn extract_text_limited(path: &Path, max_chars: usize) -> Result<Strin
     }
     let raw = match input_format {
         InputFormat::Pdf => {
-            let path = path.to_path_buf();
-            tokio::task::spawn_blocking(move || {
-                pdf_extract::extract_text(&path).map_err(|e| SdsError::Extract(e.to_string()))
+            let path_a = path.to_path_buf();
+            let path_b = path.to_path_buf();
+
+            // Try text-based extraction first.
+            let raw = tokio::task::spawn_blocking(move || {
+                pdf_extract::extract_text(&path_a).map_err(|e| SdsError::Extract(e.to_string()))
             })
             .await
-            .unwrap_or_else(|e| Err(SdsError::Extract(e.to_string())))?
+            .unwrap_or_else(|e| Err(SdsError::Extract(e.to_string())))
+            .unwrap_or_default(); // treat extraction failure as empty → triggers OCR
+
+            if raw.trim().chars().count() >= OCR_FALLBACK_THRESHOLD {
+                raw
+            } else {
+                // Sparse text: likely a scanned PDF — attempt OCR fallback.
+                let ocr = tokio::task::spawn_blocking(move || ocr_pdf_with_tesseract(&path_b))
+                    .await
+                    .unwrap_or_else(|e| Err(SdsError::Extract(e.to_string())));
+
+                match ocr {
+                    Ok(text) if !text.trim().is_empty() => text,
+                    Err(e) if raw.trim().is_empty() => {
+                        // Nothing at all — surface the OCR error so the user
+                        // knows they need to install tesseract / poppler.
+                        return Err(e);
+                    }
+                    Err(e) => {
+                        tracing::info!("OCR fallback unavailable ({e}); using sparse PDF text");
+                        raw
+                    }
+                    Ok(_) => raw, // OCR returned empty, keep original sparse text
+                }
+            }
         }
         InputFormat::Docx => {
             let path = path.to_path_buf();
@@ -134,6 +164,104 @@ pub async fn extract_text_limited(path: &Path, max_chars: usize) -> Result<Strin
         }
     };
     Ok(clean_extracted_text(&raw, max_chars))
+}
+
+// ---------------------------------------------------------------------------
+// OCR fallback (pdftoppm + tesseract CLI)
+// ---------------------------------------------------------------------------
+
+/// Convert every page of a PDF to PNG with pdftoppm, then OCR with tesseract.
+///
+/// Returns `Err` with an install hint if either tool is absent.
+/// Returns `Ok("")` only when tesseract ran but produced no text.
+fn ocr_pdf_with_tesseract(pdf_path: &Path) -> Result<String, SdsError> {
+    use std::path::PathBuf;
+
+    let tmp = tempfile::tempdir()
+        .map_err(|e| SdsError::Extract(format!("OCR tmpdir: {e}")))?;
+
+    let page_prefix = tmp.path().join("page");
+
+    // Step 1 — rasterise PDF pages to PNG at 300 dpi.
+    let status = std::process::Command::new("pdftoppm")
+        .args([
+            "-r", "300",
+            "-png",
+            pdf_path.to_str().unwrap_or(""),
+            page_prefix.to_str().unwrap_or(""),
+        ])
+        .status()
+        .map_err(|e| SdsError::Extract(format!(
+            "pdftoppm not found ({e}). \
+             Install poppler: `brew install poppler` / `apt install poppler-utils` / \
+             https://github.com/oschwartz10612/poppler-windows/releases"
+        )))?;
+
+    if !status.success() {
+        return Err(SdsError::Extract(format!("pdftoppm exited with {status}")));
+    }
+
+    // Step 2 — collect PNG files in page order.
+    let mut pngs: Vec<PathBuf> = std::fs::read_dir(tmp.path())
+        .map_err(|e| SdsError::Extract(e.to_string()))?
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .filter(|p| {
+            p.extension()
+                .and_then(|e| e.to_str())
+                .map(|e| e.eq_ignore_ascii_case("png"))
+                .unwrap_or(false)
+        })
+        .collect();
+    pngs.sort();
+
+    if pngs.is_empty() {
+        return Err(SdsError::Extract("pdftoppm produced no images".to_string()));
+    }
+
+    // Step 3 — OCR each page and concatenate.
+    let ocr_stem = tmp.path().join("ocr");
+    let mut combined = String::new();
+
+    for png in &pngs {
+        // Try jpn+eng first (common for Japanese SDS); fall back to eng-only.
+        let ok = try_tesseract(png, &ocr_stem, "jpn+eng")
+            .or_else(|_| try_tesseract(png, &ocr_stem, "eng"))
+            .is_ok();
+
+        if ok {
+            let txt = ocr_stem.with_extension("txt");
+            if let Ok(page_text) = std::fs::read_to_string(&txt) {
+                combined.push_str(&page_text);
+                combined.push('\n');
+            }
+        }
+    }
+
+    // tmp dir is cleaned up on drop.
+    Ok(combined)
+}
+
+fn try_tesseract(input: &Path, output_stem: &Path, lang: &str) -> Result<(), SdsError> {
+    let status = std::process::Command::new("tesseract")
+        .arg(input.to_str().unwrap_or(""))
+        .arg(output_stem.to_str().unwrap_or(""))
+        .args(["-l", lang])
+        .status()
+        .map_err(|e| SdsError::Extract(format!(
+            "tesseract not found ({e}). \
+             Install: `brew install tesseract tesseract-lang` / \
+             `apt install tesseract-ocr tesseract-ocr-jpn` / \
+             https://github.com/UB-Mannheim/tesseract/wiki"
+        )))?;
+
+    if !status.success() {
+        return Err(SdsError::Extract(format!(
+            "tesseract exited with {status} (lang={lang}; \
+             ensure the language pack is installed)"
+        )));
+    }
+    Ok(())
 }
 
 /// Clean and condense raw extracted text before sending to the LLM.

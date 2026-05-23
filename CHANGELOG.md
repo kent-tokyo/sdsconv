@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Scanned PDF OCR fallback** (`extractor.rs`): When `pdf_extract` yields fewer than 200 characters
+  (image-only / scanned PDF), the extractor automatically shells out to `pdftoppm` (poppler) +
+  `tesseract` CLI. Pages are rasterised at 300 dpi, OCR'd with `jpn+eng` (falls back to `eng` if the
+  Japanese pack is absent), and the combined text is fed into the normal LLM pipeline. If neither
+  tool is installed, a clear install hint is returned as the error message. No new crate dependencies.
+
 - **GUI application (eframe/egui)**: Hybrid launcher — runs as a GUI window when invoked with no
   arguments; falls back to CLI mode when arguments are present. Cross-platform (macOS, Windows,
   Linux). Five tabs: SDS→JSON Convert, Document Generate, Validate, Extract Text, Settings.

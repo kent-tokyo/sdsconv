@@ -183,7 +183,7 @@ sds-converter-core = "0.2"
 
 ### External dependency
 - [x] Pure-Rust PDF generation — `harumi::render_html_to_pdf` now available in [`harumi`](https://crates.io/crates/harumi) v0.4.0 (`html` feature)
-- [ ] OCR support for scanned PDFs (Tesseract integration)
+- [x] OCR support for scanned PDFs — `pdftoppm` + `tesseract` CLI fallback (auto-detected when text extraction yields < 200 chars)
 
 ---
 
