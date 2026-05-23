@@ -20,7 +20,7 @@
 
 > **macOS 注意事项：** 由于未经公证，macOS 可能会阻止运行。请在终端中执行以下命令：
 > ```
-> xattr -cr ~/Downloads/sds-converter.app
+> xattr -d com.apple.quarantine ~/Downloads/sds-converter.app
 > ```
 > 之后直接双击即可正常启动。
 > 或前往 **系统设置 → 隐私与安全性**，点击**「仍要打开」**。

@@ -20,7 +20,7 @@
 
 > **macOS の注意：** 公証未対応のため、macOS にブロックされる場合があります。以下のコマンドをターミナルで実行してください：
 > ```
-> xattr -cr ~/Downloads/sds-converter.app
+> xattr -d com.apple.quarantine ~/Downloads/sds-converter.app
 > ```
 > その後、通常通りダブルクリックで起動できます。
 > または **システム設定 → プライバシーとセキュリティ** を開き、**「このまま開く」**をクリックしてください。

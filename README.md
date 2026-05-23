@@ -20,7 +20,7 @@ Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **T
 
 > **macOS note:** macOS may block the app because it is not notarized. To open it, run the following command in Terminal:
 > ```
-> xattr -cr ~/Downloads/sds-converter.app
+> xattr -d com.apple.quarantine ~/Downloads/sds-converter.app
 > ```
 > Then double-click the app as usual.
 > Alternatively, go to **System Settings → Privacy & Security** and click **"Open Anyway"**.
