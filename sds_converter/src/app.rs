@@ -104,6 +104,14 @@ struct Strings {
     lbl_extract_result: &'static str,
     // Drag & drop
     msg_drop_files: &'static str,
+    // Welcome screen
+    welcome_subtitle: &'static str,
+    welcome_btn_convert_title: &'static str,
+    welcome_btn_convert_desc: &'static str,
+    welcome_btn_generate_title: &'static str,
+    welcome_btn_generate_desc: &'static str,
+    welcome_btn_validate_title: &'static str,
+    welcome_btn_validate_desc: &'static str,
 }
 
 fn get_strings(ui_lang: &str) -> Strings {
@@ -211,7 +219,14 @@ Multiple files can be selected at once.
             btn_extract:          "Extract",
             btn_extracting:       "Extracting...",
             lbl_extract_result:   "Extracted text:",
-            msg_drop_files:       "Drop files here",
+            msg_drop_files:            "Drop files here",
+            welcome_subtitle:          "Convert SDS documents to/from MHLW standard JSON",
+            welcome_btn_convert_title: "SDS → JSON",
+            welcome_btn_convert_desc:  "Convert PDF / Word / URL to standard JSON",
+            welcome_btn_generate_title: "Generate Document",
+            welcome_btn_generate_desc: "Export JSON as DOCX / HTML / PDF",
+            welcome_btn_validate_title: "Validate JSON",
+            welcome_btn_validate_desc: "Check conformance to MHLW standard",
         },
         "zh-cn" => Strings {
             menu_file:        "文件",
@@ -314,7 +329,14 @@ Multiple files can be selected at once.
             btn_extract:          "提取",
             btn_extracting:       "提取中...",
             lbl_extract_result:   "提取结果:",
-            msg_drop_files:       "拖放文件到此处",
+            msg_drop_files:            "拖放文件到此处",
+            welcome_subtitle:          "将SDS文档与MHLW标准JSON双向转换",
+            welcome_btn_convert_title: "SDS → JSON",
+            welcome_btn_convert_desc:  "将PDF / Word / URL转换为标准JSON",
+            welcome_btn_generate_title: "生成文档",
+            welcome_btn_generate_desc: "将JSON导出为DOCX / HTML / PDF",
+            welcome_btn_validate_title: "验证JSON",
+            welcome_btn_validate_desc: "检验是否符合MHLW标准",
         },
         _ => Strings {  // Japanese (ja, default)
             menu_file:        "ファイル",
@@ -419,7 +441,14 @@ JSONファイルを選択して「検証実行」をクリックすると警告�
             btn_extract:          "テキスト抽出",
             btn_extracting:       "抽出中...",
             lbl_extract_result:   "抽出結果:",
-            msg_drop_files:       "ここにドロップ",
+            msg_drop_files:            "ここにドロップ",
+            welcome_subtitle:          "SDS文書とMHLW標準JSONを双方向に変換",
+            welcome_btn_convert_title: "SDS → JSON 変換",
+            welcome_btn_convert_desc:  "PDF・Word・URLを標準JSONに変換",
+            welcome_btn_generate_title: "文書生成",
+            welcome_btn_generate_desc: "JSONをDOCX / HTML / PDFで出力",
+            welcome_btn_validate_title: "JSON 検証",
+            welcome_btn_validate_desc: "MHLW標準への適合を確認",
         },
     }
 }
@@ -428,7 +457,7 @@ JSONファイルを選択して「検証実行」をクリックすると警告�
 // Tab / format enums
 // ---------------------------------------------------------------------------
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy)]
 enum Tab {
     Convert,
     Generate,
@@ -489,6 +518,9 @@ pub struct SdsApp {
 
     // Settings tab
     settings_saved_msg: Option<String>,
+
+    // Welcome screen
+    show_welcome: bool,
 }
 
 impl SdsApp {
@@ -528,6 +560,7 @@ impl SdsApp {
             val_results:  Vec::new(),
             val_pending:  Arc::new(Mutex::new(None)),
             settings_saved_msg: None,
+            show_welcome: true,
         }
     }
 
@@ -555,7 +588,7 @@ impl SdsApp {
     fn ui_convert_tab(&mut self, ui: &mut egui::Ui, ctx: &egui::Context) {
         let s = self.s();
         ui.heading(s.heading_convert);
-        ui.add_space(6.0);
+        ui.add_space(10.0);
 
         let batch = !self.conv_inputs.is_empty();
 
@@ -631,7 +664,7 @@ impl SdsApp {
             }
         });
 
-        ui.add_space(6.0);
+        ui.add_space(10.0);
         ui.horizontal(|ui| {
             ui.label(s.lbl_provider);
             egui::ComboBox::from_id_salt("conv_provider")
@@ -783,7 +816,7 @@ impl SdsApp {
     fn ui_generate_tab(&mut self, ui: &mut egui::Ui, ctx: &egui::Context) {
         let s = self.s();
         ui.heading(s.heading_generate);
-        ui.add_space(6.0);
+        ui.add_space(10.0);
 
         ui.horizontal(|ui| {
             ui.label(s.lbl_input_json);
@@ -835,7 +868,7 @@ impl SdsApp {
             });
         }
 
-        ui.add_space(6.0);
+        ui.add_space(10.0);
         ui.horizontal(|ui| {
             ui.label(s.lbl_format);
             egui::ComboBox::from_id_salt("gen_format")
@@ -910,7 +943,7 @@ impl SdsApp {
     fn ui_validate_tab(&mut self, ui: &mut egui::Ui, ctx: &egui::Context) {
         let s = self.s();
         ui.heading(s.heading_validate);
-        ui.add_space(6.0);
+        ui.add_space(10.0);
 
         let batch = !self.val_inputs.is_empty();
 
@@ -949,7 +982,7 @@ impl SdsApp {
             }
         });
 
-        ui.add_space(6.0);
+        ui.add_space(10.0);
         ui.horizontal(|ui| {
             let label = if self.is_busy() { s.btn_validating } else { s.btn_validate };
             if ui.add_enabled(!self.is_busy(), egui::Button::new(label)).clicked() {
@@ -1034,7 +1067,7 @@ impl SdsApp {
     fn ui_extract_tab(&mut self, ui: &mut egui::Ui, ctx: &egui::Context) {
         let s = self.s();
         ui.heading(s.heading_extract);
-        ui.add_space(6.0);
+        ui.add_space(10.0);
 
         ui.horizontal(|ui| {
             ui.label(s.lbl_extract_input);
@@ -1132,7 +1165,7 @@ impl SdsApp {
         }
 
         ui.heading(s.heading_settings);
-        ui.add_space(6.0);
+        ui.add_space(10.0);
 
         egui::Grid::new("settings_grid").num_columns(2).spacing([12.0, 8.0]).show(ui, |ui| {
             ui.label(s.lbl_def_provider);
@@ -1237,6 +1270,109 @@ impl SdsApp {
             ui.label(msg);
         }
     }
+
+    // -----------------------------------------------------------------------
+    // Welcome screen
+    // -----------------------------------------------------------------------
+
+    fn ui_welcome_screen(&mut self, ui: &mut egui::Ui) {
+        let s = self.s();
+
+        // Vertical centering
+        let available_height = ui.available_height();
+        let content_height = 320.0;
+        ui.add_space(((available_height - content_height) / 2.0).max(24.0));
+
+        ui.vertical_centered(|ui| {
+            // App logo — colored rounded rect with "SDS" label
+            let (logo_rect, _) = ui.allocate_exact_size(
+                egui::vec2(72.0, 72.0),
+                egui::Sense::hover(),
+            );
+            ui.painter().rect_filled(
+                logo_rect,
+                egui::Rounding::same(14.0),
+                egui::Color32::from_rgb(56, 120, 200),
+            );
+            ui.painter().text(
+                logo_rect.center(),
+                egui::Align2::CENTER_CENTER,
+                "SDS",
+                egui::FontId::proportional(24.0),
+                egui::Color32::WHITE,
+            );
+
+            ui.add_space(14.0);
+            ui.label(egui::RichText::new("SDS Converter").size(30.0).strong());
+            ui.label(
+                egui::RichText::new(concat!("v", env!("CARGO_PKG_VERSION")))
+                    .size(13.0)
+                    .color(egui::Color32::GRAY),
+            );
+            ui.add_space(8.0);
+            ui.label(egui::RichText::new(s.welcome_subtitle).size(14.0));
+            ui.add_space(36.0);
+
+            // Action cards — explicitly centered as a group
+            let card_w = 210.0_f32;
+            let card_h = 90.0_f32;
+            let gap = 12.0_f32;
+            let group_w = 3.0 * card_w + 2.0 * gap;
+            let left_pad = ((ui.available_width() - group_w) / 2.0).max(0.0);
+
+            ui.horizontal(|ui| {
+                ui.add_space(left_pad);
+
+                let card_size = egui::vec2(card_w, card_h);
+                let entries: &[(Tab, &str, &str, &str)] = &[
+                    (Tab::Convert,  "📄", s.welcome_btn_convert_title,  s.welcome_btn_convert_desc),
+                    (Tab::Generate, "📝", s.welcome_btn_generate_title, s.welcome_btn_generate_desc),
+                    (Tab::Validate, "✅", s.welcome_btn_validate_title, s.welcome_btn_validate_desc),
+                ];
+
+                for (i, &(tab, icon, title, desc)) in entries.iter().enumerate() {
+                    if i > 0 { ui.add_space(gap); }
+
+                    let (rect, resp) = ui.allocate_exact_size(card_size, egui::Sense::click());
+                    let visuals = ui.style().interact(&resp);
+                    ui.painter().rect(
+                        rect,
+                        egui::Rounding::same(6.0),
+                        visuals.bg_fill,
+                        visuals.bg_stroke,
+                    );
+
+                    // Icon + title (bold, centered)
+                    let icon_title = format!("{}  {}", icon, title);
+                    ui.painter().text(
+                        egui::pos2(rect.center().x, rect.center().y - 14.0),
+                        egui::Align2::CENTER_CENTER,
+                        &icon_title,
+                        egui::FontId::proportional(14.0),
+                        visuals.text_color(),
+                    );
+                    // Description (smaller, gray, centered)
+                    ui.painter().text(
+                        egui::pos2(rect.center().x, rect.center().y + 14.0),
+                        egui::Align2::CENTER_CENTER,
+                        desc,
+                        egui::FontId::proportional(11.5),
+                        egui::Color32::GRAY,
+                    );
+
+                    if resp.clicked() {
+                        self.tab = tab;
+                        self.show_welcome = false;
+                    }
+                }
+            });
+
+            ui.add_space(28.0);
+            if ui.small_button("→ skip").clicked() {
+                self.show_welcome = false;
+            }
+        });
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -1298,6 +1434,10 @@ impl eframe::App for SdsApp {
             i.raw.dropped_files.iter().filter_map(|f| f.path.clone()).collect()
         });
         if !dropped.is_empty() {
+            if self.show_welcome {
+                self.show_welcome = false;
+                // tab stays Convert — drop routing below handles placement
+            }
             match self.tab {
                 Tab::Convert => {
                     if dropped.len() == 1 && self.conv_inputs.is_empty() {
@@ -1344,18 +1484,21 @@ impl eframe::App for SdsApp {
             });
         });
 
-        // --- Tab bar ---
-        egui::TopBottomPanel::top("tabs").show(ctx, |ui| {
-            ui.horizontal(|ui| {
-                ui.selectable_value(&mut self.tab, Tab::Convert,  s.tab_convert);
-                ui.selectable_value(&mut self.tab, Tab::Generate, s.tab_generate);
-                ui.selectable_value(&mut self.tab, Tab::Validate, s.tab_validate);
-                ui.selectable_value(&mut self.tab, Tab::Extract,  s.tab_extract);
-                ui.selectable_value(&mut self.tab, Tab::Settings, s.tab_settings);
+        // --- Tab bar (hidden on welcome screen) ---
+        if !self.show_welcome {
+            egui::TopBottomPanel::top("tabs").show(ctx, |ui| {
+                ui.horizontal(|ui| {
+                    ui.selectable_value(&mut self.tab, Tab::Convert,  s.tab_convert);
+                    ui.selectable_value(&mut self.tab, Tab::Generate, s.tab_generate);
+                    ui.selectable_value(&mut self.tab, Tab::Validate, s.tab_validate);
+                    ui.selectable_value(&mut self.tab, Tab::Extract,  s.tab_extract);
+                    ui.selectable_value(&mut self.tab, Tab::Settings, s.tab_settings);
+                });
             });
-        });
+        }
 
-        // --- Log panel ---
+        // --- Log panel (hidden on welcome screen) ---
+        if !self.show_welcome {
         egui::TopBottomPanel::bottom("log_panel").resizable(true).min_height(60.0).show(ctx, |ui| {
             ui.horizontal(|ui| {
                 // B13: show max-500 note
@@ -1376,16 +1519,23 @@ impl eframe::App for SdsApp {
                 }
             });
         });
+        } // end if !self.show_welcome (log panel)
 
-        // --- Main content ---
-        egui::CentralPanel::default().show(ctx, |ui| {
-            let ctx2 = ctx.clone();
-            match self.tab {
-                Tab::Convert  => self.ui_convert_tab(ui, &ctx2),
-                Tab::Generate => self.ui_generate_tab(ui, &ctx2),
-                Tab::Validate => self.ui_validate_tab(ui, &ctx2),
-                Tab::Extract  => self.ui_extract_tab(ui, &ctx2),
-                Tab::Settings => self.ui_settings_tab(ui),
+        // --- Main content (with inner margin for breathing room) ---
+        egui::CentralPanel::default()
+            .frame(egui::Frame::central_panel(ctx.style().as_ref()).inner_margin(egui::Margin::symmetric(14.0, 10.0)))
+            .show(ctx, |ui| {
+            if self.show_welcome {
+                self.ui_welcome_screen(ui);
+            } else {
+                let ctx2 = ctx.clone();
+                match self.tab {
+                    Tab::Convert  => self.ui_convert_tab(ui, &ctx2),
+                    Tab::Generate => self.ui_generate_tab(ui, &ctx2),
+                    Tab::Validate => self.ui_validate_tab(ui, &ctx2),
+                    Tab::Extract  => self.ui_extract_tab(ui, &ctx2),
+                    Tab::Settings => self.ui_settings_tab(ui),
+                }
             }
         });
 
@@ -1477,8 +1627,8 @@ fn setup_fonts(ctx: &egui::Context) {
 
     #[cfg(target_os = "macos")]
     let candidates: &[&str] = &[
+        "/System/Library/Fonts/ヒラギノ角ゴシック W4.ttc",  // W4 preferred: slightly heavier, renders cleaner at small sizes
         "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc",
-        "/System/Library/Fonts/ヒラギノ角ゴシック W4.ttc",
         "/System/Library/Fonts/Hiragino Sans GB.ttc",
     ];
     #[cfg(target_os = "windows")]
@@ -1507,6 +1657,23 @@ fn setup_fonts(ctx: &egui::Context) {
     }
 
     ctx.set_fonts(fonts);
+
+    let mut style = (*ctx.style()).clone();
+
+    // Bump body/button text from egui's default 14 pt to 15 pt
+    for font_id in style.text_styles.values_mut() {
+        if (font_id.size - 14.0).abs() < 0.5 {
+            font_id.size = 15.0;
+        }
+    }
+
+    // More breathing room: bigger button padding, taller interactive elements,
+    // and slightly more vertical space between items.
+    style.spacing.button_padding   = egui::vec2(10.0, 5.0);  // default: [4, 1]
+    style.spacing.item_spacing     = egui::vec2(8.0,  6.0);  // default: [8, 3]
+    style.spacing.interact_size.y  = 24.0;                   // default: 18  — taller inputs/combos
+
+    ctx.set_style(style);
 }
 
 pub fn run_gui() -> anyhow::Result<()> {
