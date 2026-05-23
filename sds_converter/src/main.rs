@@ -191,6 +191,14 @@ enum Commands {
 // ---------------------------------------------------------------------------
 
 fn main() -> anyhow::Result<()> {
+    tracing_subscriber::fmt()
+        .with_env_filter(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("warn")),
+        )
+        .with_writer(std::io::stderr)
+        .init();
+
     if std::env::args().len() > 1 {
         tokio::runtime::Builder::new_multi_thread()
             .enable_all()
@@ -206,8 +214,6 @@ fn main() -> anyhow::Result<()> {
 // ---------------------------------------------------------------------------
 
 async fn run_cli() -> anyhow::Result<()> {
-    tracing_subscriber::fmt::init();
-
     let cfg = config::AppConfig::load();
     let cli = Cli::parse();
     let log: LogFn = tasks::stdout_log();
