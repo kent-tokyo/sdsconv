@@ -89,6 +89,37 @@ jobs:
           name: sds-converter-macos
           path: sds-converter-macos.zip
 
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sds-converter-macos.zip
+
+      - name: Update Homebrew Cask
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          SHA256=$(shasum -a 256 sds-converter-macos.zip | awk '{print $1}')
+
+          git clone https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/kent-tokyo/homebrew-sds-converter.git
+          cd homebrew-sds-converter
+
+          python3 -c "
+          import re
+          content = open('Casks/sds-converter.rb').read()
+          content = re.sub(r'version \"[^\"]+\"', 'version \"${VERSION}\"', content)
+          content = re.sub(r'sha256 \"[^\"]+\"', 'sha256 \"${SHA256}\"', content)
+          open('Casks/sds-converter.rb', 'w').write(content)
+          "
+
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add Casks/sds-converter.rb
+          git commit -m "chore: bump sds-converter to v${VERSION}"
+          git push
+
   # Windows portable .exe
   build-windows:
     name: Windows Portable
