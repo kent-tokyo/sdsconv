@@ -12,15 +12,18 @@ Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **T
 
 | Crate | Description |
 |---|---|
-| [`sds-converter-core`](./sds_converter_core/) | Rust library — LLM-based extraction, DOCX generation, MHLW schema |
-| [`sds-converter`](./sds_converter/) | CLI binary — `to-json`, `to-docx`, `validate`, `extract-text` subcommands |
+| [`sds-converter-core`](./sds_converter_core/) | Rust library — LLM-based extraction, DOCX/HTML generation, MHLW schema |
+| [`sds-converter`](./sds_converter/) | CLI binary — `to-json`, `to-docx`, `to-html`, `to-pdf`, `validate`, `extract-text` subcommands |
 
 ---
 
 ## Features
 
-- **SDS document → JSON**: Extracts text from PDF/DOCX/XLSX/TXT and converts it to the MHLW SDS data exchange format v1.0 via LLM API. Parallel extraction with automatic retry.
+- **SDS document → JSON**: Extracts text from PDF/DOCX/XLSX/TXT/**HTML/URL** and converts it to the MHLW SDS data exchange format v1.0 via LLM API. Parallel extraction with automatic retry.
 - **JSON → DOCX**: Generates a JIS Z 7253-compliant 16-section Word document from the standard JSON, with localized section headings.
+- **JSON → HTML**: Generates a self-contained UTF-8 HTML5 document with inline CSS and `@media print` support (`to-html`).
+- **JSON → PDF**: Converts to PDF via LibreOffice CLI (`to-pdf`). Requires `soffice` in PATH.
+- **GHS/CAS validation**: Validates H-codes (H200–H420) and P-codes (P101–P503) against GHS Rev.10. Validates CAS number format and check-digit. Optional PubChem enrichment (`--enrich`) for composition cross-checking.
 - **Multilingual**: Handles source documents in `ja` / `en` / `zh-CN` / `zh-TW`.
 - **Extensible LLM backend**: Ships with Anthropic Claude, OpenAI GPT, Google Gemini, Mistral, Groq, and Cohere backends. Bring your own by implementing `LlmBackend`.
 - **Library + CLI**: Use as a Rust library or as a standalone command-line tool.
@@ -52,8 +55,23 @@ cargo install sds-converter
 export ANTHROPIC_API_KEY=sk-ant-...
 sds-converter to-json --input input.pdf --output output.json
 
+# Convert from a URL directly
+sds-converter to-json --input https://example.com/sds.html --output output.json
+
 # Convert JSON → Word document
 sds-converter to-docx --input output.json --output result.docx --lang ja
+
+# Convert JSON → HTML (printable, A4)
+sds-converter to-html --input output.json --output result.html --lang ja
+
+# Convert JSON → PDF (requires LibreOffice)
+sds-converter to-pdf --input output.json --output result.pdf --lang ja
+
+# Validate JSON + check GHS codes and CAS numbers
+sds-converter validate --input output.json
+
+# Validate and cross-check CAS numbers against PubChem
+sds-converter to-json --input input.pdf --output output.json --enrich
 ```
 
 See the [`sds-converter` README](./sds_converter/README.md) for full CLI reference and [`sds-converter-core` README](./sds_converter_core/README.md) for library API.
@@ -80,7 +98,9 @@ See the [`sds-converter` README](./sds_converter/README.md) for full CLI referen
 | Language | Rust | Python | Python |
 | AI/LLM | Yes (pluggable) | No (regex) | No (rule-based) |
 | MHLW JSON | Yes | No | No |
-| Bidirectional | Yes (↔ DOCX) | No | No |
+| Bidirectional | Yes (DOCX + HTML + PDF) | No | No |
+| HTML/URL input | Yes | No | No |
+| GHS/CAS validation | Yes | No | No |
 | Multilingual | ja / en / zh-CN / zh-TW | Limited | English only |
 
 ### Commercial products (Japan)
@@ -102,7 +122,23 @@ See the [`sds-converter` README](./sds_converter/README.md) for full CLI referen
 | Output | MHLW JSON + DOCX | Custom JSON | JSON / XML | JSON / XML / CSV | Internal only |
 | Open-source | Yes | No | No | No | No |
 
-**Key advantages:** the only open-source solution that supports the MHLW standard JSON, bidirectional conversion (JSON → DOCX), local execution without cloud subscriptions, and a pluggable LLM backend.
+**Key advantages:** the only open-source solution that supports the MHLW standard JSON, bidirectional conversion (JSON → DOCX/HTML/PDF), local execution without cloud subscriptions, GHS Rev.10 validation, PubChem enrichment, and a pluggable LLM backend.
+
+---
+
+## Roadmap
+
+### Next (0.3.x)
+- [ ] DOCX table layout — Section 3 Composition (4-column), Section 2 H/P codes (2-column), Section 9 physical properties (2-column)
+- [ ] Publish to crates.io (`sds-converter-core` + `sds-converter`)
+
+### Planned
+- [ ] GUI application (eframe/egui) — file picker, API key input, progress display
+- [ ] GHS pictogram embedding in HTML and DOCX output
+
+### External dependency
+- [ ] Pure-Rust PDF generation via `harumi::render_html_to_pdf` (pending upstream API)
+- [ ] OCR support for scanned PDFs (Tesseract integration)
 
 ---
 

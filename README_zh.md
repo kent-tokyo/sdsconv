@@ -10,15 +10,18 @@
 
 | 包 | 说明 |
 |---|---|
-| [`sds-converter-core`](./sds_converter_core/) | Rust库 — 基于LLM的提取、DOCX生成、MHLW模式 |
-| [`sds-converter`](./sds_converter/) | CLI工具 — `to-json`、`to-docx`、`validate`、`extract-text` 子命令 |
+| [`sds-converter-core`](./sds_converter_core/) | Rust库 — 基于LLM的提取、DOCX/HTML生成、MHLW模式 |
+| [`sds-converter`](./sds_converter/) | CLI工具 — `to-json`、`to-docx`、`to-html`、`to-pdf`、`validate`、`extract-text` 子命令 |
 
 ---
 
 ## 功能特点
 
-- **SDS文档 → JSON**: 从PDF/DOCX/XLSX/TXT中提取文本，并转换为符合MHLW SDS数据交换标准格式v1.0的JSON。支持并行提取与自动重试。
+- **SDS文档 → JSON**: 从PDF/DOCX/XLSX/TXT/**HTML/URL**中提取文本，并转换为符合MHLW SDS数据交换标准格式v1.0的JSON。支持并行提取与自动重试。
 - **JSON → DOCX**: 从标准JSON生成符合JIS Z 7253规范的16节Word文档，支持多语言节标题。
+- **JSON → HTML**: 生成包含内联CSS和`@media print`支持的自包含UTF-8 HTML5文档（`to-html`）。
+- **JSON → PDF**: 通过LibreOffice CLI转换为PDF（`to-pdf`，需要`soffice`）。
+- **GHS/CAS验证**: 依据GHS Rev.10验证H码（H200–H420）和P码（P101–P503），验证CAS编号格式及校验位。支持`--enrich`标志通过PubChem交叉核验成分信息。
 - **多语言支持**: 支持 `ja` / `en` / `zh-CN` / `zh-TW` 的输入和输出。
 - **可扩展LLM后端**: 内置Anthropic Claude、OpenAI GPT、Google Gemini、Mistral、Groq、Cohere实现。通过实现 `LlmBackend` trait可接入任意LLM。
 - **库 + CLI**: 可作为Rust库嵌入使用，也可作为独立命令行工具使用。
@@ -50,8 +53,23 @@ cargo install sds-converter
 export ANTHROPIC_API_KEY=sk-ant-...
 sds-converter to-json --input input.pdf --output output.json
 
+# 直接从URL转换
+sds-converter to-json --input https://example.com/sds.html --output output.json
+
 # JSON → Word文档
 sds-converter to-docx --input output.json --output result.docx --lang zh-cn
+
+# JSON → HTML（支持打印，A4）
+sds-converter to-html --input output.json --output result.html --lang zh-cn
+
+# JSON → PDF（需要LibreOffice）
+sds-converter to-pdf --input output.json --output result.pdf --lang zh-cn
+
+# 验证JSON（含GHS编码和CAS编号验证）
+sds-converter validate --input output.json
+
+# 转换并通过PubChem交叉核验成分（--enrich）
+sds-converter to-json --input input.pdf --output output.json --enrich
 ```
 
 完整CLI参考请查看 [`sds-converter` README](./sds_converter/README.md)，库API请查看 [`sds-converter-core` README](./sds_converter_core/README.md)。
@@ -78,7 +96,9 @@ sds-converter to-docx --input output.json --output result.docx --lang zh-cn
 | 语言 | Rust | Python | Python |
 | AI/LLM | 有（可替换） | 无（正则表达式） | 无（规则驱动） |
 | MHLW JSON | 有 | 无 | 无 |
-| 双向转换 | 有（↔ DOCX） | 无 | 无 |
+| 双向转换 | 有（DOCX + HTML + PDF） | 无 | 无 |
+| HTML/URL输入 | 有 | 无 | 无 |
+| GHS/CAS验证 | 有 | 无 | 无 |
 | 多语言 | ja / en / zh-CN / zh-TW | 有限 | 仅英文 |
 
 ### 商业产品（日本）
@@ -100,7 +120,23 @@ sds-converter to-docx --input output.json --output result.docx --lang zh-cn
 | 输出 | MHLW JSON + DOCX | 自定义JSON | JSON / XML | JSON / XML / CSV | 仅内部数据 |
 | 开源 | 有 | 无 | 无 | 无 | 无 |
 
-**本工具的核心优势**：唯一支持MHLW标准JSON、双向转换（JSON→DOCX）、无需云订阅的本地运行以及可替换LLM后端的开源解决方案。
+**本工具的核心优势**：唯一支持MHLW标准JSON、双向转换（JSON→DOCX/HTML/PDF）、无需云订阅的本地运行、GHS Rev.10验证、PubChem富集以及可替换LLM后端的开源解决方案。
+
+---
+
+## 路线图
+
+### 下一版本（0.3.x）
+- [ ] DOCX表格布局 — 第3节成分信息（4列）、第2节H/P编码（2列）、第9节物化性质（2列）
+- [ ] 发布至crates.io（`sds-converter-core` → `sds-converter`）
+
+### 计划中
+- [ ] GUI应用程序（eframe/egui）— 文件选择、API密钥输入、进度显示
+- [ ] 在HTML和DOCX输出中嵌入GHS象形图
+
+### 依赖外部进展
+- [ ] 纯Rust PDF生成：等待`harumi::render_html_to_pdf` API上游支持
+- [ ] 扫描PDF的OCR支持（Tesseract集成）
 
 ---
 
