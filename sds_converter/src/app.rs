@@ -1156,8 +1156,8 @@ impl SdsApp {
         if self.config.api_key.is_empty() {
             egui::Frame::none()
                 .fill(egui::Color32::from_rgb(55, 45, 0))
-                .inner_margin(egui::Margin::symmetric(8.0, 6.0))
-                .rounding(egui::Rounding::same(4.0))
+                .inner_margin(egui::Margin::symmetric(8, 6))
+                .corner_radius(4_u8)
                 .show(ui, |ui| {
                     ui.colored_label(egui::Color32::from_rgb(255, 220, 60), s.banner_no_api_key);
                 });
@@ -1291,7 +1291,7 @@ impl SdsApp {
             );
             ui.painter().rect_filled(
                 logo_rect,
-                egui::Rounding::same(14.0),
+                14_u8,
                 egui::Color32::from_rgb(56, 120, 200),
             );
             ui.painter().text(
@@ -1337,9 +1337,10 @@ impl SdsApp {
                     let visuals = ui.style().interact(&resp);
                     ui.painter().rect(
                         rect,
-                        egui::Rounding::same(6.0),
+                        6_u8,
                         visuals.bg_fill,
                         visuals.bg_stroke,
+                        egui::StrokeKind::Outside,
                     );
 
                     // Icon + title (bold, centered)
@@ -1380,7 +1381,7 @@ impl SdsApp {
 // ---------------------------------------------------------------------------
 
 impl eframe::App for SdsApp {
-    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+    fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         // Repaint while busy
         if self.is_busy() {
             ctx.request_repaint_after(Duration::from_millis(100));
@@ -1404,21 +1405,24 @@ impl eframe::App for SdsApp {
             }
         }
 
-        let s = self.s();
-
         // B11: Escape key closes modals
         if ctx.input(|i| i.key_pressed(egui::Key::Escape)) {
             if self.error_modal.is_some() { self.error_modal = None; }
             else if self.show_manual { self.show_manual = false; }
             else if self.show_about { self.show_about = false; }
         }
+    }
+
+    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        let ctx = ui.ctx().clone();
+        let s = self.s();
 
         // --- Drag & drop ---
         let hovered = ctx.input(|i| !i.raw.hovered_files.is_empty());
         if hovered {
             egui::Area::new(egui::Id::new("drop_overlay"))
                 .fixed_pos(egui::pos2(0.0, 0.0))
-                .show(ctx, |ui| {
+                .show(&ctx, |ui| {
                     let screen = ctx.screen_rect();
                     ui.painter().rect_filled(screen, 0.0, egui::Color32::from_black_alpha(120));
                     ui.painter().text(
@@ -1464,7 +1468,7 @@ impl eframe::App for SdsApp {
         }
 
         // --- Menu bar ---
-        egui::TopBottomPanel::top("menu_bar").show(ctx, |ui| {
+        egui::TopBottomPanel::top("menu_bar").show(&ctx, |ui| {
             egui::menu::bar(ui, |ui| {
                 ui.menu_button(s.menu_file, |ui| {
                     if ui.button(s.menu_quit).clicked() {
@@ -1486,7 +1490,7 @@ impl eframe::App for SdsApp {
 
         // --- Tab bar (hidden on welcome screen) ---
         if !self.show_welcome {
-            egui::TopBottomPanel::top("tabs").show(ctx, |ui| {
+            egui::TopBottomPanel::top("tabs").show(&ctx, |ui| {
                 ui.horizontal(|ui| {
                     ui.selectable_value(&mut self.tab, Tab::Convert,  s.tab_convert);
                     ui.selectable_value(&mut self.tab, Tab::Generate, s.tab_generate);
@@ -1499,7 +1503,7 @@ impl eframe::App for SdsApp {
 
         // --- Log panel (hidden on welcome screen) ---
         if !self.show_welcome {
-        egui::TopBottomPanel::bottom("log_panel").resizable(true).min_height(60.0).show(ctx, |ui| {
+        egui::TopBottomPanel::bottom("log_panel").resizable(true).min_height(60.0).show(&ctx, |ui| {
             ui.horizontal(|ui| {
                 // B13: show max-500 note
                 ui.label(format!("{} (max 500)", s.lbl_log));
@@ -1523,8 +1527,8 @@ impl eframe::App for SdsApp {
 
         // --- Main content (with inner margin for breathing room) ---
         egui::CentralPanel::default()
-            .frame(egui::Frame::central_panel(ctx.style().as_ref()).inner_margin(egui::Margin::symmetric(14.0, 10.0)))
-            .show(ctx, |ui| {
+            .frame(egui::Frame::central_panel(ctx.style().as_ref()).inner_margin(egui::Margin::symmetric(14, 10)))
+            .show(&ctx, |ui| {
             if self.show_welcome {
                 self.ui_welcome_screen(ui);
             } else {
@@ -1545,7 +1549,7 @@ impl eframe::App for SdsApp {
                 .collapsible(false)
                 .resizable(false)
                 .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
-                .show(ctx, |ui| {
+                .show(&ctx, |ui| {
                     ui.label(msg.as_str());
                     ui.add_space(8.0);
                     if ui.button("OK").clicked() {
@@ -1561,7 +1565,7 @@ impl eframe::App for SdsApp {
                 .collapsible(false)
                 .resizable(false)
                 .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
-                .show(ctx, |ui| {
+                .show(&ctx, |ui| {
                     ui.label(concat!("sds-converter v", env!("CARGO_PKG_VERSION")));
                     ui.add_space(4.0);
                     ui.label(s.about_desc);
@@ -1580,7 +1584,7 @@ impl eframe::App for SdsApp {
                 .resizable(true)
                 .default_size([520.0, 420.0])
                 .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
-                .show(ctx, |ui| {
+                .show(&ctx, |ui| {
                     egui::ScrollArea::vertical().show(ui, |ui| {
                         ui.label(s.manual_body);
                     });
@@ -1647,7 +1651,7 @@ fn setup_fonts(ctx: &egui::Context) {
 
     for path in candidates {
         if let Ok(data) = std::fs::read(path) {
-            fonts.font_data.insert("jp_font".to_owned(), egui::FontData::from_owned(data));
+            fonts.font_data.insert("jp_font".to_owned(), std::sync::Arc::new(egui::FontData::from_owned(data)));
             // Primary font: insert at position 0 so Latin and CJK share baseline metrics
             for family in [egui::FontFamily::Proportional, egui::FontFamily::Monospace] {
                 fonts.families.entry(family).or_default().insert(0, "jp_font".to_owned());

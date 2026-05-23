@@ -32,12 +32,12 @@ anyhow = { workspace = true }
 thiserror = { workspace = true }
 tracing = { workspace = true }
 harumi = { version = "0.4", features = ["html"] }
-pdf-extract = "0.8"
+pdf-extract = "0.10"
 docx-rust = "0.1"
 docx-rs = "0.4"
-calamine = "0.26"
-zip = "2"
-scraper = "0.21"
+calamine = "0.35"
+zip = "8"
+scraper = "0.27"
 tempfile = "3"
 
 [dev-dependencies]
