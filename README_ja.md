@@ -12,7 +12,7 @@
 
 | プラットフォーム | ダウンロード |
 |---|---|
-| **macOS**（Homebrew） | `brew install kent-tokyo/sds-converter/sds-converter` |
+| **macOS**（Homebrew） | `brew tap kent-tokyo/sds-converter && brew install sds-converter` |
 | **Windows**（ポータブル .exe — インストール不要） | [sds-converter-windows-portable.zip](https://github.com/kent-tokyo/sds-converter/releases/latest/download/sds-converter-windows-portable.zip) |
 | **Rust / CLI** | `cargo install sds-converter` |
 
