@@ -172,7 +172,25 @@ pub async fn extract_text_limited(path: &Path, max_chars: usize) -> Result<Strin
             if raw.trim().chars().count() >= OCR_FALLBACK_THRESHOLD {
                 raw
             } else {
-                // Sparse text: likely a scanned PDF — attempt OCR fallback.
+                // ② pdftotext fallback — handles CID/Shift-JIS fonts that pdf-extract
+                //   cannot decode (it panics or returns garbled bytes).
+                //   pdftotext is part of poppler-utils; silently skipped if not installed.
+                let path_pt = path_b.clone();
+                let pt_text = tokio::task::spawn_blocking(move || pdftotext_fallback(&path_pt))
+                    .await
+                    .unwrap_or(None);
+
+                if let Some(pt) = pt_text {
+                    if pt.trim().chars().count() >= OCR_FALLBACK_THRESHOLD {
+                        tracing::debug!(
+                            chars = pt.trim().chars().count(),
+                            "pdftotext fallback succeeded"
+                        );
+                        return Ok(clean_extracted_text(&pt, max_chars));
+                    }
+                }
+
+                // ③ Sparse text: likely a scanned PDF — attempt OCR fallback.
                 let ocr = tokio::task::spawn_blocking(move || ocr_pdf_with_tesseract(&path_b))
                     .await
                     .unwrap_or_else(|e| Err(SdsError::Extract(e.to_string())));
@@ -224,6 +242,34 @@ pub async fn extract_text_limited(path: &Path, max_chars: usize) -> Result<Strin
         }
     };
     Ok(clean_extracted_text(&raw, max_chars))
+}
+
+// ---------------------------------------------------------------------------
+// pdftotext fallback (poppler)
+// ---------------------------------------------------------------------------
+
+/// Extract text from a PDF using the `pdftotext` CLI (part of poppler-utils).
+///
+/// This is used as a middle tier when `pdf-extract` fails or returns sparse text
+/// on PDFs that use CID fonts (e.g. Shift-JIS encoded Japanese PDFs).  The `-utf8`
+/// flag instructs pdftotext to always output UTF-8, handling the encoding conversion
+/// that `pdf-extract` cannot perform.
+///
+/// Returns `None` if:
+/// - `pdftotext` is not installed (silently ignored; caller falls through to OCR)
+/// - the command exits with a non-zero status
+/// - the output is empty or whitespace-only
+fn pdftotext_fallback(path: &Path) -> Option<String> {
+    let path_str = path.to_str()?;
+    let out = std::process::Command::new("pdftotext")
+        .args(["-utf8", path_str, "-"]) // "-" writes to stdout
+        .output()
+        .ok()?;
+    if !out.status.success() {
+        return None;
+    }
+    let text = String::from_utf8_lossy(&out.stdout).into_owned();
+    if text.trim().is_empty() { None } else { Some(text) }
 }
 
 // ---------------------------------------------------------------------------
