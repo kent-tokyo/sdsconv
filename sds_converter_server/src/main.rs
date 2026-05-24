@@ -431,17 +431,24 @@ async fn main() -> anyhow::Result<()> {
     // 512 MB upload limit
     let body_limit = DefaultBodyLimit::max(512 * 1024 * 1024);
 
-    let app = Router::new()
-        .route("/api/health",   get(health))
+    // Protected routes — require Bearer token auth.
+    let protected = Router::new()
         .route("/api/to-json",  post(to_json))
         .route("/api/to-docx",  post(to_docx))
         .route("/api/to-html",  post(to_html))
         .route("/api/validate", post(validate_handler))
-        .layer(middleware::from_fn_with_state(token.clone(), require_auth))
+        .route_layer(middleware::from_fn_with_state(token.clone(), require_auth));
+
+    // Public routes — no auth required (LWA / load-balancer health checks).
+    let public = Router::new()
+        .route("/api/health", get(health));
+
+    let app = public
+        .merge(protected)
         .layer(body_limit)
         .layer(cors)
         .layer(TraceLayer::new_for_http())
-        // Fix 4: Limit concurrent in-flight requests to prevent resource exhaustion.
+        // Limit concurrent in-flight requests to prevent resource exhaustion.
         .layer(ConcurrencyLimitLayer::new(10))
         .with_state(token);
 
