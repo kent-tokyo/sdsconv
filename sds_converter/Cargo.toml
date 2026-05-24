@@ -1,6 +1,6 @@
 [package]
 name = "sds-converter"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "CLI for converting chemical safety SDS documents (PDF/DOCX) ↔ MHLW/JIS Z 7253 standard JSON via LLM (Claude/GPT/Gemini). Batch mode, multilingual."
 license = "MIT OR Apache-2.0"
