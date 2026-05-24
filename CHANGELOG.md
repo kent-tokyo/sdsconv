@@ -7,7 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **GUI minimum window size** (`app.rs`): Added `with_min_inner_size([640.0, 480.0])` to `ViewportBuilder` so the window cannot be resized below a usable minimum (H1).
+- **Busy-poll repaint interval reduced** (`app.rs`): Background task polling interval reduced from 100 ms to 250 ms, cutting CPU usage by ~60% during long conversions while keeping the UI responsive (M8).
+- **Log panel height uncapped** (`app.rs`): Removed `.max_height(160.0)` from the log `ScrollArea`; the panel now fills the available vertical space freely (M2).
+- **TextEdit fields are now responsive** (`app.rs`): All nine input fields replaced `add_sized([W, 20.0], ...)` with `desired_width(avail_width - offset).max(150.0)`, making them resize with the window (M10).
+- **Frame::NONE** (`app.rs`): Replaced deprecated `egui::Frame::none()` with `egui::Frame::NONE` (M1).
+
 ### Added
+
+- **Keyboard shortcuts** (`app.rs`): Ctrl+Q quits the application, F1 opens the manual window, Ctrl+O opens the file picker for the current tab (H3).
+- **API key show/hide toggle** (`app.rs`): A small button next to the API key field toggles password masking; icon label switches between the locale's "Show" and "Hide" strings (L1).
+- **Error modal and About dialog use `egui::Modal`** (`app.rs`): Both dialogs are now true backdrop modals handled by egui — Escape and backdrop click close them automatically via `ModalResponse::should_close()` (H4, M7).
+- **Settings saved message auto-clears** (`app.rs`): After clicking Save, `settings_saved_at` records the instant and `ctx.request_repaint_after(3 s + 50 ms)` is called to guarantee a repaint fires even when the user is idle. The `logic()` method clears the message once 3 seconds have elapsed (M9).
+- **Drag-and-drop file type validation** (`app.rs`): Dropped files are partitioned into accepted/rejected by extension using `Vec::partition()`. Accepted extensions are tab-aware (e.g. JSON-only on Generate/Validate tabs). Rejected files trigger a localised log warning (L2, L3).
+- **Hint text on all input fields** (`app.rs`): Every `TextEdit::singleline` now carries a `.hint_text(...)` placeholder describing the expected input (M4).
+- **i18n for file-dialog filter labels** (`app.rs`, `Strings`): All `add_filter("SDS", ...)` / `add_filter("JSON", ...)` etc. now use locale-specific `lbl_filter_*` strings from the `Strings` struct (M5).
+- **i18n for OK/Skip/Show/Hide buttons** (`app.rs`, `Strings`): Welcome screen Skip button and modal OK buttons use `s.btn_skip` / `s.btn_ok`; API key toggle uses `s.btn_show_key` / `s.btn_hide_key` (M6, L4).
+- **Strings struct extended** (`app.rs`): Added 10 new fields — `btn_ok`, `btn_skip`, `btn_show_key`, `btn_hide_key`, `msg_drop_rejected`, `lbl_filter_sds`, `lbl_filter_json`, `lbl_filter_doc`, `lbl_filter_word`, `lbl_filter_txt`; dead `btn_clear_files` field removed. All three locales (en/ja/zh-cn) updated.
+
+### Fixed
+
+- **Empty-input/output validation now uses error modal** (`app.rs`): `start_convert`, `start_generate`, and `start_validate` previously wrote "no input/output path" as a plain log message. They now set `self.error_modal` so the error surfaces as a blocking dialog (H2).
+- **Log clone eliminated** (`app.rs`): Log rendering previously cloned the entire `Vec<String>` before releasing the mutex. The `ScrollArea` now renders directly while holding the `MutexGuard`, saving an allocation on every frame (M3).
+- **Redundant "clear files" buttons removed** (`app.rs`): Small "clear files" buttons in the Convert and Validate batch-mode panels were redundant — switching to single mode already clears the list. Both buttons and the dead `btn_clear_files` Strings field have been removed (L7).
+
+### Added (continued from prior unreleased)
 
 - **Automated Windows & macOS release builds** (`.github/workflows/release.yml`): pushing a `v*.*.*` tag now automatically builds `sds-converter-windows-portable.zip` (Windows x86_64) and `sds-converter-macos.zip` (macOS Universal — Apple Silicon + Intel) and attaches them to the GitHub Release. Homebrew Cask auto-update is skipped gracefully when `HOMEBREW_TAP_TOKEN` is not configured.
 

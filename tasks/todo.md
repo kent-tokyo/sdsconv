@@ -159,6 +159,29 @@
 - [x] v0.2.2 で初回動作確認 — Windows・macOS 両ファイルとも Release に添付済み
 - [x] `cargo publish` — sds-converter-core 0.3.2 / sds-converter 0.2.2 公開済み
 
+## Phase 14: GUI UI改善 ✅
+- [x] **H1** 最小ウィンドウサイズ設定 — `with_min_inner_size([640.0, 480.0])` によりウィンドウが小さくなりすぎない
+- [x] **H2** バリデーションエラーの一貫性 — 入力/出力パス空の場合は `error_modal` を使用（ログに流すだけだった問題修正）（変換・生成・検証タブ）
+- [x] **H3** キーボードショートカット — Ctrl+Q でアプリ終了、F1 でマニュアル表示、Ctrl+O でファイルピッカー起動
+- [x] **H4** エラーモーダルを `egui::Modal` に変換 — バックドロップ付き真モーダル、Escape・バックドロップクリックで閉じる（エラー・Aboutダイアログ）
+- [x] **M1** `Frame::NONE` — 非推奨 `Frame::none()` を修正
+- [x] **M2** ログパネル高さ制限を撤廃 — `.max_height(160.0)` 削除でパネルが自由に拡張できるように
+- [x] **M3** ログレンダリングのクローン排除 — ロックを保持したまま `ScrollArea` をレンダリング
+- [x] **M4** 全 `TextEdit` フィールドに `hint_text` を追加
+- [x] **M5** ファイルダイアログフィルターラベルをi18n化 — `lbl_filter_*` 文字列を使用
+- [x] **M6** モーダル・ウェルカム画面のOK/Skipボタンをi18n化 — `btn_ok`、`btn_skip` 使用
+- [x] **M7** Aboutダイアログを `egui::Modal` に変換（キーボード・バックドロップ対応）
+- [x] **M8** busy-pollリペイントを100ms→250msに削減
+- [x] **M9** 設定保存の「Saved」メッセージ自動クリア — `Instant` + `request_repaint_after(3s+50ms)` でアイドル中も確実に発火
+- [x] **M10** `TextEdit` フィールドを `desired_width(avail - offset)` でレスポンシブ化（固定 `add_sized` を廃止）
+- [x] **L1** APIキー表示/非表示トグルボタン追加（`show_api_key` フィールド）
+- [x] **L2** D&Dでドロップされたファイルを拡張子でバリデーション — 拒否時にログ警告
+- [x] **L3** D&D受け入れ拡張子をタブごとに設定
+- [x] **L4** ウェルカム画面のskipボタンをi18n化 — `btn_skip` 使用
+- [x] **L7** 変換・検証タブのバッチモードから冗長な「ファイルクリア」ボタンを削除
+- [x] `Strings` 構造体に10フィールド追加（`btn_ok`、`btn_skip`、`btn_show_key`、`btn_hide_key`、`msg_drop_rejected`、`lbl_filter_{sds,json,doc,word,txt}`）、死んだ `btn_clear_files` フィールドを削除。3言語すべて（en/ja/zh-cn）更新
+- [x] `SdsApp` 構造体に `settings_saved_at`、`show_api_key`、`open_file_dialog_requested` フィールド追加
+
 ## 残タスク
 - [ ] generator.rs: 表レイアウトDOCX（Section 3 Composition 4列表、Section 2 H/P 2列表、Section 9 物性 2列表）
 - [x] harumi 対応: HTML→PDF 純Rust生成 — harumi v0.4.0 の `html` feature で `render_html_to_pdf` を使用（`converter/pdf.rs` 実装済み）
