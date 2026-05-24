@@ -51,7 +51,7 @@ sds-converter
 
 ## 功能特点
 
-- **SDS文档 → JSON**: 从PDF/DOCX/XLSX/TXT/**HTML/URL**中提取文本，并转换为符合MHLW SDS数据交换标准格式v1.0的JSON。支持并行提取与自动重试。
+- **SDS文档 → JSON**: 从PDF/DOCX/XLSX/TXT/**HTML/URL**中提取文本，并转换为符合MHLW SDS数据交换标准格式v1.0的JSON。支持并行提取与自动重试。扫描PDF通过 `pdftoppm`+`tesseract` OCR或Claude Vision API回退处理。
 - **JSON → DOCX**: 从标准JSON生成符合JIS Z 7253规范的16节Word文档，支持多语言节标题。
 - **JSON → HTML**: 生成包含内联CSS和`@media print`支持的自包含UTF-8 HTML5文档（`to-html`）。
 - **JSON → PDF**: 通过LibreOffice CLI转换为PDF（`to-pdf`，需要`soffice`）。
@@ -121,7 +121,7 @@ sds-converter to-json --input input.pdf --output output.json --enrich
 
 ```toml
 [dependencies]
-sds-converter-core = "0.2"
+sds-converter-core = "0.3"
 ```
 
 ---

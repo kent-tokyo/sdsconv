@@ -96,6 +96,7 @@ sds-converter to-json --input extracted.txt --output output.json --lang ja
 | `--lang` | 自动检测 | 源文档语言：`ja` / `en` / `zh-cn` / `zh-tw` |
 | `--quality` | `medium` | 预设：`low`（快速/低成本）/ `medium` / `high`（高精度） |
 | `--concurrency` | `4` | 批量模式的最大并发数 |
+| `--suggested-name` | — | 将输出文件重命名为 `SDS_<发行日>_<品号>.json`（符合MHLW §2.1.2推荐命名规范） |
 
 **各提供商默认值：**
 
@@ -203,7 +204,7 @@ sds-converter validate --input output.json --json
   - 本地LLM（Ollama等）: 使用 `--provider local --base-url <url>`（无需API密钥）
 - 输入文件必须是**基于文本**的PDF或DOCX
   - 不支持加密PDF
-  - 不支持扫描图像PDF（无文本可提取）
+  - 扫描图像PDF：若已安装 `pdftoppm` + `tesseract` 则自动OCR重试，或使用Claude Vision API（`--provider anthropic` 时）
 
 ---
 

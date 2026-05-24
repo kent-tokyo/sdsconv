@@ -16,6 +16,9 @@ Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **T
 - **JSON → DOCX**: Generates a JIS Z 7253-compliant 16-section Word document from the standard JSON, with localized section headings.
 - **Multilingual**: Handles source documents in `ja` / `en` / `zh-CN` / `zh-TW`.
 - **Extensible LLM backend**: Ships with Anthropic Claude, OpenAI GPT, and Google Gemini backends. Bring your own by implementing `LlmBackend`.
+- **SSRF protection**: URL fetches reject private/loopback/link-local and metadata endpoints
+- **HTML/URL input**: Accepts `.html`/`.htm` files and `http(s)://` URLs as input
+- **GHS/CAS validation**: H-codes (H200–H420) and P-codes (P101–P503) against GHS Rev.10; CAS number format and check-digit validation; optional PubChem enrichment
 
 ---
 
@@ -23,7 +26,7 @@ Supports documents in **Japanese**, **English**, **Simplified Chinese**, and **T
 
 ```toml
 [dependencies]
-sds-converter-core = "0.1"
+sds-converter-core = "0.3"
 ```
 
 ---
@@ -201,7 +204,7 @@ The schema covers all 16 sections of JIS Z 7253 with ~200 structured fields.
   - Google Gemini: [Get API key](https://aistudio.google.com/)
 - Input files must be **text-based** PDF or DOCX
   - Encrypted PDFs are not supported (text extraction will fail)
-  - Scanned/image-only PDFs are not supported (no text to extract)
+  - Scanned/image-only PDFs: automatically retried via `pdftoppm` + `tesseract` OCR (if installed), or via Claude Vision API (when using Anthropic provider)
 
 ---
 

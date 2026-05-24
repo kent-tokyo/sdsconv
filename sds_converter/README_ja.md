@@ -96,6 +96,7 @@ sds-converter to-json --input extracted.txt --output output.json --lang ja
 | `--lang` | 自動検出 | ソース文書の言語：`ja` / `en` / `zh-cn` / `zh-tw` |
 | `--quality` | `medium` | プリセット：`low`（高速・低コスト）/ `medium` / `high`（高精度） |
 | `--concurrency` | `4` | バッチモードの最大並列数 |
+| `--suggested-name` | — | 出力ファイルを `SDS_<発行日>_<品番>.json` にリネーム（厚労省§2.1.2推奨命名規則） |
 
 **プロバイダ別デフォルト:**
 
@@ -203,7 +204,7 @@ sds-converter validate --input output.json --json
   - ローカルLLM（Ollama等）: `--provider local --base-url <url>`（APIキー不要）
 - 入力ファイルは**テキストベース**のPDFまたはDOCXであること
   - 暗号化PDFは非対応
-  - スキャン画像PDFは非対応（テキストが存在しない）
+  - スキャン画像PDF：`pdftoppm` + `tesseract`（インストール済みの場合）またはClaude Vision API（`--provider anthropic` 使用時）で自動リトライ
 
 ---
 

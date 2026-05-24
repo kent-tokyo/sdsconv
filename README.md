@@ -51,7 +51,7 @@ Settings are saved to `~/.config/sds-converter/config.toml` and restored on next
 
 ## Features
 
-- **SDS document → JSON**: Extracts text from PDF/DOCX/XLSX/TXT/**HTML/URL** and converts it to the MHLW SDS data exchange format v1.0 via LLM API. Parallel extraction with automatic retry.
+- **SDS document → JSON**: Extracts text from PDF/DOCX/XLSX/TXT/**HTML/URL** and converts it to the MHLW SDS data exchange format v1.0 via LLM API. Parallel extraction with automatic retry. Scanned PDFs are handled via `pdftoppm`+`tesseract` OCR or Claude Vision API fallback.
 - **JSON → DOCX**: Generates a JIS Z 7253-compliant 16-section Word document from the standard JSON, with localized section headings.
 - **JSON → HTML**: Generates a self-contained UTF-8 HTML5 document with inline CSS and `@media print` support (`to-html`).
 - **JSON → PDF**: Converts to PDF via LibreOffice CLI (`to-pdf`). Requires `soffice` in PATH.
@@ -168,7 +168,7 @@ See the [`sds-converter` CLI README](./sds_converter/README.md) for full CLI ref
 ```toml
 # Cargo.toml
 [dependencies]
-sds-converter-core = "0.2"
+sds-converter-core = "0.3"
 ```
 
 ---

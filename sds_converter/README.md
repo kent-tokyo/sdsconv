@@ -96,6 +96,7 @@ sds-converter to-json --input extracted.txt --output output.json --lang ja
 | `--lang` | auto-detect | Source document language: `ja`, `en`, `zh-cn`, `zh-tw` |
 | `--quality` | `medium` | Preset: `low` (fast/cheap), `medium`, `high` (accurate) |
 | `--concurrency` | `4` | Max parallel files in batch mode |
+| `--suggested-name` | — | Rename output to `SDS_<IssueDate>_<ProductCode>.json` (MHLW §2.1.2 recommended convention) |
 
 **Provider defaults:**
 
@@ -207,7 +208,7 @@ Checks that key sections (Identification, HazardIdentification, ToxicologicalInf
   - Local LLM (Ollama etc.): use `--provider local --base-url <url>` (no API key required)
 - Input files must be **text-based** PDF or DOCX
   - Encrypted PDFs are not supported
-  - Scanned/image-only PDFs are not supported (no text to extract)
+  - Scanned/image-only PDFs: automatically retried via `pdftoppm` + `tesseract` OCR (if installed), or via Claude Vision API (when using `--provider anthropic`)
 
 ---
 
@@ -221,7 +222,7 @@ The conversion engine is available as a standalone library:
 
 ```toml
 [dependencies]
-sds-converter-core = "0.2"
+sds-converter-core = "0.3"
 ```
 
 ---

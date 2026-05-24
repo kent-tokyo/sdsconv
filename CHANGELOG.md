@@ -7,8 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **REST API server now requires authentication** (`sds_converter_server`): Bearer token auth via `SDS_SERVER_TOKEN` env var (auto-generates and prints a random token if not set). Default bind address changed from `0.0.0.0` to `127.0.0.1` (`SDS_SERVER_BIND` override)
+- **CORS restricted to localhost** (`sds_converter_server`): replaced `CorsLayer::permissive()` with an allowlist of `http://localhost` and `http://127.0.0.1` only
+- **Concurrency cap on REST server** (`sds_converter_server`): `ConcurrencyLimitLayer(10)` prevents resource exhaustion from concurrent requests
+- **SSRF protection** (`extractor.rs`): URL fetches now reject private/loopback/link-local/metadata IP addresses and hostnames (`localhost`, `169.254.x.x`, RFC-1918 ranges, `::1`) before issuing the HTTP request
+- **Prompt injection mitigation strengthened** (`llm.rs`): `</document>` occurrences in document text are escaped to `</_document>` before insertion into LLM user messages
+- **LLM error body no longer forwarded to API clients** (`sds_converter_server`): full provider error responses are logged server-side only; clients receive a sanitized `{"error": "LLM API request failed", "status": N}` response
+
 ### Added
 
+- **MHLW §3.3 compliance — empty field pruning** (`tasks.rs`): `prune_empty_strings` post-processes LLM output to remove `""`, `[]`, and `{}` values before writing the JSON file
+- **Recommended filename output** (`tasks.rs`, `config.rs`, `app.rs`, `main.rs`): `--suggested-name` CLI flag and GUI Settings checkbox output the file as `SDS_<IssueDate>_<ProductCode>.json` per the MHLW §2.1.2 naming convention. Filename conflicts are resolved atomically
+- **`SdsError::display_safe()`** (`error.rs`): new method that returns a sanitized error message safe for external/client display (strips LLM provider error bodies)
+- **`ProductNoUser` extraction** (`llm.rs`): added `ProductNoUser` array to the MHLW schema example hint so LLMs extract the field
 - **Scanned PDF OCR fallback** (`extractor.rs`): When `pdf_extract` yields fewer than 200 characters
   (image-only / scanned PDF), the extractor automatically shells out to `pdftoppm` (poppler) +
   `tesseract` CLI. Pages are rasterised at 300 dpi, OCR'd with `jpn+eng` (falls back to `eng` if the
@@ -50,6 +63,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Provider API key links and onboarding banner** (`app.rs`): Settings tab displays clickable
   links to the API key page for each provider. First-run onboarding banner guides new users.
+
+### Fixed
+
+- URL response body now capped at 50 MB (Content-Length pre-check + streaming byte cap) to prevent OOM on large responses
+- CJK text truncation: `out.len()` (byte count) was compared against `max_chars` (character count), causing Japanese text to be cut at 1/3 the intended length. Fixed to use `chars().count()`
+- Blocking `std::fs::read` replaced with `tokio::task::spawn_blocking` inside `convert_pdf_to_json_vision` to avoid stalling the Tokio executor during image-only PDF processing
+- Log panel now enforces the documented 500-line maximum (was unbounded despite the "max 500" label)
+- `start_generate` now validates the output path before spawning the async task, matching the guard in `start_convert`
+- Validation result "No issues" message now uses the i18n `Strings` struct instead of a hardcoded Japanese literal
+- TOCTOU race in `resolve_unique_suggested_path`: replaced `exists()` check with atomic `OpenOptions::create_new(true)` to prevent concurrent batch runs from overwriting each other's output
+- PubChem enrichment no longer silently drops results on HTTP 429: adds 250 ms inter-request delay and retries once with 1 s backoff
 
 ## [0.2.0] - 2026-05-23
 
