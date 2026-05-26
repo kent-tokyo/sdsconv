@@ -87,6 +87,7 @@ struct Strings {
     tooltip_quality_low: &'static str,
     tooltip_quality_med: &'static str,
     tooltip_quality_high: &'static str,
+    tooltip_quality_max: &'static str,
     // Settings — advanced LLM fields
     lbl_model: &'static str,
     lbl_base_url: &'static str,
@@ -226,6 +227,7 @@ Multiple files can be selected at once.
             tooltip_quality_low:  "Low accuracy, fast & cheap (Haiku)",
             tooltip_quality_med:  "Standard accuracy & speed (Haiku)",
             tooltip_quality_high: "High accuracy, slow & costly (Sonnet)",
+            tooltip_quality_max:  "Maximum tokens (65 536) for very long SDS documents (Sonnet)",
             lbl_model:            "Model (optional):",
             lbl_base_url:         "Base URL (optional):",
             lbl_template:         "Template (optional):",
@@ -348,6 +350,7 @@ Multiple files can be selected at once.
             tooltip_quality_low:  "低精度·快速·低成本 (Haiku)",
             tooltip_quality_med:  "标准精度·标准速度 (Haiku)",
             tooltip_quality_high: "高精度·慢速·高成本 (Sonnet)",
+            tooltip_quality_max:  "最大输出token（65 536），适用于超长SDS文档 (Sonnet)",
             lbl_model:            "模型名（可选）:",
             lbl_base_url:         "Base URL（可选）:",
             lbl_template:         "模板（可选）:",
@@ -472,6 +475,7 @@ JSONファイルを選択して「検証実行」をクリックすると警告�
             tooltip_quality_low:  "低精度・高速・低コスト (Haiku)",
             tooltip_quality_med:  "標準精度・標準速度 (Haiku)",
             tooltip_quality_high: "高精度・低速・高コスト (Sonnet)",
+            tooltip_quality_max:  "最大出力トークン（65 536）超長文SDS用 (Sonnet)",
             lbl_model:            "モデル名 (省略可):",
             lbl_base_url:         "base URL (省略可):",
             lbl_template:         "テンプレート (省略可):",
@@ -770,6 +774,8 @@ impl SdsApp {
                         .on_hover_text(s.tooltip_quality_med);
                     ui.selectable_value(&mut self.conv_quality, "high".to_string(), "high")
                         .on_hover_text(s.tooltip_quality_high);
+                    ui.selectable_value(&mut self.conv_quality, "max".to_string(), "max")
+                        .on_hover_text(s.tooltip_quality_max);
                 });
             ui.add_space(8.0);
             ui.label(s.lbl_lang);

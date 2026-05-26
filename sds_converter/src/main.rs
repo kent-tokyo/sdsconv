@@ -25,6 +25,8 @@ enum CliQuality {
     #[default]
     Medium,
     High,
+    /// Maximum output tokens (65 536) for very long SDS documents.
+    Max,
 }
 
 impl From<CliQuality> for Quality {
@@ -33,6 +35,7 @@ impl From<CliQuality> for Quality {
             CliQuality::Low    => Quality::Low,
             CliQuality::Medium => Quality::Medium,
             CliQuality::High   => Quality::High,
+            CliQuality::Max    => Quality::Max,
         }
     }
 }

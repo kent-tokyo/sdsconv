@@ -79,11 +79,14 @@ pub enum Quality {
     #[default]
     Medium,
     High,
+    /// Maximum — for very long SDS documents (e.g. multi-section Chinese GB/T 16483).
+    /// Uses max_tokens=65_536 and max_chars=120_000.
+    Max,
 }
 
 impl Quality {
     pub fn all() -> &'static [&'static str] {
-        &["low", "medium", "high"]
+        &["low", "medium", "high", "max"]
     }
 
     pub fn label(self) -> &'static str {
@@ -91,6 +94,7 @@ impl Quality {
             Quality::Low    => "low",
             Quality::Medium => "medium",
             Quality::High   => "high",
+            Quality::Max    => "max",
         }
     }
 
@@ -98,15 +102,17 @@ impl Quality {
         match s {
             "low"  => Quality::Low,
             "high" => Quality::High,
+            "max"  => Quality::Max,
             _      => Quality::Medium,
         }
     }
 
     pub fn max_chars(self) -> usize {
         match self {
-            Quality::Low    => 15_000,
-            Quality::Medium => 30_000,
-            Quality::High   => 60_000,
+            Quality::Low    =>  15_000,
+            Quality::Medium =>  30_000,
+            Quality::High   =>  60_000,
+            Quality::Max    => 120_000,
         }
     }
 
@@ -115,13 +121,14 @@ impl Quality {
             Quality::Low    =>  8_192,
             Quality::Medium => 16_384,
             Quality::High   => 32_768,
+            Quality::Max    => 65_536,
         }
     }
 
     pub fn anthropic_model(self) -> &'static str {
         match self {
-            Quality::High => "claude-sonnet-4-6",
-            _             => "claude-haiku-4-5-20251001",
+            Quality::High | Quality::Max => "claude-sonnet-4-6",
+            _                            => "claude-haiku-4-5-20251001",
         }
     }
 }

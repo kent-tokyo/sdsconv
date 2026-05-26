@@ -37,7 +37,7 @@ sds-converter
 |---|---|
 | **変換** | SDS文書（PDF/DOCX/XLSX/HTML/URL）→ MHLW標準JSON |
 | **文書生成** | MHLW JSON → DOCX / HTML / PDF（DOCXテンプレート対応） |
-| **検証** | MHLW JSONの構造検証（✅⚠❌カラー表示） |
+| **検証** | MHLW JSONの構造検証（OK/警告/エラーをカラー表示） |
 | **テキスト抽出** | 文書からテキスト抽出（LLM API不要） |
 | **設定** | APIキー・モデル名・base URL・品質・言語・UI言語 |
 

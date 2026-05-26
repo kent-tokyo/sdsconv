@@ -36,7 +36,7 @@ The GUI window (820×640) opens with five tabs:
 |---|---|
 | **Convert** | SDS document (PDF/DOCX/XLSX/HTML/URL) → MHLW standard JSON |
 | **Generate** | MHLW JSON → DOCX / HTML / PDF (with optional DOCX template) |
-| **Validate** | Structural validation of MHLW JSON with colored ✅⚠❌ results |
+| **Validate** | Structural validation of MHLW JSON with colored OK/Warning/Error results |
 | **Extract Text** | Raw text extraction from documents — no LLM API required |
 | **Settings** | API key, model name, base URL, quality, language, UI language |
 

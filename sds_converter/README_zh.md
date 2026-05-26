@@ -36,7 +36,7 @@ sds-converter
 |---|---|
 | **转换** | SDS文档（PDF/DOCX/XLSX/HTML/URL）→ MHLW标准JSON |
 | **文档生成** | MHLW JSON → DOCX / HTML / PDF（支持DOCX模板） |
-| **验证** | MHLW JSON结构验证（✅⚠❌彩色显示） |
+| **验证** | MHLW JSON结构验证（OK/警告/错误彩色显示） |
 | **文本提取** | 从文档提取原始文本（无需LLM API） |
 | **设置** | API密钥、模型名称、Base URL、质量、语言、界面语言 |
 

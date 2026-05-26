@@ -114,18 +114,41 @@ impl LlmBackend for AnthropicBackend {
             ]
         });
 
+        // For large outputs (max_tokens > 8192) request the extended output beta so
+        // that Claude 3.7+ / Claude 4 models can produce up to 128 K tokens.
+        let beta_header = if self.config.max_tokens > 8_192 {
+            "extended-cache-ttl-2025-04-11,output-128k-2025-02-19"
+        } else {
+            "extended-cache-ttl-2025-04-11"
+        };
+
         let response = send_with_retry(|| {
             self.client
                 .post(ANTHROPIC_API_URL)
                 .header("x-api-key", &self.api_key)
                 .header("anthropic-version", ANTHROPIC_VERSION)
-                .header("anthropic-beta", "extended-cache-ttl-2025-04-11")
+                .header("anthropic-beta", beta_header)
                 .header("content-type", "application/json")
                 .json(&body)
         })
         .await?;
 
         let resp: Value = response.json().await?;
+
+        // Log stop_reason and output token usage for diagnostics.
+        let stop_reason = resp["stop_reason"].as_str().unwrap_or("<none>");
+        let out_tokens  = resp["usage"]["output_tokens"].as_u64().unwrap_or(0);
+        tracing::debug!(stop_reason, out_tokens, max_tokens = self.config.max_tokens, "Anthropic response");
+
+        // Warn when the model ran out of output tokens (stop_reason == "max_tokens").
+        if stop_reason == "max_tokens" {
+            tracing::warn!(
+                "Anthropic API stop_reason=max_tokens — response truncated \
+                 (used {out_tokens} of {} max_tokens). Consider using --quality max or splitting the document.",
+                self.config.max_tokens
+            );
+        }
+
         let text = resp["content"][0]["text"]
             .as_str()
             .ok_or_else(|| SdsError::LlmParse("missing content[0].text".to_string()))?;
@@ -378,6 +401,81 @@ fn repair_json(s: &str) -> String {
         s.push(*closer);
     }
     s
+}
+
+// ---------------------------------------------------------------------------
+// Unescaped-quote fixer
+// ---------------------------------------------------------------------------
+
+/// Scan JSON text character-by-character and escape any `"` that appears
+/// *inside* a string value (i.e. after the opening `"` but before the closing `"`
+/// that is followed by `:`, `,`, `}`, or `]`).
+///
+/// This handles cases where the LLM outputs source-document quotation like
+/// `"参見"第8部分"内容"` instead of `"参見\"第8部分\"内容"`.
+///
+/// The heuristic is conservative: only escape `"` when it is clearly inside a
+/// JSON string (not a legitimate delimiter) — specifically when the scanner
+/// encounters a `"` that is not preceded by `\` while `in_string == true`.
+///
+/// Because LLMs always emit the structural tokens (`:`, `,`, `{`, `}`, `[`, `]`)
+/// as ASCII, we can reliably detect delimiter vs. content quotes by checking what
+/// follows: a lone `"` whose next non-whitespace character is NOT one of those
+/// structural tokens is treated as content and gets escaped.
+fn fix_unescaped_quotes(s: &str) -> String {
+    let chars: Vec<char> = s.chars().collect();
+    let n = chars.len();
+    let mut out = String::with_capacity(s.len() + 64);
+    let mut i = 0;
+    let mut in_string = false;
+    let mut prev_backslash = false;
+
+    while i < n {
+        let c = chars[i];
+
+        if prev_backslash {
+            prev_backslash = false;
+            out.push(c);
+            i += 1;
+            continue;
+        }
+
+        if c == '\\' {
+            prev_backslash = true;
+            out.push(c);
+            i += 1;
+            continue;
+        }
+
+        if c == '"' {
+            if !in_string {
+                // Opening delimiter — begin string
+                in_string = true;
+                out.push(c);
+            } else {
+                // Could be closing delimiter or unescaped content quote.
+                // Peek at what follows (skip whitespace).
+                let mut j = i + 1;
+                while j < n && (chars[j] == ' ' || chars[j] == '\t') {
+                    j += 1;
+                }
+                let next = chars.get(j).copied().unwrap_or('\0');
+                if matches!(next, ':' | ',' | '}' | ']' | '\n' | '\r' | '\0') {
+                    // Structural character follows → this is the closing delimiter.
+                    in_string = false;
+                    out.push(c);
+                } else {
+                    // Non-structural character follows → unescaped content quote.
+                    out.push('\\');
+                    out.push('"');
+                }
+            }
+        } else {
+            out.push(c);
+        }
+        i += 1;
+    }
+    out
 }
 
 // ---------------------------------------------------------------------------
@@ -680,7 +778,10 @@ fn build_system_prompt(lang: Option<Language>) -> String {
          - Numeric values as numeric types (not strings) inside NumericRangeWithUnitAndQualifier\n\
          - For qualitative text values in PhysicalChemicalProperties, use AdditionalInfo: {{\"FullText\": [\"text\"]}} — note FullText is an ARRAY of strings\n\
          - For multi-line text values, use \"\\n\" (backslash-n) to represent line breaks, never actual newlines inside a JSON string\n\
+         - CRITICAL: Any double-quote character (\" U+0022) that appears inside a JSON string value MUST be escaped as \\\\\" — this includes quotation marks used in source text (e.g. \"第8部分\" must be written as \\\\\"第8部分\\\\\")\n\
          - Reproduce text exactly as written in the source document; do not infer or fill in missing data\n\
+         - Confidential/undisclosed values (e.g. '非公開', '秘密', 'confidential', '不公开') must be recorded as-is in AdditionalInfo.FullText — never omit them\n\
+         - ItemName values must be copied verbatim from the source document; never translate or standardize them (e.g. '目に入った場合' must NOT become '眼への接触')\n\
          - JSON keys must match EXACTLY the key names shown in the schema example below\n\
          {TYPO_WARNINGS}\n\
          \nSchema example (use these EXACT key names):\n{MHLW_SCHEMA_HINT}"
@@ -864,11 +965,23 @@ fn lenient_deserialize(json_str: &str) -> Result<(SdsRoot, Vec<String>), SdsErro
     // Strip code fences that some models add despite instructions.
     let json_str = &strip_code_fences(json_str);
 
-    // Try parsing as-is first; only run repair if needed (avoids unnecessary allocations).
+    // Try parsing as-is first; then repair_json; then escape-fix + repair as last resort.
     let mut val: Value = serde_json::from_str(json_str)
         .or_else(|_| serde_json::from_str(&repair_json(json_str)))
+        .or_else(|_| serde_json::from_str(&repair_json(&fix_unescaped_quotes(json_str))))
         .map_err(|e| {
             let preview: String = json_str.chars().take(500).collect();
+            // Log a window around the error column for diagnosis.
+            if let Some(col) = e.column().checked_sub(1) {
+                let start = col.saturating_sub(120);
+                let window: String = json_str.chars().skip(start).take(240).collect();
+                tracing::warn!("JSON parse error near col {col}: ...{window}...");
+            }
+            // Dump the full raw JSON to /tmp for offline inspection.
+            if let Ok(mut f) = std::fs::File::create("/tmp/sds_llm_raw_error.json") {
+                let _ = std::io::Write::write_all(&mut f, json_str.as_bytes());
+                tracing::warn!("Full raw JSON written to /tmp/sds_llm_raw_error.json");
+            }
             SdsError::LlmParse(format!("Invalid JSON: {e}\nRaw (first 500 chars): {preview}"))
         })?;
 
@@ -975,7 +1088,10 @@ fn build_vision_system_prompt(lang: Option<Language>) -> String {
          - Numeric values as numeric types (not strings) inside NumericRangeWithUnitAndQualifier\n\
          - For qualitative text values in PhysicalChemicalProperties, use AdditionalInfo: {{\"FullText\": [\"text\"]}} — note FullText is an ARRAY of strings\n\
          - For multi-line text values, use \"\\n\" (backslash-n) to represent line breaks, never actual newlines inside a JSON string\n\
+         - CRITICAL: Any double-quote character (\" U+0022) that appears inside a JSON string value MUST be escaped as \\\\\" — this includes quotation marks used in source text (e.g. \"第8部分\" must be written as \\\\\"第8部分\\\\\")\n\
          - Reproduce text exactly as written in the source document; do not infer or fill in missing data\n\
+         - Confidential/undisclosed values (e.g. '非公開', '秘密', 'confidential', '不公开') must be recorded as-is in AdditionalInfo.FullText — never omit them\n\
+         - ItemName values must be copied verbatim from the source document; never translate or standardize them (e.g. '目に入った場合' must NOT become '眼への接触')\n\
          - JSON keys must match EXACTLY the key names shown in the schema example below\n\
          {TYPO_WARNINGS}\n\
          \nSchema example (use these EXACT key names):\n{MHLW_SCHEMA_HINT}"
