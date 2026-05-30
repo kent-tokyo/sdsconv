@@ -303,3 +303,71 @@ CJK文字（日中韓）は1文字=3バイトのUTF-8。
 
 ### 空のJSONセクション vs 抽出失敗
 `ToxicologicalInformation`/`EcologicalInformation` が `[{}]` や `{}` となっている場合、ソースSDS が「データなし」と記載していることの正しい反映であり、バグではない。内容が意味あるものかチェックする前に、JSONの構造文字（`{`・`}`・`[`・`]`）を除去すること。
+
+## LLM抽出品質チェック（QCフォールスポジティブ）
+
+### H226 + Dangerシグナルの誤検知
+H226（第3類引火性液体）単独でDangerシグナルを持つ場合は通常の警告対象だが、同一製品にH314/H370/H350等の「Danger相当Hコード」が他に存在する場合は、そのDangerシグナルは他コードによるものであり誤検知となる。
+QCチェック実装では `other_danger = any(h for h in hcodes if h != "H226" and h starts with danger_prefix)` で他のDangerレベルコードがあれば警告をスキップすること。
+
+### FireFighting「適切な消火方法を使用」の誤検知
+"Use appropriate extinguishing measures" / "適切な消火措置" のような汎用的な記述は、特定の消火剤名（foam/water/CO2等）を列挙しない形式で規格準拠のSDS（特に英語・中国語）に多く見られる。QCでは "appropriate"/"extinguish"/"灭火"/"消火" といったキーワードも許容すること。
+
+### Transport「規制されていない」の日本語表現
+"非危険物"だけでなく "規制されていない"/"規制対象外"/"危険物に該当しない"/"not subject"/"no regulation" 等の表現もチェックに含めること。
+
+### StabilityReactivity「該当データなし」の誤検知
+安定性・反応性セクションで "無相関詳細資料"/"无相关详细资料"/"N/A"/"ConditionsToAvoid"（JSONキー名）等の「データなし」表現が含まれていれば、有意な内容があるとみなしてよい。QCの文字列比較は case-sensitive で行い、JSONキー名自体も検索対象に含めること（`sr_str` ではなく `sr_lower` を使うと JSONキー名が消えて検出できない）。
+
+### 吸入FirstAidのキーワード vs キー存在確認
+FirstAid テキストに "inhalation" 等のキーワードがなくても、`FirstAidInhalation` というキーが JSON に存在すれば吸入ルート対応とみなせる。テキスト内容のキーワード検索より先に、JSONキー名の存在を確認すること（`route_keys_lower` の辞書で `"firstaidinhalation" in route_keys_lower` を優先）。
+
+### PersistenceDegradability の文字列チェック
+`PersistenceDegradability` というキー名を含む文字列を small-case 変換（`eco_lower`）で検索すると `"persistencedegradability"` になり、`"PersistenceDeg"` 等のサブストリングでマッチしない。JSON文字列は case-sensitive なので `eco_str`（変換前）で検索するか、`"degradab"` 等の小文字でも一致するキーワードを使うこと。
+
+## LLM抽出 — 「なし」表現の検出
+
+### OEL「不要求」フレーズ群
+中国語・日本語SDSでは職業ばく露限値が設定されていない場合に "不要求"/"无需监控"/"不适用"/"无职業接触限值" 等と記載する。LLMがこれらを無視して ExposureControlPersonalProtection.OccupationalExposureLimits を省略しないよう、プロンプトにこれらのフレーズを明示的に列挙し "include one entry with AdditionalInfo.FullText quoting that source phrase" と指示すること。
+
+### Use フィールドの省略防止
+Section 1.2 が存在するが具体的な使用目的が記載されていない場合（'無相関詳細情報'/'无相关详细资料'/'no specific use listed'等）、LLMは Use 配列を省略しがち。"never omit the Use key when Section 1.2 is present" と明示し、データなしのソーステキストを1エントリとして格納するよう指示すること。
+
+## 中国旧規格（GB 13690-92）の引火点分類
+
+ichemistry等の古い中国語SDSは GB 13690-92（前GHS時代）の引火点分類（甲A/甲B/乙/丙等）を使用している。この分類はGHS Cat.2/3と1対1対応しないため、LLMが推論で H225 vs H226 を誤ることがある。例：FP=16°C の液体が "高闪点" 分類（丙類）で記載されている場合、GHS的には H225 だが旧分類の "丙" は H226 に誤対応する。これはソース品質の問題であり、抽出バグではない。
+
+---
+
+## Round 22 分析（quality_check_r22.py / 30件）
+
+### 最頻出 QC 問題トップ 10（件数）
+
+| 件数 | 問題 | 種別 |
+|---|---|---|
+| 10 | CompanyName empty | ソース限界（前 GHS ichemistry） |
+| 10 | 手袋材質未指定（nitrile/butyl 等） | 抽出ギャップ → Phase 18 対応可 |
+| 8 | pH 未抽出（腐食性 H コード） | 抽出ギャップ → Phase 18 対応可 |
+| 7 | NO P-codes | ソース限界（前 GHS MSDS） |
+| 7 | GB 標準規格参照なし（zh-cn） | ソース限界（旧 MSDS） |
+| 6 | Proper Shipping Name 未抽出 | 抽出ギャップ → Phase 18 対応可 |
+| 6 | AutoIgnitionTemperature 未抽出 | 抽出ギャップ → Phase 18 対応可 |
+| 5 | Density/RelativeDensity 未抽出 | 一部継続課題 |
+| 3 | LogP/Kow/BCF 未抽出 | 抽出ギャップ → Phase 18 対応可 |
+| 3 | 廃棄方法の記述なし（zh-tw） | ソース品質（大学系 MSDS） |
+
+### Phase 18 プロンプト改善候補
+
+1. **Sec8 手袋材質**: HandProtection 抽出時に「具体的な材質名（nitrile/butyl rubber/neoprene/天然ゴム等）を必ず記載」と指示
+2. **Sec9 pH**: 腐食性・酸性製品（H314/H290/H318/H319）では pH 値を必ず抽出
+3. **Sec9 AutoIgnitionTemperature**: 引火性液体（H224/H225/H226）では自然発火温度を抽出
+4. **Sec12 LogP/BCF**: 環境 H コード（H4xx）では分配係数・生体濃縮係数を抽出
+5. **Sec14 ProperShippingName**: UN 番号がある場合は正式品名を必ず抽出
+
+### zh-cn ichemistry の構造的限界
+
+前 GHS 時代（〜2003 年）の中国 MSDS は GHS 形式に対応していない：
+- CompanyName が原文に存在しない（会社リスト形式で管理）
+- P コードが存在しない（GHS ラベルがない）
+- GB 30000 系参照がない（代わりに GB 13690-92 等の旧規格）
+これらは抽出ギャップではなくソース品質限界。r22 QC で HIGH が出るのは仕様通り。

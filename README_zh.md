@@ -186,6 +186,12 @@ sds-converter-core = "0.3"
 ### 下一版本（0.3.x）
 - [ ] DOCX表格布局 — 第3节成分信息（4列）、第2节H/P编码（2列）、第9节物化性质（2列）
 
+### 0.3.6 / 0.2.6 已完成
+- [x] LLM提示词：第1节Use回退 — 第1.2节存在但无具体用途时，将原文（如`'无相关详细资料'`）存入Use数组
+- [x] LLM提示词：第8节OEL"不要求"检测 — `不要求`/`无需监控`/`不适用`等表述存入`AdditionalInfo.FullText`（不再省略）
+- [x] LLM提示词：第9节Densities必须提取；易燃/挥发性产品（H224/H225/H226/H330–H332）提取VapourPressure
+- [x] LLM提示词：第12节存在持续性/降解性子节时，必须填充`PersistenceDegradability.BiologicalDegradability`
+
 ### 0.3.5 / 0.2.5 已完成
 - [x] 多国SDS支持（`--country cn|tw|kr|jp`）— 国家特定LLM提取规则注入、合规差距报告生成
 - [x] 验证驱动纠错通道（`--correct`）— 第二次LLM调用修复无效H/P码，CAS校验位确定性纠错
@@ -213,6 +219,7 @@ sds-converter-core = "0.3"
 
 - [厚生劳动省 — SDS信息交换标准格式发布页面](https://www.mhlw.go.jp/stf/newpage_56484.html)（日语）
 - [SDS数据交换格式开发者手册（PDF）](https://www.mhlw.go.jp/content/11305000/001467068.pdf)（日语）
+- [JSON 质量检查详细手册 — 53项检查按章节说明](docs/quality-check.md)
 
 ---
 

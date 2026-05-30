@@ -185,6 +185,12 @@ sds-converter-core = "0.3"
 ### Next (0.3.x)
 - [ ] DOCX table layout — Section 3 Composition (4-column), Section 2 H/P codes (2-column), Section 9 physical properties (2-column)
 
+### Completed in 0.3.6 / 0.2.6
+- [x] LLM prompt: Section 1 Use fallback — source phrase captured when Section 1.2 exists but no specific use is listed (e.g. `'无相关详细资料'`)
+- [x] LLM prompt: Section 8 OEL "not required" detection — `不要求` / `无需监控` / `不适用` and similar phrases now stored in `AdditionalInfo.FullText` instead of being silently omitted
+- [x] LLM prompt: Section 9 Densities always extracted; VapourPressure added for flammable/volatile products (H224/H225/H226/H330–H332)
+- [x] LLM prompt: Section 12 `PersistenceDegradability.BiologicalDegradability` always populated when the source subsection exists
+
 ### Completed in 0.3.5 / 0.2.5
 - [x] Multi-country SDS support (`--country cn|tw|kr|jp`) with country-specific LLM extraction rules and compliance gap reports
 - [x] Validation-driven correction pass (`--correct`) — second LLM call fixes invalid H/P-codes; deterministic CAS check-digit correction
@@ -212,6 +218,7 @@ sds-converter-core = "0.3"
 
 - [MHLW — SDS Standard Data Exchange Format (official page)](https://www.mhlw.go.jp/stf/newpage_56484.html) (Japanese)
 - [SDS Data Exchange Format Developer Manual (PDF)](https://www.mhlw.go.jp/content/11305000/001467068.pdf) (Japanese)
+- [JSON Quality Check Manual — all 53 rules explained by section](docs/quality-check.md)
 
 ---
 

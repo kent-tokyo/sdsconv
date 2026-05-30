@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **LLM prompt: Section 1 Use fallback** (`llm.rs`): When Section 1.2 exists in the source but no specific use is listed, the source phrase (e.g. `'無相関詳細情報'`, `'无相关详细资料'`, `'no specific use listed'`) is now captured as one entry in the Use array — the Use key is never omitted when Section 1.2 is present in the source.
+
+- **LLM prompt: Section 8 OEL "not required" detection** (`llm.rs`): Added explicit recognition of Chinese and Japanese phrases that indicate no occupational exposure limits are established (`不要求`, `无需监控`, `不适用`, `无职業接触限值`, `no limits established`, `not required`, `no monitoring required`). When any such phrase is present, one entry with `AdditionalInfo.FullText` quoting the source phrase is included instead of omitting the field.
+
+- **LLM prompt: Section 9 Densities and VapourPressure** (`llm.rs`): Added explicit instruction to always extract density, relative density, or specific gravity into the `Densities` array (numeric values via `NumericRangeWithUnitAndQualifier`, text-only values via `AdditionalInfo.FullText`). Also added instruction to extract `VapourPressure` for any flammable or volatile product bearing H224, H225, H226, H330, H331, or H332.
+
+- **LLM prompt: Section 12 PersistenceDegradability** (`llm.rs`): When the source includes a persistence/degradability subsection, `PersistenceDegradability.BiologicalDegradability` is now always populated — using the source text if available, or `'該当データなし'` / `'无相关数据'` if the subsection exists but contains no data. Similarly, bioaccumulation subsections are captured in `AdditionalEcotoxInformation`.
+
 ## [0.2.4] / [0.3.4] — 2026-05-26
 
 ### Fixed

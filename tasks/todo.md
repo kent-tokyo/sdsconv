@@ -203,6 +203,13 @@
 - [x] Visionパスへのリテキストパスと同等のCRITICAL指示適用
 - [x] バリデーター強化: 濃度フィールド内の日付検出・製品名プレースホルダー検出・分類網羅性チェック・中国語キーワード（氯/氟/酐/酰等）によるH290クロスチェック・混合物対応AcuteToxicityカテゴリ vs H-codeクロスチェック
 
+## Phase 17: LLM抽出品質向上（Round 21テスト） ✅
+- [x] Section 1 Use フォールバック — セクション1.2が存在するがUseが不明の場合、ソーステキスト（'無相関詳細情報'/'无相关详细资料'/'no specific use listed'等）を1エントリとして Use 配列に格納、キー自体を省略しない
+- [x] Section 8 OEL「不要求」フレーズ検出 — '不要求'/'无需监控'/'不适用'/'无职業接触限值'/'no limits established'/'not required'/'no monitoring required'等を「制限値なし」として認識し AdditionalInfo.FullText に格納
+- [x] Section 9 Densities 必須抽出 — 密度・相対密度・比重を Densities 配列へ（数値→NumericRangeWithUnitAndQualifier、テキスト→AdditionalInfo.FullText）
+- [x] Section 9 VapourPressure — H224/H225/H226/H330/H331/H332 を持つ引火性・揮発性製品で明示的に抽出指示を追加
+- [x] Section 12 PersistenceDegradability — 残留性/分解性サブセクションが存在する場合は BiologicalDegradability を常に格納（データなしの場合は'該当データなし'/'无相关数据'）
+
 ## 残タスク
 - [ ] generator.rs: 表レイアウトDOCX（Section 3 Composition 4列表、Section 2 H/P 2列表、Section 9 物性 2列表）
 - [x] harumi 対応: HTML→PDF 純Rust生成 — harumi v0.4.0 の `html` feature で `render_html_to_pdf` を使用（`converter/pdf.rs` 実装済み）

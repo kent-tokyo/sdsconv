@@ -184,6 +184,12 @@ sds-converter-core = "0.3"
 ### 次期リリース（0.3.x）
 - [ ] DOCXの表レイアウト — 第3項（成分情報・4列表）、第2項（H/Pコード・2列表）、第9項（物性・2列表）
 
+### 0.3.6 / 0.2.6 で完了
+- [x] LLMプロンプト: Section 1 Use フォールバック — セクション1.2が存在するが使用目的不明の場合、ソーステキストを Use 配列に格納（`'无相关详细资料'` 等）
+- [x] LLMプロンプト: Section 8 OEL「不要求」検出 — `不要求`/`无需监控`/`不适用` 等を `AdditionalInfo.FullText` に格納（省略しない）
+- [x] LLMプロンプト: Section 9 Densities 必須抽出、引火性製品（H224/H225/H226/H330–H332）の VapourPressure 抽出
+- [x] LLMプロンプト: Section 12 残留性/分解性サブセクション存在時は `PersistenceDegradability.BiologicalDegradability` を常に格納
+
 ### 0.3.5 / 0.2.5 で完了
 - [x] 多国SDS対応（`--country cn|tw|kr|jp`）— 国別LLM抽出ルール注入・コンプライアンスギャップレポート生成
 - [x] バリデーション駆動補正パス（`--correct`）— 無効H/P-codeを第2LLMコールで修正、CASチェックデジット確定的補正
@@ -211,6 +217,7 @@ sds-converter-core = "0.3"
 
 - [厚生労働省 — SDS情報交換のための標準的フォーマット等の公開について](https://www.mhlw.go.jp/stf/newpage_56484.html)
 - [SDSデータ交換フォーマット データ利用マニュアル（PDF）](https://www.mhlw.go.jp/content/11305000/001467068.pdf)
+- [JSON 品質チェック詳細マニュアル — 53 チェック項目をセクション別に解説](docs/quality-check.md)
 
 ---
 
