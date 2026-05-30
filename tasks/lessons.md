@@ -286,3 +286,20 @@ CJK文字（日中韓）は1文字=3バイトのUTF-8。
 実際にはバイト数制限になり、日本語テキストは意図の1/3しかLLMに渡らない。
 → 文字数制限には `text.chars().count()` を使い、
 切り詰めのバイトオフセットは `text.char_indices().nth(n)` で求めること。
+
+## 多国SDS対応
+
+### CAS連結文字列
+一部のSDS（特に中国製）では、複数のCAS番号を `\n`・カンマ・セミコロンで連結した1つの文字列として格納している。常に `\n`/`\r`/`,`/`;` で分割してトリムすること。`normalize_cas_full_text()` 関数がこの処理を担当する。
+
+### 非GHS形式のMSDS（前GHS時代の中国語SDS）
+化工仪器网・ichemistry等の中国語SDSは、標準的なP-codeが存在しない前GHS時代のMSDS形式を使用していることがある。LLMは記述からH-codeを正しく推論できるが、P-codeは原文に存在しない。これは抽出バグではなく、ソースSDS自体の品質上の問題として扱うこと。
+
+### 国別バリデーション vs 抽出品質
+国別バリデーション警告（例: GB/T 16483では24時間緊急連絡先が必要）は、コア抽出品質チェックとは別に管理すること。これらはソースSDS内の規制遵守上のギャップを示すものであり、抽出器のバグではない。
+
+### 品質チェッカーのフィールドパス精度
+実際のスキーマ（generated.rs）に照らしてJSONフィールドパスを必ず検証すること。例: 物質名は `SubstanceIdentity.SubstanceNames` ではなく `SubstanceIdentifiers.SubstanceNames`、SDS日付は `Datasheet.SDSDate` ではなく `Datasheet.IssueDate` に格納されている。
+
+### 空のJSONセクション vs 抽出失敗
+`ToxicologicalInformation`/`EcologicalInformation` が `[{}]` や `{}` となっている場合、ソースSDS が「データなし」と記載していることの正しい反映であり、バグではない。内容が意味あるものかチェックする前に、JSONの構造文字（`{`・`}`・`[`・`]`）を除去すること。

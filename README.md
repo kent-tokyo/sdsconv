@@ -57,6 +57,8 @@ Settings are saved to `~/.config/sds-converter/config.toml` and restored on next
 - **JSON → HTML**: Generates a self-contained UTF-8 HTML5 document with inline CSS and `@media print` support (`to-html`).
 - **JSON → PDF**: Converts to PDF via LibreOffice CLI (`to-pdf`). Requires `soffice` in PATH.
 - **GHS/CAS validation**: Validates H-codes (H200–H420) and P-codes (P101–P503) against GHS Rev.10. Validates CAS number format and check-digit. Optional PubChem enrichment (`--enrich`) for composition cross-checking.
+- **Multi-country SDS support**: Auto-infers source country from `--lang` (zh-cn→China, zh-tw→Taiwan, ja→Japan). Override with `--country cn|tw|kr|jp`. Injects country-specific extraction rules into the LLM prompt — China (GB/T 16483): 24h emergency contact, GBZ 2 OEL, GB 13690 regulatory refs; Taiwan (CNS 15030): CNS headings, NERC contact; Korea (K-GHS Rev.6): KEC number, KOSHA reference, K-REACH status. Country-specific validation (`validate_country()`) and compliance gap reports (`ComplianceDiffReport`) included in `ConversionReport`.
+- **Validation-driven correction pass**: `--correct` flag activates a second targeted LLM call to fix invalid GHS H/P-codes found by the validator, plus deterministic CAS check-digit correction without an LLM call.
 - **Multilingual**: Handles source documents in `ja` / `en` / `zh-CN` / `zh-TW`.
 - **Extensible LLM backend**: Ships with Anthropic Claude, OpenAI GPT, Google Gemini, Mistral, Groq, and Cohere backends. Bring your own by implementing `LlmBackend`.
 - **Library + CLI**: Use as a Rust library or as a standalone command-line tool.
@@ -106,6 +108,9 @@ sds-converter validate --input output.json
 
 # Validate and cross-check CAS numbers against PubChem
 sds-converter to-json --input input.pdf --output output.json --enrich
+
+# Convert a Chinese SDS (GB/T 16483) with explicit country and correction pass
+sds-converter to-json --input input.pdf --output output.json --lang zh-cn --country cn --correct
 ```
 
 See the [`sds-converter` CLI README](./sds_converter/README.md) for full CLI reference and the [`sds-converter-core` README](./sds_converter_core/README.md) for the Rust library API.
@@ -179,6 +184,16 @@ sds-converter-core = "0.3"
 
 ### Next (0.3.x)
 - [ ] DOCX table layout — Section 3 Composition (4-column), Section 2 H/P codes (2-column), Section 9 physical properties (2-column)
+
+### Completed in 0.3.5 / 0.2.5
+- [x] Multi-country SDS support (`--country cn|tw|kr|jp`) with country-specific LLM extraction rules and compliance gap reports
+- [x] Validation-driven correction pass (`--correct`) — second LLM call fixes invalid H/P-codes; deterministic CAS check-digit correction
+- [x] CAS concatenation normalization — splits multi-CAS strings delimited by `\n`, comma, or semicolon
+- [x] Non-hazardous product stub — inserts minimal `HazardIdentification` when LLM omits it for non-hazardous products
+- [x] Expanded H-code mapping table with zh-cn/zh-tw phrases and multi-hazard split instruction
+- [x] P-code annotation disambiguation — strips bracketed H-codes (e.g. `[H315]`) from P-code fields
+- [x] Vision path CRITICAL instruction parity with text path
+- [x] Validator enhancements: date-in-concentration detection, placeholder product name detection, classification completeness, H290 Chinese keyword cross-check, mixture-aware AcuteToxicity cross-check
 
 ### Planned
 - [x] GUI application (eframe/egui) — Convert / Generate / Validate / Extract Text / Settings tabs with drag-and-drop, persistent config, and 3-language UI

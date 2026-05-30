@@ -57,6 +57,8 @@ sds-converter
 - **JSON → HTML**: 生成包含内联CSS和`@media print`支持的自包含UTF-8 HTML5文档（`to-html`）。
 - **JSON → PDF**: 通过LibreOffice CLI转换为PDF（`to-pdf`，需要`soffice`）。
 - **GHS/CAS验证**: 依据GHS Rev.10验证H码（H200–H420）和P码（P101–P503），验证CAS编号格式及校验位。支持`--enrich`标志通过PubChem交叉核验成分信息。
+- **多国SDS支持**: 自动从 `--lang` 推断来源国（zh-cn→中国、zh-tw→台湾、ja→日本）。可用 `--country cn|tw|kr|jp` 显式覆盖。向LLM提示注入国家特定提取规则 — 中国（GB/T 16483）: 24小时应急联系方式、GBZ 2 OEL、GB 13690法规引用；台湾（CNS 15030）: CNS标题、NERC应急联系方式；韩国（K-GHS Rev.6）: KEC编号、KOSHA参考、K-REACH状态。国家特定验证（`validate_country()`）和合规差距报告（`ComplianceDiffReport`）包含在 `ConversionReport` 中。
+- **验证驱动纠错通道**: `--correct` 标志启用第二次针对性LLM调用，修复验证器发现的无效GHS H/P码；CAS校验位纠错无需LLM调用，确定性执行。
 - **多语言支持**: 支持 `ja` / `en` / `zh-CN` / `zh-TW` 的输入和输出。
 - **可扩展LLM后端**: 内置Anthropic Claude、OpenAI GPT、Google Gemini、Mistral、Groq、Cohere实现。通过实现 `LlmBackend` trait可接入任意LLM。
 - **库 + CLI**: 可作为Rust库嵌入使用，也可作为独立命令行工具使用。
@@ -106,6 +108,9 @@ sds-converter validate --input output.json
 
 # 转换并通过PubChem交叉核验成分（--enrich）
 sds-converter to-json --input input.pdf --output output.json --enrich
+
+# 转换中文SDS（GB/T 16483），指定国家并启用纠错通道
+sds-converter to-json --input input.pdf --output output.json --lang zh-cn --country cn --correct
 ```
 
 完整CLI参考请查看 [`sds-converter` README](./sds_converter/README.md)，库API请查看 [`sds-converter-core` README](./sds_converter_core/README.md)。
@@ -180,6 +185,16 @@ sds-converter-core = "0.3"
 
 ### 下一版本（0.3.x）
 - [ ] DOCX表格布局 — 第3节成分信息（4列）、第2节H/P编码（2列）、第9节物化性质（2列）
+
+### 0.3.5 / 0.2.5 已完成
+- [x] 多国SDS支持（`--country cn|tw|kr|jp`）— 国家特定LLM提取规则注入、合规差距报告生成
+- [x] 验证驱动纠错通道（`--correct`）— 第二次LLM调用修复无效H/P码，CAS校验位确定性纠错
+- [x] CAS连接字符串规范化 — 将 `\n`、逗号、分号分隔的多CAS字符串拆分为独立条目
+- [x] 非危险品存根插入 — LLM对非危险品省略HazardIdentification时插入最小存根
+- [x] H码映射表扩展（添加zh-cn/zh-tw表述）+ 多重危害拆分指令
+- [x] P码注释消歧 — 从P码字段中去除括号内的H码（如 `[H315]`）
+- [x] Vision路径与文本路径CRITICAL指令同步
+- [x] 验证器增强：浓度字段日期检测、产品名称占位符检测、分类完整性检查、中文关键词H290交叉核验、混合物感知AcuteToxicity交叉核验
 
 ### 计划中
 - [x] GUI应用程序（eframe/egui）— 转换/生成/验证/文本提取/设置标签页，支持拖放、配置持久化和三语言界面

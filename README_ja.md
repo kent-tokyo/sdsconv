@@ -57,6 +57,8 @@ sds-converter
 - **JSON → HTML**: inline CSS と `@media print` 対応の自己完結型HTML5文書を生成します（`to-html`）。
 - **JSON → PDF**: LibreOffice CLI経由でPDFに変換します（`to-pdf`、要 `soffice`）。
 - **GHS/CASバリデーション**: GHS Rev.10準拠のH-code（H200–H420）・P-code（P101–P503）検証、CAS番号フォーマット＋チェックデジット検証。`--enrich` フラグでPubChem照合も可能。
+- **多国SDS対応**: `--lang` からソース国を自動推論（zh-cn→中国、zh-tw→台湾、ja→日本）。`--country cn|tw|kr|jp` で明示的に上書き可能。国別LLM抽出ルールをシステムプロンプトに注入 — 中国（GB/T 16483）: 24時間緊急連絡先・GBZ 2 OEL・GB 13690規制参照；台湾（CNS 15030）: CNS見出し・NERC緊急連絡先；韓国（K-GHS Rev.6）: KEC番号・KOSHA参照・K-REACH状況。国別バリデーション（`validate_country()`）とコンプライアンスギャップレポート（`ComplianceDiffReport`）を `ConversionReport` に含めます。
+- **バリデーション駆動補正パス**: `--correct` フラグで第2のLLMコールが有効になり、バリデーターが検出した無効なGHS H/P-codeを修正します。CASチェックデジット補正はLLMコールなしで確定的に実行されます。
 - **多言語対応**: `ja` / `en` / `zh-CN` / `zh-TW` の入出力に対応。
 - **LLMバックエンドを拡張可能**: Anthropic Claude、OpenAI GPT、Google Gemini、Mistral、Groq、Cohere の実装を同梱。`LlmBackend`トレイトを実装すれば任意のLLMを使用可能。
 - **ライブラリ + CLI**: Rustライブラリとして組み込み利用、またはCLIとして単独利用できます。
@@ -106,6 +108,9 @@ sds-converter validate --input output.json
 
 # 変換後にPubChem照合（--enrich）
 sds-converter to-json --input input.pdf --output output.json --enrich
+
+# 中国語SDS（GB/T 16483）を国指定＋補正パスで変換
+sds-converter to-json --input input.pdf --output output.json --lang zh-cn --country cn --correct
 ```
 
 CLIの詳細は [`sds-converter` README](./sds_converter/README.md)、ライブラリAPIは [`sds-converter-core` README](./sds_converter_core/README.md) を参照してください。
@@ -178,6 +183,16 @@ sds-converter-core = "0.3"
 
 ### 次期リリース（0.3.x）
 - [ ] DOCXの表レイアウト — 第3項（成分情報・4列表）、第2項（H/Pコード・2列表）、第9項（物性・2列表）
+
+### 0.3.5 / 0.2.5 で完了
+- [x] 多国SDS対応（`--country cn|tw|kr|jp`）— 国別LLM抽出ルール注入・コンプライアンスギャップレポート生成
+- [x] バリデーション駆動補正パス（`--correct`）— 無効H/P-codeを第2LLMコールで修正、CASチェックデジット確定的補正
+- [x] CAS連結文字列の正規化 — `\n`・カンマ・セミコロン区切りの複数CASを個別エントリに分割
+- [x] 非危険物スタブ挿入 — 非危険物でLLMがHazardIdentificationを省略した際の最小スタブ挿入
+- [x] zh-cn/zh-tw表現を追加したH-codeマッピングテーブル拡張・複合ハザード分割指示
+- [x] P-codeアノテーション除去 — Pコードフィールドから `[H315]` 形式の括弧内H-codeを除去
+- [x] VisionパスへのテキストパスのCRITICAL指示適用
+- [x] バリデーター強化: 濃度フィールド内の日付検出・製品名プレースホルダー検出・分類網羅性チェック・中国語キーワードによるH290クロスチェック・混合物対応AcuteToxicityクロスチェック
 
 ### 計画中
 - [x] GUIアプリケーション（eframe/egui）— 変換・文書生成・検証・テキスト抽出・設定タブ、ドラッグ&ドロップ対応、設定永続化、3言語UI

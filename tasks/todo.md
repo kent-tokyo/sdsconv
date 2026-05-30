@@ -189,6 +189,20 @@
 - [x] llm.rs: `extract_text_from_value` ヘルパー追加 — String・Array・AdditionalInfoオブジェクトから統一的にテキスト抽出
 - [x] llm.rs ユニットテスト2件追加: `normalize_colour_odour_from_additional_info_object`、`casno_full_text_flex_deserialization`
 
+## Phase 16: 多国SDS対応・補正パス・バリデーター強化 ✅
+- [x] SourceCountry enum（Japan/China/Taiwan/Korea）+ `--lang` からの自動推論（country.rs）
+- [x] `--country cn|tw|kr|jp` CLI明示的上書きフラグ
+- [x] 国別LLM抽出ルールのシステムプロンプト注入（CN: GB/T 16483、TW: CNS 15030、KR: K-GHS）
+- [x] validate_country()による各規格準拠チェック（GB/T 16483 / CNS 15030 / K-GHS Rev.6）
+- [x] ComplianceDiffReport + generate_compliance_diff()（compliance.rs、ConversionReport.compliance_diffに含める）
+- [x] normalize_cas_full_text(): `\n`/`\r`/`,`/`;` 区切りのCAS連結文字列を個別エントリに分割
+- [x] ensure_hazard_identification(): 非危険物でLLMがHazardIdentificationを省略した際の最小スタブ挿入
+- [x] 補正パス: CorrectionConfig + CorrectionResult（corrector.rs、`--correct` フラグで有効化）
+- [x] H-codeマッピングテーブル拡張（zh-cn/zh-tw表現追加）+ 複合ハザード分割指示
+- [x] P-codeアノテーション除去（Pコードフィールドから `[H315]` 形式の括弧内H-codeを除去）
+- [x] Visionパスへのリテキストパスと同等のCRITICAL指示適用
+- [x] バリデーター強化: 濃度フィールド内の日付検出・製品名プレースホルダー検出・分類網羅性チェック・中国語キーワード（氯/氟/酐/酰等）によるH290クロスチェック・混合物対応AcuteToxicityカテゴリ vs H-codeクロスチェック
+
 ## 残タスク
 - [ ] generator.rs: 表レイアウトDOCX（Section 3 Composition 4列表、Section 2 H/P 2列表、Section 9 物性 2列表）
 - [x] harumi 対応: HTML→PDF 純Rust生成 — harumi v0.4.0 の `html` feature で `render_html_to_pdf` を使用（`converter/pdf.rs` 実装済み）
