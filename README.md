@@ -218,7 +218,7 @@ sds-converter-core = "0.3"
 
 - [MHLW — SDS Standard Data Exchange Format (official page)](https://www.mhlw.go.jp/stf/newpage_56484.html) (Japanese)
 - [SDS Data Exchange Format Developer Manual (PDF)](https://www.mhlw.go.jp/content/11305000/001467068.pdf) (Japanese)
-- [JSON Quality Check Manual — all 53 rules explained by section](docs/quality-check.md)
+- [JSON Quality Check Manual — all 53 rules explained by section](docs/quality-check.md) ([日本語](docs/quality-check_ja.md) / [中文](docs/quality-check_zh.md))
 
 ---
 

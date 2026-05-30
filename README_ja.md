@@ -217,7 +217,7 @@ sds-converter-core = "0.3"
 
 - [厚生労働省 — SDS情報交換のための標準的フォーマット等の公開について](https://www.mhlw.go.jp/stf/newpage_56484.html)
 - [SDSデータ交換フォーマット データ利用マニュアル（PDF）](https://www.mhlw.go.jp/content/11305000/001467068.pdf)
-- [JSON 品質チェック詳細マニュアル — 53 チェック項目をセクション別に解説](docs/quality-check.md)
+- [JSON 品質チェック詳細マニュアル — 53 チェック項目をセクション別に解説](docs/quality-check_ja.md) ([English](docs/quality-check.md) / [中文](docs/quality-check_zh.md))
 
 ---
 

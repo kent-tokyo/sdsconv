@@ -219,7 +219,7 @@ sds-converter-core = "0.3"
 
 - [厚生劳动省 — SDS信息交换标准格式发布页面](https://www.mhlw.go.jp/stf/newpage_56484.html)（日语）
 - [SDS数据交换格式开发者手册（PDF）](https://www.mhlw.go.jp/content/11305000/001467068.pdf)（日语）
-- [JSON 质量检查详细手册 — 53项检查按章节说明](docs/quality-check.md)
+- [JSON 质量检查详细手册 — 53项检查按章节说明](docs/quality-check_zh.md) ([English](docs/quality-check.md) / [日本語](docs/quality-check_ja.md))
 
 ---
 
