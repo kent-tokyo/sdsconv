@@ -151,8 +151,8 @@ This convention means `WARN` = "minor extraction gap, acceptable for most use ca
 |---|---|---|
 | Pictogram outside valid set | MED | Must be GHS01–GHS09 or Japanese equivalents |
 | H-codes present but Classification section missing | MED | Classification information absent |
-| **r23** H200–H205 (explosive) present but GHS01 pictogram absent | MED | GHS explosive hazard always requires the exploding bomb pictogram |
-| **r23** H410/H411/H412/H413 (environmental hazard) present but GHS09 absent | MED | Environmental hazard requires the dead tree & fish pictogram |
+| **r23** H200–H205 (explosive) present but GHS01 pictogram absent | MED | GHS explosive hazard always requires the exploding bomb pictogram (r25 fixed false-negative from "01" substring match) |
+| **r23** H410/H411/H412/H413 (environmental hazard) present but GHS09 absent | MED | Environmental hazard requires the dead tree & fish pictogram (r25 fixed false-negative from "09" substring match) |
 | **r23** SignalWord present but HazardStatement completely absent | HIGH | Signal word without any hazard statements indicates incomplete labelling |
 
 ---
@@ -177,6 +177,7 @@ This convention means `WARN` = "minor extraction gap, acceptable for most use ca
 | Single-component product with no concentration/purity | MED | Concentration field is empty |
 | **r23** Mixture with > 10 components | MED | Unusually high count — likely over-extraction or CompositionType mismatch |
 | **r23** Concentration field contains a year-like string | HIGH | e.g., `"2024"` or `"2024-01-01"` stored as concentration — extraction error |
+| **r25** Substance name field contains a bare CAS number | HIGH | `GenericName` or `IupacName` matches `\d{1,7}-\d{2}-\d` — CAS placed in wrong field by LLM |
 
 **CAS check-digit example**:
 ```
@@ -408,6 +409,7 @@ H224, H225, H226, H300, H301, H302, H310, H311, H314, H330, H331, H332, H270, H2
 | Date format is not YYYY-MM-DD | MED | |
 | Date year outside 2000–2030 range | MED | Detects default value 1900 or implausible future dates |
 | SDS date is before 2020 (older than 5 years) | MED | May require update |
+| **r25** RevisionDate precedes IssueDate | HIGH | Impossible date ordering — likely LLM swapped the two date fields |
 
 ---
 
@@ -495,6 +497,7 @@ QC-SUMMARY: 0 CRIT + 2 HIGH + 3 MED = 5 total issues
 | **r22** | CAS check-digit validation, concentration sum > 102%, per-substance CAS in mixtures, Sec6 cleanup keywords, Sec7 ventilation for volatile/toxic, Sec8 glove material and respirator type, Sec9 auto-ignition temperature / pH / vapour pressure, Sec10 decomposition products, Sec12 LogP/BCF, Sec14 Proper Shipping Name, Sec15 GB standards / 化管法 PRTR, Sec16 SDS older than 5 years, Danger P-code count raised to ≥4 |
 | **r23** | Supplier phone digit count, GHS01/GHS09 pictogram–H-code consistency, SignalWord without HazardStatement (HIGH), concentration year-string detection (HIGH), mixture > 10 components, OEL numeric value check, density/pH/auto-ignition/boiling point range validation, H350/351 carcinogenicity agency, H420 ozone keywords, UN number format, cross-section duplicate text, single-family H-code detection for complex mixtures |
 | **r24** | S1-ZH-NO-EMERGENCY for zh-cn/zh-tw, S7-FLAMMABLE-STORAGE-TEMP, S8-NO-ENG-CONTROLS, S10-NO-INCOMPATIBLE, CROSS-STALE-DATE; S5-EMPTY threshold 30→15; S8-OEL-NO-NUMERIC Chinese unit-before-value exemption and additional "no OEL" phrase patterns |
+| **r25** | S3-NAME-IS-CAS (HIGH): substance name field contains a bare CAS number; S16-REVISION-BEFORE-ISSUE (HIGH): RevisionDate precedes IssueDate; fix S2-EXPLOSIVE-NO-GHS01 and S2-ENV-NO-GHS09 spurious false-negative from substring "01"/"09" matching dates or H-codes |
 
 ---
 

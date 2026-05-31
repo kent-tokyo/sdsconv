@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-SDS JSON Quality Check Script — r24
+SDS JSON Quality Check Script — r25
 
+# r25: fix S2-EXPLOSIVE-NO-GHS01/S2-ENV-NO-GHS09 spurious substring false negatives,
+#       new: S3-NAME-IS-CAS, S16-REVISION-BEFORE-ISSUE
 # r24: S5-EMPTY threshold 30→15, S8-OEL-NO-NUMERIC false positive fix,
 #       new: S1-ZH-NO-EMERGENCY, S8-NO-ENG-CONTROLS, S7-FLAMMABLE-STORAGE-TEMP,
 #            S10-NO-INCOMPATIBLE, CROSS-STALE-DATE
@@ -501,17 +503,17 @@ def check_sec2(root: dict, lang: str, h_codes: set, p_codes: set) -> list:
             issues.append(issue("MED", "S2-NO-CLASSIFICATION",
                                 "Sec2: H-codes present but Classification section missing"))
 
-        # r23-NEW: H200-H205 but no GHS01
+        # r23-NEW: H200-H205 but no GHS01  (r25-fix: removed false-negative "01" fallback)
         if h_codes.intersection({"H200", "H201", "H202", "H203", "H204", "H205"}):
             pic_texts = " ".join(str(p) for p in pictograms)
-            if "GHS01" not in pic_texts and "01" not in pic_texts:
+            if "GHS01" not in pic_texts:
                 issues.append(issue("MED", "S2-EXPLOSIVE-NO-GHS01",
                                     "Sec2: H200-H205 (explosive) present but GHS01 pictogram not found"))
 
-        # r23-NEW: H4xx environmental but no GHS09
+        # r23-NEW: H4xx environmental but no GHS09  (r25-fix: removed false-negative "09" fallback)
         if h_codes.intersection({"H410", "H411", "H412", "H413"}):
             pic_texts = " ".join(str(p) for p in pictograms)
-            if "GHS09" not in pic_texts and "09" not in pic_texts:
+            if "GHS09" not in pic_texts:
                 issues.append(issue("MED", "S2-ENV-NO-GHS09",
                                     "Sec2: H410/H411/H412/H413 present but GHS09 (environmental) pictogram not found"))
 
@@ -602,6 +604,14 @@ def check_sec3(root: dict, lang: str, h_codes: set) -> list:
                         issues.append(issue("CRIT", "S3-KATAKANA-SUBSTANCE",
                                             f"Sec3: Katakana substance name in non-Japanese SDS: '{nm}'"))
                         break
+
+            # r25-NEW: substance name field contains a bare CAS number (LLM mis-extraction)
+            for nm_key in ("GenericName", "IupacName"):
+                nm = to_str(sub_names.get(nm_key))
+                if nm and re.match(r"^\d{1,7}-\d{2}-\d$", nm):
+                    issues.append(issue("HIGH", "S3-NAME-IS-CAS",
+                                        f"Sec3: Substance name field '{nm_key}' contains bare CAS number: '{nm}'"))
+                    break
 
             # Molecular weight check
             mw_node = sub_id.get("MolecularWeight") or {}
@@ -1461,6 +1471,16 @@ def check_sec16(root: dict, lang: str, h_codes: set) -> list:
                 if year < 2020:
                     issues.append(issue("MED", "S16-DATE-OLD",
                                         f"Sec16: SDS date {date_str} is before 2020 (older than 5 years)"))
+                    break
+
+        # r25-NEW: RevisionDate precedes IssueDate (impossible ordering — likely LLM swap)
+        if issue_date and re.match(r"^\d{4}-\d{2}-\d{2}$", issue_date):
+            valid_rev_dates = [rd for rd in rev_dates
+                               if isinstance(rd, str) and re.match(r"^\d{4}-\d{2}-\d{2}$", rd)]
+            for rd in valid_rev_dates:
+                if rd < issue_date:
+                    issues.append(issue("HIGH", "S16-REVISION-BEFORE-ISSUE",
+                                        f"Sec16: RevisionDate ({rd}) precedes IssueDate ({issue_date}) — likely date swap"))
                     break
 
     except Exception as e:
