@@ -90,6 +90,7 @@ exit code = 検出した問題の総数（CRIT + HIGH + MED の合計）
 | 非日本語 SDS に会社名が片仮名 | HIGH | 言語の混在を検出 |
 | 用途（Use フィールド）の存在 | MED | UseAndUseAdvisedAgainst.Use が空 |
 | 緊急連絡先の電話番号桁数 | MED | EmergencyContact エントリに数字が含まれないもの |
+| **r23** 供給者電話番号が 7 桁以上 | MED | SupplierInformation.Phone がない、または数字が 7 桁未満 |
 
 **ポイント**: 前 GHS 時代の中国 MSDS は CompanyName が原文に存在しないことが多く、HIGH が出ても「ソース限界」として扱います。
 
@@ -147,6 +148,9 @@ exit code = 検出した問題の総数（CRIT + HIGH + MED の合計）
 |---|---|---|
 | ピクトグラムが有効セット外 | MED | GHS01〜GHS09 または日本語表記以外 |
 | H コードありだが Classification セクションが空 | MED | 分類情報の欠落 |
+| **r23** H200–H205（爆発物）ありで GHS01 ピクトグラムなし | MED | 爆発物は爆弾ピクトグラム（GHS01）が必須 |
+| **r23** H410/H411/H412/H413（環境有害性）ありで GHS09 ピクトグラムなし | MED | 環境有害性は枯れ木・死魚ピクトグラム（GHS09）が必須 |
+| **r23** 信号語ありで HazardStatement が完全に空 | HIGH | 信号語だけで危険有害性情報がゼロはラベリング不備 |
 
 ---
 
@@ -168,6 +172,8 @@ exit code = 検出した問題の総数（CRIT + HIGH + MED の合計）
 | 濃度数値合計 > 102% | MED | 二重カウントまたは抽出エラーの可能性 |
 | 単一成分で物質名なし | MED | substance name が全て空 |
 | 単一成分で濃度・純度なし | MED | Concentration フィールドが空 |
+| **r23** 混合物で成分 > 10 件 | MED | 過剰抽出または CompositionType 不一致の疑い |
+| **r23** 濃度フィールドに年号文字列 | HIGH | `"2024"` や `"2024-01-01"` が濃度として格納されている抽出エラー |
 
 **CAS チェックデジット計算例**:
 ```
@@ -242,6 +248,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | 腐食性（H314）で目・顔面保護が不十分 | MED | face shield/goggles/フェイス/ゴーグル 等のキーワードなし |
 | 皮膚・腐食性 H コードで手袋材質の記述なし | MED | nitrile/butyl/neoprene/rubber/ニトリル/ブチル/丁腈 等なし |
 | 吸入 H コードで呼吸保護具の種別なし | MED | P2/P3/ABEK/FFP/half mask/full face/防毒/防塵 等なし |
+| **r23** OEL フィールドに数値がない | MED | OEL テキストに数字なし（例: ppm/mg/m³ なし）— プレースホルダの疑い |
 
 **手袋材質キーワード**: nitrile, butyl, neoprene, rubber, latex, viton, PVC, polyethylene, ニトリル, ブチル, ネオプレン, ゴム, 丁腈, 丁基, 氯丁, 橡胶
 
@@ -287,6 +294,10 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | 引火性 H コードで自然発火温度なし | MED | AutoIgnitionTemperature 未抽出 |
 | 揮発性・引火性 H コードで蒸気圧なし | MED | H224/225/226/330/331/332 |
 | 腐食性・酸性 H コードで pH なし | MED | H314/H290/H318/H319 |
+| **r23** 密度が 0.1〜25 g/cm³ 範囲外 | MED | 物理的に非現実的な密度値 |
+| **r23** pH が 0〜14 範囲外 | MED | 有効範囲外 — 抽出エラーまたは単位誤り |
+| **r23** 自然発火温度が引火点より低い | MED | 熱力学的に不可能（自然発火温度 > 引火点） |
+| **r23** 沸点が −200〜3000°C 範囲外 | MED | 物理的に非現実的な値 |
 
 ---
 
@@ -318,6 +329,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | H360/H361（生殖毒性）で ReproductiveToxicity なし | MED | |
 | H370-H373（STOT）で SpecificTargetOrgan なし | MED | |
 | AcuteToxicity 区分 1/2 だが致死 H コードなし | MED | 有害性分類と H コードの不整合 |
+| **r23** H350/H351（発がん性）ありで発がん性評価機関の記述なし | MED | IARC/NTP/ACGIH/WHO 等の分類機関への言及が必要 |
 
 ---
 
@@ -332,6 +344,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | H410/H411 ありで生分解性・生体蓄積キーワードなし | MED | biodeg/bioaccum/BCF/PersistenceDeg 等 |
 | 環境 H コードで LogP/Kow/BCF 値なし | MED | partition coefficient / 分配係数 / 辛醇 等 |
 | 有害製品で EcologicalInformation が空 | MED | 環境 H コードがなくても有害なら記載推奨 |
+| **r23** H420（オゾン層破壊物質）ありでオゾン関連キーワードなし | MED | オゾン破壊係数（ODP）やオゾン層に関する記述が必要 |
 
 ---
 
@@ -356,6 +369,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | 危険物 H コードありで UN 番号なし | MED | ただし「規制対象外」テキストが明示されている場合は除外 |
 | UN 番号ありで容器等級（Packing Group）なし | MED | |
 | UN 番号ありで正式品名（Proper Shipping Name）なし | MED | |
+| **r23** UN 番号が `UN\d{4}` 形式でない | MED | UN 番号は 4 桁（UN0001〜UN9999）でなければならない |
 
 **危険物判定 H コード**: H224, H225, H226, H300, H301, H302, H310, H311, H314, H330, H331, H332, H270, H271, H272
 
@@ -400,6 +414,8 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | プレースホルダーテキストの検出 | HIGH | `[insert`, `[記入`, `PLACEHOLDER`, `TODO`, `TBD` 等 |
 | SDS セクション総数 < 10 | HIGH | 16 セクションのうち 10 未満が populated |
 | SDS セクション総数 < 13 | MED | 16 セクションのうち 13 未満が populated |
+| **r23** 異なるセクション間で同一テキスト（100 文字超）が存在 | MED | コピー&ペースト的な抽出エラー（同一ブロックが複数箇所に出現） |
+| **r23** 成分 3 件以上の混合物で全 H コードが単一ファミリー | MED | H3xx のみ等、部分抽出の疑い（H4xx 環境系が抜けているケース等） |
 
 ---
 
@@ -407,30 +423,30 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 
 ```bash
 # 基本実行
-python3 quality_check_r22.py <SDS_JSON_FILE> <LANG>
+python3 tools/quality_check.py <SDS_JSON_FILE> <LANG>
 
 # LANG: en / ja / zh-cn / zh-tw
 
 # 例
-python3 quality_check_r22.py output/sds.json ja
+python3 tools/quality_check.py output/sds.json ja
+
+# JSON Lines 出力（機械可読）
+python3 tools/quality_check.py output/sds.json ja --jsonl | tail -1 | python3 -m json.tool
 
 # 終了コード確認
 echo "Exit: $?"
 ```
 
-### バッチ実行（テストスクリプトと組み合わせ）
+### バッチ実行（ラウンドトリップテスト）
 
 ```bash
 set -a && source .env && set +a
 
-bash test_round22.sh \
-  target/release/sds-converter \
-  /tmp/sds_out \
-  "Phase17" \
-  2>&1 | tee /tmp/result.txt
+# 30 件ランダム抽出（言語バランス調整）PDF → JSON → DOCX ラウンドトリップ
+bash tools/roundtrip_test.sh 30 2>&1 | tee /tmp/roundtrip.txt
 
 # サマリーのみ表示
-grep "SUMMARY" /tmp/result.txt
+grep -E "QC issues|FAIL|to-json" /tmp/roundtrip.txt
 ```
 
 ---
@@ -469,6 +485,7 @@ QC-SUMMARY: 0 CRIT + 2 HIGH + 3 MED = 5 total issues
 |---|---|
 | **r21** | 基本セクション構造チェック、H/P コード書式、CAS 書式、FlashPoint 範囲、引火点 × 沸点、GHS ピクトグラム、Danger/Warning P コード最低数（≥3）、言語整合性 |
 | **r22** | CAS チェックデジット検証、濃度合計 > 102%、多成分 CAS 必須、Sec6 具体的回収キーワード、Sec7 換気キーワード、Sec8 手袋材質・呼吸保護具種別、Sec9 自然発火温度・pH・蒸気圧、Sec10 分解生成物、Sec12 LogP/BCF、Sec14 正式品名、Sec15 GB/化管法・PRTR、Sec16 SDS 5 年超、Danger P コード ≥4 |
+| **r23** | 供給者電話番号桁数、GHS01/GHS09 ピクトグラム整合性、信号語のみで HazardStatement 空（HIGH）、濃度フィールドへの年号混入検出（HIGH）、混合物 > 10 成分、OEL 数値確認、密度・pH・自然発火温度・沸点の範囲検証、H350/351 発がん性機関、H420 オゾン、UN 番号書式、セクション間重複テキスト、混合物 H コード単一ファミリー検出 |
 
 ---
 

@@ -90,6 +90,7 @@ This convention means `WARN` = "minor extraction gap, acceptable for most use ca
 | Katakana company name in non-Japanese SDS | HIGH | Cross-language contamination |
 | Use field present | MED | `UseAndUseAdvisedAgainst.Use` is empty |
 | Emergency contact contains phone digits | MED | EmergencyContact entry has no numeric digits |
+| **r23** Supplier phone has ≥ 7 digits | MED | `SupplierInformation.Phone` is absent or contains fewer than 7 digits |
 
 **Note**: Pre-GHS Chinese MSDS files (e.g. from ichemistry) often lack a CompanyName in the source document. A HIGH flag in such cases reflects a source quality limitation, not an extraction bug.
 
@@ -149,6 +150,9 @@ This convention means `WARN` = "minor extraction gap, acceptable for most use ca
 |---|---|---|
 | Pictogram outside valid set | MED | Must be GHS01–GHS09 or Japanese equivalents |
 | H-codes present but Classification section missing | MED | Classification information absent |
+| **r23** H200–H205 (explosive) present but GHS01 pictogram absent | MED | GHS explosive hazard always requires the exploding bomb pictogram |
+| **r23** H410/H411/H412/H413 (environmental hazard) present but GHS09 absent | MED | Environmental hazard requires the dead tree & fish pictogram |
+| **r23** SignalWord present but HazardStatement completely absent | HIGH | Signal word without any hazard statements indicates incomplete labelling |
 
 ---
 
@@ -170,6 +174,8 @@ This convention means `WARN` = "minor extraction gap, acceptable for most use ca
 | Sum of numeric concentrations > 102% | MED | Possible double-counting or extraction error |
 | Single-component product with no substance name | MED | All name fields are empty |
 | Single-component product with no concentration/purity | MED | Concentration field is empty |
+| **r23** Mixture with > 10 components | MED | Unusually high count — likely over-extraction or CompositionType mismatch |
+| **r23** Concentration field contains a year-like string | HIGH | e.g., `"2024"` or `"2024-01-01"` stored as concentration — extraction error |
 
 **CAS check-digit example**:
 ```
@@ -242,6 +248,7 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 | H314 (corrosive) but no face shield/goggles mention | MED | eye protection must mention face shield/goggles/フェイス/ゴーグル/面罩 |
 | Skin/corrosive H-code but glove material not specified | MED | HandProtection must name material: nitrile/butyl/neoprene/rubber/ニトリル/丁腈 etc. |
 | Inhalation H-code but respirator type not specified | MED | RespiratoryProtection must name type: P2/ABEK/FFP/half mask/full face/SCBA/防毒/防塵 |
+| **r23** OEL present but contains no numeric value | MED | OEL field text has no number (e.g., `ppm`, `mg/m³`) — likely a text placeholder |
 
 **Glove material keywords**: nitrile, butyl, neoprene, rubber, latex, viton, PVC, polyethylene, ニトリル, ブチル, ネオプレン, ゴム, 丁腈, 丁基, 氯丁, 橡胶
 
@@ -287,6 +294,10 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 | Flammable H-code but no auto-ignition temperature | MED | AutoIgnitionTemperature not extracted |
 | Volatile/flammable H-code but no vapour pressure | MED | H224/225/226/330/331/332 |
 | Corrosive/acidic H-code but no pH | MED | H314/H290/H318/H319 |
+| **r23** Density value outside 0.1–25 g/cm³ | MED | Physically implausible density (any common substance fits within this range) |
+| **r23** pH value outside 0–14 | MED | Impossible pH — likely extraction error or unit mismatch |
+| **r23** Auto-ignition temperature below flash point | MED | Auto-ignition temperature must be higher than flash point (thermodynamic constraint) |
+| **r23** Boiling point outside −200 to 3000 °C | MED | Physically implausible value |
 
 ---
 
@@ -318,6 +329,7 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 | H360/H361 (reproductive tox) but ReproductiveToxicity absent | MED | |
 | H370–H373 (STOT) but SpecificTargetOrgan absent | MED | |
 | AcuteToxicity Cat 1/2 but no lethal H-code in Section 2 | MED | Hazard classification vs. H-code inconsistency |
+| **r23** H350/H351 present but no carcinogenicity agency reference | MED | Carcinogenic classification should cite IARC/NTP/ACGIH/WHO or equivalent |
 
 ---
 
@@ -332,6 +344,7 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 | H410/H411 but no biodegradability/bioaccumulation keywords | MED | biodeg/bioaccum/BCF/PersistenceDeg etc. |
 | Environmental H-code but no LogP/Kow/BCF value | MED | partition coefficient / 分配係数 / 辛醇 etc. |
 | Hazardous product with empty EcologicalInformation | MED | Even without H4xx codes, basic eco data recommended |
+| **r23** H420 (ozone-depleting substance) present but no ODP/ozone keywords | MED | Ozone depletion potential or ozone layer reference expected in section 12 |
 
 ---
 
@@ -356,6 +369,7 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 | Dangerous goods H-code present but no UN number | MED | Unless "not regulated" is explicitly stated in the source |
 | UN number found but Packing Group not extracted | MED | |
 | UN number found but Proper Shipping Name not extracted | MED | |
+| **r23** UN number does not match `UN\d{4}` format | MED | UN numbers must be 4-digit (UN0001–UN9999) |
 
 **Dangerous goods H-codes triggering the UN check**:
 H224, H225, H226, H300, H301, H302, H310, H311, H314, H330, H331, H332, H270, H271, H272
@@ -403,6 +417,8 @@ Consistency checks spanning multiple sections:
 | Placeholder text detected | HIGH | `[insert`, `[記入`, `PLACEHOLDER`, `TODO`, `TBD` etc. |
 | Fewer than 10 of 16 SDS sections populated | HIGH | |
 | Fewer than 13 of 16 SDS sections populated | MED | |
+| **r23** Identical text (> 100 chars) in two different sections | MED | Copy-paste artefact — same block repeated verbatim across sections |
+| **r23** All H-codes from a single H-code family for mixture with ≥ 3 components | MED | Suggests partial extraction (e.g., only H3xx hazards extracted, H4xx ecological ignored) |
 
 ---
 
@@ -410,30 +426,30 @@ Consistency checks spanning multiple sections:
 
 ```bash
 # Basic usage
-python3 quality_check_r22.py <SDS_JSON_FILE> <LANG>
+python3 tools/quality_check.py <SDS_JSON_FILE> <LANG>
 
 # LANG: en / ja / zh-cn / zh-tw
 
 # Example
-python3 quality_check_r22.py output/sds.json ja
+python3 tools/quality_check.py output/sds.json ja
+
+# Machine-readable JSON Lines output
+python3 tools/quality_check.py output/sds.json ja --jsonl | tail -1 | python3 -m json.tool
 
 # Check exit code
 echo "Exit: $?"
 ```
 
-### Batch execution (with test script)
+### Batch execution (round-trip test)
 
 ```bash
 set -a && source .env && set +a
 
-bash test_round22.sh \
-  target/release/sds-converter \
-  /tmp/sds_out \
-  "Phase17" \
-  2>&1 | tee /tmp/result.txt
+# 30 random PDFs (balanced across languages), full round-trip PDF → JSON → DOCX
+bash tools/roundtrip_test.sh 30 2>&1 | tee /tmp/roundtrip.txt
 
 # Show summary only
-grep "SUMMARY" /tmp/result.txt
+grep -E "QC issues|FAIL|to-json" /tmp/roundtrip.txt
 ```
 
 ---
@@ -472,6 +488,7 @@ QC-SUMMARY: 0 CRIT + 2 HIGH + 3 MED = 5 total issues
 |---|---|
 | **r21** | Basic section structure, H/P-code format, CAS format, FlashPoint range, flash point vs. boiling point, GHS pictogram validation, Danger/Warning P-code minimum counts (≥3), cross-language consistency |
 | **r22** | CAS check-digit validation, concentration sum > 102%, per-substance CAS in mixtures, Sec6 cleanup keywords, Sec7 ventilation for volatile/toxic, Sec8 glove material and respirator type, Sec9 auto-ignition temperature / pH / vapour pressure, Sec10 decomposition products, Sec12 LogP/BCF, Sec14 Proper Shipping Name, Sec15 GB standards / 化管法 PRTR, Sec16 SDS older than 5 years, Danger P-code count raised to ≥4 |
+| **r23** | Supplier phone digit count, GHS01/GHS09 pictogram–H-code consistency, SignalWord without HazardStatement (HIGH), concentration year-string detection (HIGH), mixture > 10 components, OEL numeric value check, density/pH/auto-ignition/boiling point range validation, H350/351 carcinogenicity agency, H420 ozone keywords, UN number format, cross-section duplicate text, single-family H-code detection for complex mixtures |
 
 ---
 
