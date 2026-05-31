@@ -851,14 +851,21 @@ def check_sec8(root: dict, lang: str, h_codes: set) -> list:
                 issues.append(issue("MED", "S8-NO-OEL",
                                     "Sec8: Hazardous single-substance product with no OEL"))
 
-        # r23-NEW: OEL present but no numeric value
+        # r23-NEW / r24-fix: OEL present but no numeric value
         oel_text = walk_text(oel)
-        if oel_text.strip() and not re.search(r"\d+\.?\d*\s*(mg/m|ppm|mg/L|f/cc|µg)", oel_text, re.IGNORECASE):
+        # Detect numeric value — handles both "5 ppm" AND Chinese "MAC(mg/m3)：5" (unit before value)
+        _oel_has_num = bool(
+            re.search(r"\d+\.?\d*\s*(mg/m|ppm|mg/L|f/cc|µg)", oel_text, re.IGNORECASE) or
+            re.search(r"(mg/m\d*|ppm|mg/L)[^0-9A-Za-z]{0,5}\d+\.?\d*", oel_text, re.IGNORECASE)
+        )
+        if oel_text.strip() and not _oel_has_num:
             if not re.search(
                     r"設定されていない|not established|not set|no limit|not available|情報なし|なし|N/A|"
                     r"does not contain|含有していない|含まれていない|限界値.*含有|"
                     r"no hazardous material|no applicable|not required|no substances.*limit|"
-                    r"没有.*接触限值|无职业接触限值|不适用|无需监控",
+                    r"没有.*接触限值|无职业接触限值|不适用|无需监控|"
+                    r"未制订|无资料|不监控|监视.*不.*含|该产品不含|"
+                    r"[：:]\s*[-－—]\s*[；;]|[：:]\s*[-－—]\s*$",  # dash as N/A: "TWA：－"
                     oel_text, re.IGNORECASE):
                 issues.append(issue("MED", "S8-OEL-NO-NUMERIC",
                                     "Sec8: OEL present but contains no numeric value (ppm/mg/m³ etc.)"))
