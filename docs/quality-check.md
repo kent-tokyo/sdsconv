@@ -91,6 +91,7 @@ This convention means `WARN` = "minor extraction gap, acceptable for most use ca
 | Use field present | MED | `UseAndUseAdvisedAgainst.Use` is empty |
 | Emergency contact contains phone digits | MED | EmergencyContact entry has no numeric digits |
 | **r23** Supplier phone has ≥ 7 digits | MED | `SupplierInformation.Phone` is absent or contains fewer than 7 digits |
+| **r24** zh-cn/zh-tw SDS with no emergency contact | HIGH | Chinese regulations (GB/T 16483) require a 24h emergency contact; missing entirely |
 
 **Note**: Pre-GHS Chinese MSDS files (e.g. from ichemistry) often lack a CompanyName in the source document. A HIGH flag in such cases reflects a source quality limitation, not an extraction bug.
 
@@ -205,7 +206,7 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 
 | Check | Level | Description |
 |---|---|---|
-| Section is completely empty | HIGH | JSON field length < 30 characters |
+| Section is completely empty | HIGH | JSON field length < 15 characters |
 | No extinguishing agent mentioned | MED | No keywords such as foam/water/CO2/powder/dry chemical/泡/粉末/干粉 |
 
 **Extinguishing agent keywords (partial)**: foam, water, CO2, carbon dioxide, powder, sand, dry chemical, halon, nitrogen, inert gas, extinguish, 泡, 二酸化炭素, 粉末, 砂, 消火, 灭火, 水雾, dry sand, surrounding, appropriate
@@ -233,6 +234,7 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 | Flammable H-code but no heat/ignition source mention | MED | H224/H225/H226 → cool/heat/ignition/flame/spark/火気/冷所/远离 |
 | Water-reactive H-code but no dry/moisture mention | MED | H260/H261/H250 → dry/moisture/water/乾燥/防湿 |
 | Volatile/toxic H-code but no ventilation mention | MED | H330–H335, H224–H226 → ventilat/exhaust/fume hood/換気/局排/通风/排気 |
+| **r24** Flammable product but no storage temperature/cool mention | MED | H224/H225/H226 — storage section should mention cool conditions or specific temperature limits |
 
 ---
 
@@ -249,6 +251,7 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 | Skin/corrosive H-code but glove material not specified | MED | HandProtection must name material: nitrile/butyl/neoprene/rubber/ニトリル/丁腈 etc. |
 | Inhalation H-code but respirator type not specified | MED | RespiratoryProtection must name type: P2/ABEK/FFP/half mask/full face/SCBA/防毒/防塵 |
 | **r23** OEL present but contains no numeric value | MED | OEL field text has no number (e.g., `ppm`, `mg/m³`) — likely a text placeholder |
+| **r24** Hazardous product with no engineering controls specified | MED | EngineeringControls field empty for products with H-codes — ventilation/fume hood/local exhaust should be described |
 
 **Glove material keywords**: nitrile, butyl, neoprene, rubber, latex, viton, PVC, polyethylene, ニトリル, ブチル, ネオプレン, ゴム, 丁腈, 丁基, 氯丁, 橡胶
 
@@ -310,6 +313,7 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 | Section is empty | MED | JSON length < 30 characters |
 | No conditions to avoid or incompatible materials mentioned | MED | No keywords: avoid/heat/incompatible/acid/酸化/禁止/avoid/分解/stable |
 | Flammable/explosive H-code but decomposition products absent | MED | HazardousDecompositionProducts is empty |
+| **r24** Reactive/oxidizer H-code but no incompatible materials listed | MED | H272/H290/H314 — incompatible materials (acids, bases, oxidizers etc.) should be listed |
 
 ---
 
@@ -419,6 +423,7 @@ Consistency checks spanning multiple sections:
 | Fewer than 13 of 16 SDS sections populated | MED | |
 | **r23** Identical text (> 100 chars) in two different sections | MED | Copy-paste artefact — same block repeated verbatim across sections |
 | **r23** All H-codes from a single H-code family for mixture with ≥ 3 components | MED | Suggests partial extraction (e.g., only H3xx hazards extracted, H4xx ecological ignored) |
+| **r24** SDS date older than 5 years from current date | MED | IssueDate/RevisionDate more than 5 years old — may need regulatory re-review |
 
 ---
 
@@ -489,6 +494,7 @@ QC-SUMMARY: 0 CRIT + 2 HIGH + 3 MED = 5 total issues
 | **r21** | Basic section structure, H/P-code format, CAS format, FlashPoint range, flash point vs. boiling point, GHS pictogram validation, Danger/Warning P-code minimum counts (≥3), cross-language consistency |
 | **r22** | CAS check-digit validation, concentration sum > 102%, per-substance CAS in mixtures, Sec6 cleanup keywords, Sec7 ventilation for volatile/toxic, Sec8 glove material and respirator type, Sec9 auto-ignition temperature / pH / vapour pressure, Sec10 decomposition products, Sec12 LogP/BCF, Sec14 Proper Shipping Name, Sec15 GB standards / 化管法 PRTR, Sec16 SDS older than 5 years, Danger P-code count raised to ≥4 |
 | **r23** | Supplier phone digit count, GHS01/GHS09 pictogram–H-code consistency, SignalWord without HazardStatement (HIGH), concentration year-string detection (HIGH), mixture > 10 components, OEL numeric value check, density/pH/auto-ignition/boiling point range validation, H350/351 carcinogenicity agency, H420 ozone keywords, UN number format, cross-section duplicate text, single-family H-code detection for complex mixtures |
+| **r24** | S1-ZH-NO-EMERGENCY for zh-cn/zh-tw, S7-FLAMMABLE-STORAGE-TEMP, S8-NO-ENG-CONTROLS, S10-NO-INCOMPATIBLE, CROSS-STALE-DATE; S5-EMPTY threshold 30→15; S8-OEL-NO-NUMERIC Chinese unit-before-value exemption and additional "no OEL" phrase patterns |
 
 ---
 

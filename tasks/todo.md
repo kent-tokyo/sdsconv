@@ -210,6 +210,25 @@
 - [x] Section 9 VapourPressure — H224/H225/H226/H330/H331/H332 を持つ引火性・揮発性製品で明示的に抽出指示を追加
 - [x] Section 12 PersistenceDegradability — 残留性/分解性サブセクションが存在する場合は BiologicalDegradability を常に格納（データなしの場合は'該当データなし'/'无相关数据'）
 
+## Phase 18: QC ルールベース強化・プロンプト品質向上 ✅
+- [x] tools/quality_check.py 作成 (r23) — 50+ ルール、CRIT/HIGH/MED 3段階、--jsonl フラグ、終了コード=問題数
+- [x] tools/roundtrip_test.sh 作成 — PDF→JSON→DOCX バッチテスト (n=30, 言語バランス ja/zh-cn/en/zh-tw)
+- [x] quality_check.py r24 改善
+  - S8-OEL-NO-NUMERIC フォールスポジティブ修正 (「限界値なし」フレーズ 23 件 → 0 件)
+  - S5-EMPTY HIGH 閾値 30→15 文字（中国語簡体字の短い消火措置セクション対応）
+  - S2-INTERNAL バグ修正 (allto_str タイポ → all(to_str(...)))
+  - roundtrip_test.sh バグ修正 (JSONL パース、validator 文字列配列、zsh 互換)
+  - 新ルール: S1-ZH-NO-EMERGENCY / S8-NO-ENG-CONTROLS / S7-FLAMMABLE-STORAGE-TEMP / S10-NO-INCOMPATIBLE / CROSS-STALE-DATE
+  - 中国語 OEL 「unit：value」形式（MAC(mg/m3)：0.03）の数値検出対応
+- [x] llm.rs プロンプト強化（text + vision 両プロンプト）
+  - Sec5: 消火剤種別（泡沫/粉末/CO2 等）の明示抽出指示
+  - Sec8: 手袋材質（nitrile/butyl/ニトリル/丁腈等）明示抽出
+  - Sec8: 呼吸器型番（FFP2/FFP3/ABEK 等）明示抽出
+  - Sec8: 工学的管理（局所排気/局部排風/强制换気）の明示抽出
+  - Sec9: 腐食性 H-コード時に pH 明示抽出
+  - Sec15 zh-cn: 危険化学品安全管理条例・GBZ 2 等 GB 規格参照強化
+- [x] ラウンドトリップ基準値 (r24): 30/30 to-json ✓、30/30 to-docx ✓、CRIT=0、HIGH=9、MED=176
+
 ## 残タスク
 - [ ] generator.rs: 表レイアウトDOCX（Section 3 Composition 4列表、Section 2 H/P 2列表、Section 9 物性 2列表）
 - [x] harumi 対応: HTML→PDF 純Rust生成 — harumi v0.4.0 の `html` feature で `render_html_to_pdf` を使用（`converter/pdf.rs` 実装済み）

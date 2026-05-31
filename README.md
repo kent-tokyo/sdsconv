@@ -186,6 +186,10 @@ sds-converter-core = "0.3"
 - [ ] DOCX table layout — Section 3 Composition (4-column), Section 2 H/P codes (2-column), Section 9 physical properties (2-column)
 
 ### Completed in 0.3.6 / 0.2.6
+- [x] QC r24: 5 new rule-based checks (S1-ZH-NO-EMERGENCY, S7-FLAMMABLE-STORAGE-TEMP, S8-NO-ENG-CONTROLS, S10-NO-INCOMPATIBLE, CROSS-STALE-DATE)
+- [x] QC r24: S8-OEL-NO-NUMERIC false-positive fixes — Chinese unit-before-value format, additional "no OEL" exemption phrases
+- [x] QC r24: S5-EMPTY threshold 30→15 chars (reduces false positives for brief Chinese firefighting sections)
+- [x] Round-trip test: JSONL parsing fix, validator string-array handling; r24 baseline 30/30 success, CRIT=0, HIGH=9, MED=176
 - [x] LLM prompt: Section 1 Use fallback — source phrase captured when Section 1.2 exists but no specific use is listed (e.g. `'无相关详细资料'`)
 - [x] LLM prompt: Section 8 OEL "not required" detection — `不要求` / `无需监控` / `不适用` and similar phrases now stored in `AdditionalInfo.FullText` instead of being silently omitted
 - [x] LLM prompt: Section 9 Densities always extracted; VapourPressure added for flammable/volatile products (H224/H225/H226/H330–H332)

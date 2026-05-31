@@ -210,6 +210,20 @@ sds-converter validate --input output.json --json
 
 ---
 
+## 更新履歴
+
+### 0.3.6 / 0.2.6 で完了
+- [x] QC r24: 新規5ルール（S1-ZH-NO-EMERGENCY・S7-FLAMMABLE-STORAGE-TEMP・S8-NO-ENG-CONTROLS・S10-NO-INCOMPATIBLE・CROSS-STALE-DATE）
+- [x] QC r24: S8-OEL-NO-NUMERIC 誤検知修正 — 中国語「単位→数値」形式・「OEL不要」表現の除外パターン追加
+- [x] QC r24: S5-EMPTY 閾値 30→15 文字（中国語の簡潔な消火情報の誤検知削減）
+- [x] ラウンドトリップテスト: JSONLパース修正・バリデータ文字列配列対応; r24ベースライン 30/30 成功、CRIT=0・HIGH=9・MED=176
+- [x] LLMプロンプト: Section 1 Use フォールバック — セクション1.2が存在するが使用目的不明の場合、ソーステキストを Use 配列に格納（`'无相关详细资料'` 等）
+- [x] LLMプロンプト: Section 8 OEL「不要求」検出 — `不要求`/`无需监控`/`不适用` 等を `AdditionalInfo.FullText` に格納（省略しない）
+- [x] LLMプロンプト: Section 9 Densities 必須抽出、引火性製品（H224/H225/H226/H330–H332）の VapourPressure 抽出
+- [x] LLMプロンプト: Section 12 残留性/分解性サブセクション存在時は `PersistenceDegradability.BiologicalDegradability` を常に格納
+
+---
+
 ## 参考リンク
 
 - [厚生労働省 — SDS情報交換のための標準的フォーマット等の公開について](https://www.mhlw.go.jp/stf/newpage_56484.html)

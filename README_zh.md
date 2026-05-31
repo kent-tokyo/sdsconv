@@ -187,6 +187,10 @@ sds-converter-core = "0.3"
 - [ ] DOCX表格布局 — 第3节成分信息（4列）、第2节H/P编码（2列）、第9节物化性质（2列）
 
 ### 0.3.6 / 0.2.6 已完成
+- [x] QC r24：新增5条规则（S1-ZH-NO-EMERGENCY、S7-FLAMMABLE-STORAGE-TEMP、S8-NO-ENG-CONTROLS、S10-NO-INCOMPATIBLE、CROSS-STALE-DATE）
+- [x] QC r24：S8-OEL-NO-NUMERIC 误报修复 — 中文"单位→数值"格式识别、新增"无需OEL"豁免短语
+- [x] QC r24：S5-EMPTY 阈值 30→15 字符（减少中文简短灭火信息的误报）
+- [x] 循环测试：修复 JSONL 解析及验证器字符串数组处理；r24 基线 30/30 成功，CRIT=0、HIGH=9、MED=176
 - [x] LLM提示词：第1节Use回退 — 第1.2节存在但无具体用途时，将原文（如`'无相关详细资料'`）存入Use数组
 - [x] LLM提示词：第8节OEL"不要求"检测 — `不要求`/`无需监控`/`不适用`等表述存入`AdditionalInfo.FullText`（不再省略）
 - [x] LLM提示词：第9节Densities必须提取；易燃/挥发性产品（H224/H225/H226/H330–H332）提取VapourPressure

@@ -91,6 +91,7 @@ exit code = 検出した問題の総数（CRIT + HIGH + MED の合計）
 | 用途（Use フィールド）の存在 | MED | UseAndUseAdvisedAgainst.Use が空 |
 | 緊急連絡先の電話番号桁数 | MED | EmergencyContact エントリに数字が含まれないもの |
 | **r23** 供給者電話番号が 7 桁以上 | MED | SupplierInformation.Phone がない、または数字が 7 桁未満 |
+| **r24** zh-cn/zh-tw SDS に緊急連絡先がない | HIGH | 中国規制（GB/T 16483）は24時間緊急連絡先を必須とする |
 
 **ポイント**: 前 GHS 時代の中国 MSDS は CompanyName が原文に存在しないことが多く、HIGH が出ても「ソース限界」として扱います。
 
@@ -203,7 +204,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 
 | チェック | レベル | 内容 |
 |---|---|---|
-| セクション全体が空 | HIGH | JSON フィールド長 < 30 文字 |
+| セクション全体が空 | HIGH | JSON フィールド長 < 15 文字 |
 | 消火剤の記載なし | MED | foam/water/CO2/粉末/泡沫/干粉 等のキーワードなし |
 
 **消火剤キーワード（一部）**: foam, water, CO2, carbon dioxide, powder, sand, dry chemical, 泡, 二酸化炭素, 粉末, 砂, 水雾, dry sand, halon, nitrogen, extinguish, surrounding
@@ -233,6 +234,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | 引火性 H コードで熱・点火源への言及なし | MED | H224/H225/H226 → cool/heat/ignition/火気/冷所 等 |
 | 水反応性 H コードで乾燥条件への言及なし | MED | H260/H261/H250 → dry/moisture/乾燥 等 |
 | 揮発性・有毒 H コードで換気への言及なし | MED | H330-H335, H224-H226 → ventilat/換気/局排/通风 等 |
+| **r24** 可燃性製品で保管温度・冷所への言及なし | MED | H224/H225/H226 — 保管セクションに冷所条件または具体的な温度上限の記載が必要 |
 
 ---
 
@@ -249,6 +251,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | 皮膚・腐食性 H コードで手袋材質の記述なし | MED | nitrile/butyl/neoprene/rubber/ニトリル/ブチル/丁腈 等なし |
 | 吸入 H コードで呼吸保護具の種別なし | MED | P2/P3/ABEK/FFP/half mask/full face/防毒/防塵 等なし |
 | **r23** OEL フィールドに数値がない | MED | OEL テキストに数字なし（例: ppm/mg/m³ なし）— プレースホルダの疑い |
+| **r24** 危険物製品で工学的管理対策の記載なし | MED | H コードがある製品で EngineeringControls フィールドが空 — 換気・局所排気・フューム排気等の記載が必要 |
 
 **手袋材質キーワード**: nitrile, butyl, neoprene, rubber, latex, viton, PVC, polyethylene, ニトリル, ブチル, ネオプレン, ゴム, 丁腈, 丁基, 氯丁, 橡胶
 
@@ -310,6 +313,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | セクションが空 | MED | JSON 長 < 30 文字 |
 | 避けるべき条件や禁忌物質の記述なし | MED | avoid/heat/incompatible/acid/酸化/禁止 等なし |
 | 引火性・爆発性 H コードで分解生成物なし | MED | HazardousDecompositionProducts が空 |
+| **r24** 反応性・酸化剤 H コードがあるが混触禁止物質の記載なし | MED | H272/H290/H314 — 酸・塩基・酸化剤などの混触禁止物質のリストが必要 |
 
 ---
 
@@ -416,6 +420,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | SDS セクション総数 < 13 | MED | 16 セクションのうち 13 未満が populated |
 | **r23** 異なるセクション間で同一テキスト（100 文字超）が存在 | MED | コピー&ペースト的な抽出エラー（同一ブロックが複数箇所に出現） |
 | **r23** 成分 3 件以上の混合物で全 H コードが単一ファミリー | MED | H3xx のみ等、部分抽出の疑い（H4xx 環境系が抜けているケース等） |
+| **r24** SDS 作成日が現在から5年以上前 | MED | IssueDate/RevisionDate が5年以上前 — 法令改正への対応確認が必要 |
 
 ---
 
@@ -486,6 +491,7 @@ QC-SUMMARY: 0 CRIT + 2 HIGH + 3 MED = 5 total issues
 | **r21** | 基本セクション構造チェック、H/P コード書式、CAS 書式、FlashPoint 範囲、引火点 × 沸点、GHS ピクトグラム、Danger/Warning P コード最低数（≥3）、言語整合性 |
 | **r22** | CAS チェックデジット検証、濃度合計 > 102%、多成分 CAS 必須、Sec6 具体的回収キーワード、Sec7 換気キーワード、Sec8 手袋材質・呼吸保護具種別、Sec9 自然発火温度・pH・蒸気圧、Sec10 分解生成物、Sec12 LogP/BCF、Sec14 正式品名、Sec15 GB/化管法・PRTR、Sec16 SDS 5 年超、Danger P コード ≥4 |
 | **r23** | 供給者電話番号桁数、GHS01/GHS09 ピクトグラム整合性、信号語のみで HazardStatement 空（HIGH）、濃度フィールドへの年号混入検出（HIGH）、混合物 > 10 成分、OEL 数値確認、密度・pH・自然発火温度・沸点の範囲検証、H350/351 発がん性機関、H420 オゾン、UN 番号書式、セクション間重複テキスト、混合物 H コード単一ファミリー検出 |
+| **r24** | S1-ZH-NO-EMERGENCY（zh-cn/zh-tw 緊急連絡先）、S7-FLAMMABLE-STORAGE-TEMP、S8-NO-ENG-CONTROLS、S10-NO-INCOMPATIBLE、CROSS-STALE-DATE；S5-EMPTY 閾値 30→15；S8-OEL-NO-NUMERIC 中国語「単位→数値」形式対応・「OEL不要」表現の除外パターン追加 |
 
 ---
 
