@@ -1,6 +1,6 @@
 [package]
 name = "sds-converter"
-version = "0.2.7"
+version = "0.2.8"
 edition = "2021"
 description = "CLI for converting chemical safety SDS documents (PDF/DOCX) ↔ MHLW/JIS Z 7253 standard JSON via LLM (Claude/GPT/Gemini). Batch mode, multilingual."
 license = "MIT OR Apache-2.0"
@@ -16,7 +16,7 @@ name = "sds-converter"
 path = "src/main.rs"
 
 [dependencies]
-sds-converter-core = { path = "../sds_converter_core", version = "0.3.7" }
+sds-converter-core = { path = "../sds_converter_core", version = "0.3.8" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 tokio = { workspace = true }
