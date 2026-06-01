@@ -219,6 +219,8 @@ sds-converter validate --input output.json --json
 - [x] 循环测试：修复 JSONL 解析及验证器字符串数组处理；r24 基线 30/30 成功，CRIT=0、HIGH=9、MED=176
 - [x] QC r25：修复 S2-EXPLOSIVE-NO-GHS01 / S2-ENV-NO-GHS09 漏报（日期/H码中"01"/"09"子串误跳过）；新增 S3-NAME-IS-CAS（HIGH）、S16-REVISION-BEFORE-ISSUE（HIGH）
 - [x] 循环测试 r25 基线：30/30 成功，CRIT=0、HIGH=13、MED=175
+- [x] QC r26：S2-FLAMMABLE-NO-GHS02、S2-CORROSIVE-NO-GHS05、S2-ACUTETOX-NO-GHS06（均为 MED）— 易燃、腐蚀性、急性毒性 Cat 1–3 象形图一致性检查；S4-H314-NO-REMOVE-CLOTHING（MED）— P361 脱除污染衣物合规
+- [x] 循环测试 r26 基线：30/30 成功，CRIT=0、HIGH=14、MED=181
 - [x] LLM提示词：第1节Use回退 — 第1.2节存在但无具体用途时，将原文（如`'无相关详细资料'`）存入Use数组
 - [x] LLM提示词：第8节OEL"不要求"检测 — `不要求`/`无需监控`/`不适用`等表述存入`AdditionalInfo.FullText`（不再省略）
 - [x] LLM提示词：第9节Densities必须提取；易燃/挥发性产品（H224/H225/H226/H330–H332）提取VapourPressure

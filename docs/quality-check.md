@@ -153,6 +153,9 @@ This convention means `WARN` = "minor extraction gap, acceptable for most use ca
 | H-codes present but Classification section missing | MED | Classification information absent |
 | **r23** H200–H205 (explosive) present but GHS01 pictogram absent | MED | GHS explosive hazard always requires the exploding bomb pictogram (r25 fixed false-negative from "01" substring match) |
 | **r23** H410/H411/H412/H413 (environmental hazard) present but GHS09 absent | MED | Environmental hazard requires the dead tree & fish pictogram (r25 fixed false-negative from "09" substring match) |
+| **r26** H224/H225/H226/H220–H223/H228/H242/H252 (flammable) present but GHS02 pictogram absent | MED | Flammable hazard always requires the flame pictogram |
+| **r26** H314 (skin corrosion) present but GHS05 pictogram absent | MED | Corrosive hazard requires the corrosion pictogram |
+| **r26** H300/H301/H310/H311/H330/H331 (acute tox Cat 1–3) present but GHS06 pictogram absent | MED | Fatal/highly-toxic acute hazard requires the skull-and-crossbones pictogram |
 | **r23** SignalWord present but HazardStatement completely absent | HIGH | Signal word without any hazard statements indicates incomplete labelling |
 
 ---
@@ -198,6 +201,7 @@ CAS: 107-06-2 → digits "10706" multiplied right-to-left by 1,2,3,4,5 → sum m
 | Eye hazard H-code but no eye first-aid text | MED | H318/H319/H314 → eye/眼/rinse/洗眼 etc. |
 | Inhalation H-code but no inhalation first-aid text | MED | H330–H335 → inhal/吸入/fresh air etc. |
 | Skin hazard H-code but no skin contact first-aid text | MED | H314/H315 → skin/皮膚/wash etc. |
+| **r26** H314 present but no instruction to remove contaminated clothing | MED | P361 requirement: remove/take off contaminated clothing immediately |
 
 ---
 
@@ -498,6 +502,7 @@ QC-SUMMARY: 0 CRIT + 2 HIGH + 3 MED = 5 total issues
 | **r23** | Supplier phone digit count, GHS01/GHS09 pictogram–H-code consistency, SignalWord without HazardStatement (HIGH), concentration year-string detection (HIGH), mixture > 10 components, OEL numeric value check, density/pH/auto-ignition/boiling point range validation, H350/351 carcinogenicity agency, H420 ozone keywords, UN number format, cross-section duplicate text, single-family H-code detection for complex mixtures |
 | **r24** | S1-ZH-NO-EMERGENCY for zh-cn/zh-tw, S7-FLAMMABLE-STORAGE-TEMP, S8-NO-ENG-CONTROLS, S10-NO-INCOMPATIBLE, CROSS-STALE-DATE; S5-EMPTY threshold 30→15; S8-OEL-NO-NUMERIC Chinese unit-before-value exemption and additional "no OEL" phrase patterns |
 | **r25** | S3-NAME-IS-CAS (HIGH): substance name field contains a bare CAS number; S16-REVISION-BEFORE-ISSUE (HIGH): RevisionDate precedes IssueDate; fix S2-EXPLOSIVE-NO-GHS01 and S2-ENV-NO-GHS09 spurious false-negative from substring "01"/"09" matching dates or H-codes |
+| **r26** | S2-FLAMMABLE-NO-GHS02 (MED): flammable H-codes without GHS02 flame pictogram; S2-CORROSIVE-NO-GHS05 (MED): H314 without GHS05 corrosion pictogram; S2-ACUTETOX-NO-GHS06 (MED): acute-tox Cat 1–3 H-codes without GHS06 skull pictogram; S4-H314-NO-REMOVE-CLOTHING (MED): H314 without P361 remove-clothing instruction |
 
 ---
 

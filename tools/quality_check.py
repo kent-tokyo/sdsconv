@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-SDS JSON Quality Check Script — r25
+SDS JSON Quality Check Script — r26
 
+# r26: new pictogram rules S2-FLAMMABLE-NO-GHS02, S2-CORROSIVE-NO-GHS05,
+#       S2-ACUTETOX-NO-GHS06; new S4-H314-NO-REMOVE-CLOTHING
 # r25: fix S2-EXPLOSIVE-NO-GHS01/S2-ENV-NO-GHS09 spurious substring false negatives,
 #       new: S3-NAME-IS-CAS, S16-REVISION-BEFORE-ISSUE
 # r24: S5-EMPTY threshold 30→15, S8-OEL-NO-NUMERIC false positive fix,
@@ -517,6 +519,27 @@ def check_sec2(root: dict, lang: str, h_codes: set, p_codes: set) -> list:
                 issues.append(issue("MED", "S2-ENV-NO-GHS09",
                                     "Sec2: H410/H411/H412/H413 present but GHS09 (environmental) pictogram not found"))
 
+        # r26-NEW: Flammable H-codes but no GHS02 flame pictogram
+        if h_codes.intersection({"H224", "H225", "H226", "H220", "H221", "H222", "H223", "H228", "H242", "H252"}):
+            pic_texts = " ".join(str(p) for p in pictograms)
+            if "GHS02" not in pic_texts:
+                issues.append(issue("MED", "S2-FLAMMABLE-NO-GHS02",
+                                    "Sec2: Flammable H-code present but GHS02 (flame) pictogram not found"))
+
+        # r26-NEW: Skin corrosion H314 but no GHS05 corrosion pictogram
+        if "H314" in h_codes:
+            pic_texts = " ".join(str(p) for p in pictograms)
+            if "GHS05" not in pic_texts:
+                issues.append(issue("MED", "S2-CORROSIVE-NO-GHS05",
+                                    "Sec2: H314 (skin corrosion) present but GHS05 (corrosion) pictogram not found"))
+
+        # r26-NEW: Fatal/toxic acute H-codes (Cat 1-3) but no GHS06 skull pictogram
+        if h_codes.intersection({"H300", "H301", "H310", "H311", "H330", "H331"}):
+            pic_texts = " ".join(str(p) for p in pictograms)
+            if "GHS06" not in pic_texts:
+                issues.append(issue("MED", "S2-ACUTETOX-NO-GHS06",
+                                    "Sec2: Acute-tox H300/H301/H310/H311/H330/H331 present but GHS06 (skull) pictogram not found"))
+
     except Exception as e:
         issues.append(issue("MED", "S2-INTERNAL", f"Sec2 check failed: {e}"))
     return issues
@@ -714,6 +737,17 @@ def check_sec4(root: dict, lang: str, h_codes: set) -> list:
             if not re.search(r"skin|皮膚|wash|洗|水|water", sec_text, re.IGNORECASE):
                 issues.append(issue("MED", "S4-SKIN-HCODE-NO-SKIN-AID",
                                     "Sec4: H314/H315 but no skin contact first-aid keywords found"))
+
+        # r26-NEW: H314 (severe skin corrosion) but no "remove clothing" instruction (P361 equivalent)
+        if "H314" in h_codes:
+            skin_aid_text = walk_text(exp_route.get("FirstAidSkin") or {})
+            combined = (skin_aid_text or sec_text)
+            if not re.search(
+                r"remov.*cloth|take.?off.*cloth|contaminat.*cloth|衣類.*脱|脱.*衣|汚染.*衣|除去.*衣|脱去.*衣|立即.*脱|立刻.*脱|脱掉",
+                combined, re.IGNORECASE
+            ):
+                issues.append(issue("MED", "S4-H314-NO-REMOVE-CLOTHING",
+                                    "Sec4: H314 present but no 'remove contaminated clothing' instruction found (P361 requirement)"))
 
     except Exception as e:
         issues.append(issue("MED", "S4-INTERNAL", f"Sec4 check failed: {e}"))

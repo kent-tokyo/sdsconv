@@ -191,6 +191,8 @@ sds-converter-core = "0.3"
 - [x] ラウンドトリップテスト: JSONLパース修正・バリデータ文字列配列対応; r24ベースライン 30/30 成功、CRIT=0・HIGH=9・MED=176
 - [x] QC r25: S2-EXPLOSIVE-NO-GHS01 / S2-ENV-NO-GHS09 偽陰性バグ修正（日付・Hコード内 "01"/"09" による誤スキップ）；新ルール S3-NAME-IS-CAS（HIGH）・S16-REVISION-BEFORE-ISSUE（HIGH）
 - [x] ラウンドトリップテスト r25 ベースライン: 30/30 成功、CRIT=0・HIGH=13・MED=175
+- [x] QC r26: S2-FLAMMABLE-NO-GHS02・S2-CORROSIVE-NO-GHS05・S2-ACUTETOX-NO-GHS06（全て MED）— 引火性・腐食性・急性毒性 Cat 1–3 のピクトグラム整合性チェック；S4-H314-NO-REMOVE-CLOTHING（MED）— P361 汚染衣類脱去指示
+- [x] ラウンドトリップテスト r26 ベースライン: 30/30 成功、CRIT=0・HIGH=14・MED=181
 - [x] LLMプロンプト: Section 1 Use フォールバック — セクション1.2が存在するが使用目的不明の場合、ソーステキストを Use 配列に格納（`'无相关详细资料'` 等）
 - [x] LLMプロンプト: Section 8 OEL「不要求」検出 — `不要求`/`无需监控`/`不适用` 等を `AdditionalInfo.FullText` に格納（省略しない）
 - [x] LLMプロンプト: Section 9 Densities 必須抽出、引火性製品（H224/H225/H226/H330–H332）の VapourPressure 抽出

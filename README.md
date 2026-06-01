@@ -192,6 +192,8 @@ sds-converter-core = "0.3"
 - [x] Round-trip test: JSONL parsing fix, validator string-array handling; r24 baseline 30/30 success, CRIT=0, HIGH=9, MED=176
 - [x] QC r25: fix S2-EXPLOSIVE-NO-GHS01 / S2-ENV-NO-GHS09 false-negatives (substring "01"/"09" in dates/H-codes); new S3-NAME-IS-CAS (HIGH) and S16-REVISION-BEFORE-ISSUE (HIGH)
 - [x] Round-trip test r25 baseline: 30/30 success, CRIT=0, HIGH=13, MED=175
+- [x] QC r26: S2-FLAMMABLE-NO-GHS02, S2-CORROSIVE-NO-GHS05, S2-ACUTETOX-NO-GHS06 (all MED) — pictogram/H-code consistency for flammable, corrosive, and acute-tox Cat 1–3; S4-H314-NO-REMOVE-CLOTHING (MED) — P361 compliance
+- [x] Round-trip test r26 baseline: 30/30 success, CRIT=0, HIGH=14, MED=181
 - [x] LLM prompt: Section 1 Use fallback — source phrase captured when Section 1.2 exists but no specific use is listed (e.g. `'无相关详细资料'`)
 - [x] LLM prompt: Section 8 OEL "not required" detection — `不要求` / `无需监控` / `不适用` and similar phrases now stored in `AdditionalInfo.FullText` instead of being silently omitted
 - [x] LLM prompt: Section 9 Densities always extracted; VapourPressure added for flammable/volatile products (H224/H225/H226/H330–H332)

@@ -151,6 +151,9 @@ exit code = 検出した問題の総数（CRIT + HIGH + MED の合計）
 | H コードありだが Classification セクションが空 | MED | 分類情報の欠落 |
 | **r23** H200–H205（爆発物）ありで GHS01 ピクトグラムなし | MED | 爆発物は爆弾ピクトグラム（GHS01）が必須（r25 にて "01" サブ文字列による偽陰性バグを修正） |
 | **r23** H410/H411/H412/H413（環境有害性）ありで GHS09 ピクトグラムなし | MED | 環境有害性は枯れ木・死魚ピクトグラム（GHS09）が必須（r25 にて "09" サブ文字列による偽陰性バグを修正） |
+| **r26** H224/H225/H226/H220–H223/H228/H242/H252（引火性）ありで GHS02 ピクトグラムなし | MED | 引火性危険物は炎ピクトグラム（GHS02）が必須 |
+| **r26** H314（皮膚腐食性）ありで GHS05 ピクトグラムなし | MED | 腐食性は腐食ピクトグラム（GHS05）が必須 |
+| **r26** H300/H301/H310/H311/H330/H331（急性毒性 Cat 1–3）ありで GHS06 ピクトグラムなし | MED | 高毒性急性毒性には髑髏ピクトグラム（GHS06）が必須 |
 | **r23** 信号語ありで HazardStatement が完全に空 | HIGH | 信号語だけで危険有害性情報がゼロはラベリング不備 |
 
 ---
@@ -196,6 +199,7 @@ CAS: 107-06-2 → "10706" の各桁を右から 1,2,3,4,5 倍して合算 → mo
 | 眼刺激 H コードで眼への言及なし | MED | H318/H319/H314 → eye/眼/rinse 等 |
 | 吸入 H コードで吸入経路テキストなし | MED | H330-H335 → inhal/吸入/fresh air 等 |
 | 皮膚 H コードで皮膚接触テキストなし | MED | H314/H315 → skin/皮膚/wash 等 |
+| **r26** H314 ありで汚染衣類の脱去指示なし | MED | P361 要件：汚染された衣類をすぐに脱ぐよう指示が必要 |
 
 ---
 
@@ -495,6 +499,7 @@ QC-SUMMARY: 0 CRIT + 2 HIGH + 3 MED = 5 total issues
 | **r23** | 供給者電話番号桁数、GHS01/GHS09 ピクトグラム整合性、信号語のみで HazardStatement 空（HIGH）、濃度フィールドへの年号混入検出（HIGH）、混合物 > 10 成分、OEL 数値確認、密度・pH・自然発火温度・沸点の範囲検証、H350/351 発がん性機関、H420 オゾン、UN 番号書式、セクション間重複テキスト、混合物 H コード単一ファミリー検出 |
 | **r24** | S1-ZH-NO-EMERGENCY（zh-cn/zh-tw 緊急連絡先）、S7-FLAMMABLE-STORAGE-TEMP、S8-NO-ENG-CONTROLS、S10-NO-INCOMPATIBLE、CROSS-STALE-DATE；S5-EMPTY 閾値 30→15；S8-OEL-NO-NUMERIC 中国語「単位→数値」形式対応・「OEL不要」表現の除外パターン追加 |
 | **r25** | S3-NAME-IS-CAS（HIGH）：物質名フィールドに CAS 番号が入力されている；S16-REVISION-BEFORE-ISSUE（HIGH）：改訂日が発行日より前；S2-EXPLOSIVE-NO-GHS01 / S2-ENV-NO-GHS09 の日付・H コード内 "01"/"09" による偽陰性バグを修正 |
+| **r26** | S2-FLAMMABLE-NO-GHS02（MED）：引火性 H コードで GHS02 炎ピクトグラムなし；S2-CORROSIVE-NO-GHS05（MED）：H314 で GHS05 腐食ピクトグラムなし；S2-ACUTETOX-NO-GHS06（MED）：急性毒性 Cat 1–3 H コードで GHS06 髑髏ピクトグラムなし；S4-H314-NO-REMOVE-CLOTHING（MED）：H314 で P361 汚染衣類脱去指示なし |
 
 ---
 
