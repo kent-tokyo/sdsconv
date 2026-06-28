@@ -149,7 +149,7 @@ fn to_json_with_report(
     let path_buf = Path::new(path).to_path_buf();
 
     rt().block_on(async move {
-        let (mut sds, report) = convert_to_json_with_report(&path_buf, &be, &config)
+        let (sds, report) = convert_to_json_with_report(&path_buf, &be, &config)
             .await
             .map_err(|e| PyRuntimeError::new_err(e.to_string()))?;
 
