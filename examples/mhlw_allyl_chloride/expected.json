@@ -1,0 +1,938 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "不活性材料（例えば、乾燥砂又は土等）で流出物を吸収して、化学品廃棄容器に入れる。危険でなければ漏れを止める。すべての発火源を速やかに取除く（近傍での喫煙、火花や火炎の禁止）。排水溝、下水溝、地下室あるいは閉鎖場所への流入を防ぐ。"
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "環境中に放出してはならない。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "全ての着火源を取り除く。直ちに、全ての方向に適切な距離を漏洩区域として隔離する。関係者以外の立入りを禁止する。密閉された場所に立入る前に換気する。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "Concentration": {
+          "NumericRangeWithUnitAndQualifier": {
+            "ExactValue": {
+              "Value": 100.0
+            },
+            "Unit": "%"
+          }
+        },
+        "MolecularFormula": "C3H5Cl",
+        "MolecularWeight": 76.52,
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "107-05-1"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "３‐クロロプロパ‐１‐エン、(3-Chloroprop-1-ene)、１‐クロロ‐２‐プロペン、(1-Chloro-2-propene)、３‐クロロプロピレン、(3-Chloropropylene)",
+            "IupacName": "塩化アリル"
+          }
+        }
+      }
+    ],
+    "CompositionType": "単一物質"
+  },
+  "Datasheet": {
+    "IssueDate": "2002-03-12",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "FullText": "廃棄の前に、可能な限り無害化、安定化及び中和等の処理を行って危険有害性のレベルを低い状態にする。廃棄においては、関連法規並びに地方自治体の基準に従う。",
+    "PackagingWaste": [
+      "容器は清浄にしてリサイクルするか、関連法規並びに地方自治体の基準に従って適切な処分を行う。空容器を廃棄する場合は、内容物を完全に除去すること。"
+    ],
+    "ProductWaste": [
+      "廃棄の前に、可能な限り無害化、安定化及び中和等の処理を行って危険有害性のレベルを低い状態にする。廃棄においては、関連法規並びに地方自治体の基準に従う。"
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "AdditionalEcotoxInformation": "生物蓄積性が低い（BCF=5.6（既存化学物質安全性点検データ））",
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "魚類（ファットヘッドミノー）での96時間TLm = 19780μg/L（環境省リスク評価第3巻, 2004）であることから、区分3とした。"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "PersistenceDegradability": {
+        "BiologicalDegradability": "急速分解性があり（BODによる分解度：62%（既存化学物質安全性点検データ））、かつ生物蓄積性が低い（BCF=5.6（既存化学物質安全性点検データ））ことから、区分外とした。",
+        "RapidDegradability": true
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "この物質を貯蔵ないし取扱う作業場には洗眼器と安全シャワーを設置すること。",
+      "ばく露を防止するため、装置の密閉化又は防爆タイプの局所排気装置を設置すること。"
+    ],
+    "OccupationalExposureLimits": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "管理濃度：未設定"
+          ]
+        }
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "許容濃度（日本産衛学会）：未設定 (2009年版)"
+          ]
+        }
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "ACGIH TLV：TWA 1ppm STEL 2ppm (2009年版)"
+          ]
+        }
+      }
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "適切な眼の保護具を着用すること。"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "適切な保護手袋を着用すること。"
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "適切な呼吸器保護具を着用すること。"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "適切な保護衣を着用すること。"
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireAndExplosionHazards": {
+      "FullText": "加熱により容器が爆発するおそれがある。極めて燃え易く、熱、火花、火炎で容易に発火する。消火後再び発火するおそれがある。火災時に刺激性、腐食性及び毒性のガスを発生するおそれがある。"
+    },
+    "FireFightingProcedures": {
+      "FullText": "危険でなければ火災区域から容器を移動する。容器が熱に晒されているときは、移動させない。安全に対処できるならば着火源を除去すること。"
+    },
+    "MediaToBeUsed": {
+      "FullText": "泡消火剤、粉末消火剤、炭酸ガス、乾燥砂類"
+    },
+    "SpecialProtectiveEquipmentForFirefighters": {
+      "FullText": "適切な空気呼吸器、防護服（耐熱性）を着用する。"
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "水で数分間注意深く洗うこと。次に、コンタクトレンズを着用していて容易に外せる場合は外すこと。その後も洗浄を続けること。直ちに医師に連絡すること。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "気分が悪い時は、医師に連絡すること。口をすすぐこと。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "空気の新鮮な場所に移し、呼吸しやすい姿勢で休息させること。医師に連絡すること。"
+      },
+      "FirstAidSkin": {
+        "FullText": "直ちに、汚染された衣類をすべて脱ぐこと、取り除くこと。皮膚を流水、シャワーで洗うこと。多量の水と石鹸で洗うこと。皮膚刺激が生じた場合、医師の診断、手当てを受けること。汚染された衣類を脱ぎ、再使用する場合には洗濯すること。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "消防法の規制に従う。取扱い後はよく手を洗うこと。この製品を使用する時に、飲食または喫煙をしないこと。屋外または換気の良い場所でのみ使用すること。使用前に取扱説明書を入手すること。すべての安全注意を読み理解するまで取り扱わないこと。ミスト、蒸気、スプレーを吸入しないこと。皮膚と接触しないこと。飲み込まないこと。眼に入れないこと。",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "『８．ばく露防止及び保護措置』に記載の設備対策を行い、保護具を着用する。",
+        "VentilationCondition": "『８．ばく露防止及び保護措置』に記載の局所排気、全体換気を行う。"
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "容器を密閉して冷乾所にて保存すること。換気の良い場所で保管すること。涼しいところに置くこと。施錠して保管すること。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "Classification": {
+      "EnvironmentalEffect": {
+        "AquaticToxicityAcute": "区分3"
+      },
+      "HealthEffect": {
+        "AcuteToxicityInhalationVapour": "区分3",
+        "AcuteToxicityOral": "区分4",
+        "EyeDamageOrIrritation": "区分1",
+        "ReproductiveToxicity": {
+          "Category": "区分2"
+        },
+        "SkinCorrosionIrritation": "区分2",
+        "SpecificTargetOrganRE": [
+          {
+            "Category": "区分1",
+            "TargetOrgan": [
+              "神経系",
+              "腎臓",
+              "心臓",
+              "肝臓"
+            ]
+          }
+        ],
+        "SpecificTargetOrganSE": [
+          {
+            "Category": "区分1",
+            "TargetOrgan": [
+              "呼吸器",
+              "神経系",
+              "腎臓",
+              "肝臓",
+              "心臓"
+            ]
+          },
+          {
+            "Category": "区分3",
+            "TargetOrgan": [
+              "麻酔作用"
+            ]
+          }
+        ]
+      },
+      "PhysicochemicalEffect": {
+        "CorrosiveToMetals": "分類対象外",
+        "Explosives": "分類対象外",
+        "FlammableAerosols": "分類対象外",
+        "FlammableGases": "分類対象外",
+        "FlammableLiquids": "区分2",
+        "FlammableSolids": "分類対象外",
+        "GasesUnderPressure": "分類対象外",
+        "OrganicPeroxides": "分類対象外",
+        "OxidisingGases": "分類対象外",
+        "OxidisingLiquids": "分類対象外",
+        "OxidisingSolids": "分類対象外",
+        "PyrophoricLiquids": "区分外",
+        "PyrophoricSolids": "分類対象外"
+      }
+    },
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "引火性の高い液体および蒸気",
+          "HazardStatementCode": "H225"
+        },
+        {
+          "FullText": "飲み込むと有害",
+          "HazardStatementCode": "H302"
+        },
+        {
+          "FullText": "吸入すると有毒",
+          "HazardStatementCode": "H331"
+        },
+        {
+          "FullText": "皮膚刺激",
+          "HazardStatementCode": "H315"
+        },
+        {
+          "FullText": "重篤な眼の損傷",
+          "HazardStatementCode": "H318"
+        },
+        {
+          "FullText": "発がんのおそれの疑い"
+        },
+        {
+          "FullText": "生殖能または胎児への悪影響のおそれの疑い"
+        },
+        {
+          "FullText": "呼吸器、神経系、腎臓、肝臓、心臓の障害"
+        },
+        {
+          "FullText": "眠気やめまいのおそれ"
+        },
+        {
+          "FullText": "長期にわたる、または、反復ばく露により神経系、腎臓、心臓、肝臓の障害"
+        },
+        {
+          "FullText": "水生生物に有害"
+        }
+      ],
+      "PrecautionaryStatements": {
+        "Disposal": [
+          {
+            "FullText": "内容物、容器を都道府県知事の許可を受けた専門の廃棄物処理業者に業務委託すること。",
+            "PrecautionaryStatementCode": "P501"
+          }
+        ],
+        "Prevention": [
+          {
+            "FullText": "熱、火花、裸火、高温のもののような着火源から遠ざけること。－禁煙。",
+            "PrecautionaryStatementCode": "P210"
+          },
+          {
+            "FullText": "容器を密閉しておくこと。",
+            "PrecautionaryStatementCode": "P233"
+          },
+          {
+            "FullText": "静電気的に敏感な物質を積みなおす場合、容器を接地すること、アースをとること。"
+          },
+          {
+            "FullText": "防爆型の電気機器、換気装置、照明機器等を使用すること。",
+            "PrecautionaryStatementCode": "P241"
+          },
+          {
+            "FullText": "火花を発生させない工具を使用すること。",
+            "PrecautionaryStatementCode": "P242"
+          },
+          {
+            "FullText": "静電気放電に対する予防措置を講ずること。",
+            "PrecautionaryStatementCode": "P243"
+          },
+          {
+            "FullText": "適切な保護手袋、保護眼鏡、保護面を着用すること。",
+            "PrecautionaryStatementCode": "P280"
+          },
+          {
+            "FullText": "取扱い後はよく手を洗うこと。",
+            "PrecautionaryStatementCode": "P264"
+          },
+          {
+            "FullText": "この製品を使用する時に、飲食または喫煙をしないこと。",
+            "PrecautionaryStatementCode": "P270"
+          },
+          {
+            "FullText": "屋外または換気の良い場所でのみ使用すること。",
+            "PrecautionaryStatementCode": "P271"
+          },
+          {
+            "FullText": "使用前に取扱説明書を入手すること。",
+            "PrecautionaryStatementCode": "P201"
+          },
+          {
+            "FullText": "すべての安全注意を読み理解するまで取り扱わないこと。",
+            "PrecautionaryStatementCode": "P202"
+          },
+          {
+            "FullText": "適切な個人用保護具を使用すること。"
+          },
+          {
+            "FullText": "ミスト、蒸気、スプレーを吸入しないこと。",
+            "PrecautionaryStatementCode": "P260"
+          },
+          {
+            "FullText": "環境への放出を避けること。",
+            "PrecautionaryStatementCode": "P273"
+          }
+        ],
+        "Response": [
+          {
+            "FullText": "皮膚または髪に付着した場合、直ちに、汚染された衣類をすべて脱ぐこと、取り除くこと。皮膚を流水、シャワーで洗うこと。",
+            "PrecautionaryStatementCode": "P303+P361+P353"
+          },
+          {
+            "FullText": "火災の場合には適切な消火方法をとること。",
+            "PrecautionaryStatementCode": "P370+P378"
+          },
+          {
+            "FullText": "飲み込んだ場合、気分が悪い時は、医師に連絡すること。",
+            "PrecautionaryStatementCode": "P301+P312"
+          },
+          {
+            "FullText": "飲み込んだ場合、口をすすぐこと。",
+            "PrecautionaryStatementCode": "P330"
+          },
+          {
+            "FullText": "吸入した場合、空気の新鮮な場所に移し、呼吸しやすい姿勢で休息させること。",
+            "PrecautionaryStatementCode": "P304+P340"
+          },
+          {
+            "FullText": "吸入した場合、医師に連絡すること。",
+            "PrecautionaryStatementCode": "P311"
+          },
+          {
+            "FullText": "皮膚に付着した場合、多量の水と石鹸で洗うこと。",
+            "PrecautionaryStatementCode": "P302+P352"
+          },
+          {
+            "FullText": "皮膚に付着した場合、皮膚刺激が生じた場合、医師の診断、手当てを受けること。",
+            "PrecautionaryStatementCode": "P333+P313"
+          },
+          {
+            "FullText": "汚染された衣類を脱ぎ、再使用する場合には洗濯すること。",
+            "PrecautionaryStatementCode": "P362"
+          },
+          {
+            "FullText": "眼に入った場合、水で数分間注意深く洗うこと。次に、コンタクトレンズを着用していて容易に外せる場合は外すこと。その後も洗浄を続けること。",
+            "PrecautionaryStatementCode": "P305+P351+P338"
+          },
+          {
+            "FullText": "眼に入った場合、直ちに医師に連絡すること。",
+            "PrecautionaryStatementCode": "P310"
+          },
+          {
+            "FullText": "ばく露またはばく露の懸念がある場合、医師の診断、手当てを受けること。",
+            "PrecautionaryStatementCode": "P308+P313"
+          },
+          {
+            "FullText": "気分が悪い時は、医師の診断、手当てを受けること。",
+            "PrecautionaryStatementCode": "P314"
+          }
+        ],
+        "Storage": [
+          {
+            "FullText": "換気の良い場所で保管すること。涼しいところに置くこと。",
+            "PrecautionaryStatementCode": "P403+P235"
+          },
+          {
+            "FullText": "施錠して保管すること。",
+            "PrecautionaryStatementCode": "P405"
+          }
+        ]
+      },
+      "SignalWord": "危険"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "東京都△△区△△町△丁目△△番地",
+      "CompanyName": "○○○○株式会社",
+      "EmergencyContact": [
+        {
+          "Phone": "03-1234-5678"
+        }
+      ],
+      "Fax": "03-1234-5678",
+      "Phone": "03-1234-5678"
+    },
+    "TradeProductIdentity": {
+      "ProductNoUser": [
+        "21B3088"
+      ],
+      "TradeNameEN": "Allyl chloride",
+      "TradeNameJP": "塩化アリル"
+    },
+    "UseAndUseAdvisedAgainst": {
+      "Use": [
+        "エピクロロヒドリン、グリセリン、アリルアミン、ポリマー、樹脂の合成原料 (Chapman(Ver.16:2, 2009))"
+      ]
+    }
+  },
+  "OtherInformation": {
+    "RelatedDocuments": "各データ毎に記載した｡",
+    "RevisionInformation": [
+      {
+        "FullText": "改訂日 2010年3月31日",
+        "LastUpdateDate": "2010-03-31"
+      }
+    ]
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "無色",
+      "Odour": "刺激臭",
+      "PhysicalState": "液体"
+    },
+    "BoilingPointRelated": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "ICSC (2004)"
+          ]
+        },
+        "ItemName": "沸点、初留点及び沸騰範囲",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 45.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "Densities": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "20℃ : Lide (88th,2008)"
+          ]
+        },
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 0.9376
+          },
+          "Unit": "g/cm3"
+        }
+      }
+    ],
+    "FlashPoint": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "密閉式 : ICSC(2004)"
+          ]
+        },
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": -32.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "MeltingPointRelated": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "ICSC (2004)"
+          ]
+        },
+        "ItemName": "融点・凝固点",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": -135.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "390℃ : ICSC (2004)",
+            "485℃ : NFPA (13th,2006)",
+            "392℃ : HSDB (2006)"
+          ]
+        },
+        "ItemName": "自然発火温度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "2.9～11.2vol% : ICSC(2004)"
+          ]
+        },
+        "ItemName": "爆発範囲"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "Sax(11th, 2004)"
+          ]
+        },
+        "ItemName": "蒸気密度",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 2.64
+          }
+        }
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "0.94(20℃,4℃) : Chapman (2009)"
+          ]
+        },
+        "ItemName": "比重（密度）"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "log P=2.1 : ICSC (2004)"
+          ]
+        },
+        "ItemName": "オクタノール・水分配係数"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "25℃ : Lide (88th,2008)"
+          ]
+        },
+        "ItemName": "粘度",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 0.314
+          },
+          "Unit": "mPa･s"
+        }
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "アルコール、クロロホルム、エーテル、石油エーテル : 混和 : Merck (14th,2006)"
+          ]
+        },
+        "ItemName": "溶解度（アルコール、クロロホルム、エーテル、石油エーテル）"
+      }
+    ],
+    "Solubilities": {
+      "WaterSolubility": [
+        {
+          "AdditionalInfo": {
+            "FullText": [
+              "水 : 0.36g/100mL(20℃) : ICSC(2004)"
+            ]
+          }
+        }
+      ]
+    },
+    "VapourPressure": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "20℃ : Chapman (2009)"
+          ]
+        },
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 295.0
+          },
+          "Unit": "mmHg"
+        }
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "化審法",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "第２種監視化学物質（法第２条第５項）（政令番号：２監-１０１４）"
+                ]
+              },
+              "RegulationName": "第２種監視化学物質"
+            }
+          ]
+        },
+        {
+          "LegislationName": "労働安全衛生法",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "健康障害防止指針公表物質（法第２８条第３項・厚労省指針公示）"
+                ]
+              },
+              "RegulationName": "健康障害防止指針公表物質"
+            },
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "変異原性が認められた既存化学物質（法第５７条の５、労働基準局長通達）"
+                ]
+              },
+              "RegulationName": "変異原性が認められた既存化学物質"
+            },
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "危険物・引火性の物（施行令別表第１第４号）"
+                ]
+              },
+              "RegulationName": "危険物・引火性の物"
+            },
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "名称等を通知すべき危険物及び有害物（法第５７条の２、施行令第１８条の２別表第９）（政令番号：9-95）"
+                ]
+              },
+              "RegulationName": "名称等を通知すべき危険物及び有害物"
+            }
+          ]
+        },
+        {
+          "LegislationName": "海洋汚染防止法",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "有害液体物質（Ｙ類物質）（施行令別表第１）"
+                ]
+              },
+              "RegulationName": "有害液体物質"
+            }
+          ]
+        },
+        {
+          "LegislationName": "化学物質排出把握管理促進法（ＰＲＴＲ法）",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "第１種指定化学物質（法第２条第２項、施行令第１条別表第１）（政令番号：1-123 ）"
+                ]
+              },
+              "RegulationName": "第１種指定化学物質"
+            }
+          ]
+        },
+        {
+          "LegislationName": "消防法",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "第４類引火性液体、第一石油類非水溶性液体（法第２条第７項危険物別表第１・第４類）"
+                ]
+              },
+              "RegulationName": "第４類引火性液体"
+            }
+          ]
+        },
+        {
+          "LegislationName": "船舶安全法",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "引火性液体類（危規則第３条危険物告示別表第１）"
+                ]
+              },
+              "RegulationName": "引火性液体類"
+            }
+          ]
+        },
+        {
+          "LegislationName": "航空法",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "引火性液体（施行規則第１９４条危険物告示別表第１）"
+                ]
+              },
+              "RegulationName": "引火性液体"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "ConditionsToAvoid": "燃焼",
+    "HazardousDecompositionProducts": {
+      "Substance": "塩化水素"
+    },
+    "HazardousReactions": {
+      "FullText": "酸、熱、過酸化物の影響下で重合することがあり、火災や爆発の危険を伴う。燃焼すると、有毒で腐食性のヒューム(塩化水素)を生成する。強力な酸化剤や金属粉末と激しく反応し、火災や爆発の危険をもたらす。 水と反応し塩酸を生成する。プラスチック、ゴム、被膜剤を侵す。"
+    },
+    "MaterialsToAvoid": "強力な酸化剤や金属粉末、水",
+    "StabilityDescription": "法規制に従った保管及び取扱においては安定と考えられる"
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ラットのLD50値 450, 460, 700 mg/kg (いずれもSIDS(2003))に基づき、区分4とした。"
+              ]
+            },
+            "Category": "区分4",
+            "ExposureRouteName": "経口"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ラットのLD50値 2200 mg/kg (NITE初期リスク評価書(2008))、ウサギのLD50値 2026 mg/kg (SIDS(2003))に基づき、JIS分類基準の区分外（国連分類基準の区分5）とした。"
+              ]
+            },
+            "Category": "区分外",
+            "ExposureRouteName": "経皮"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "GHSの定義における液体である。ラットのLC50値（4h）は、 2100 ppm, ≧2000 ppm(SIDS(2003)), 1138 ppm, 2620 ppm (DFGOT vol.18(2002))であり、最も多くのLC50値がガイダンス値区分3に該当するため、区分3とした。なお、25℃の飽和蒸気圧濃度は484211 ppmV であり、いずれのLC50値も飽和蒸気圧濃度の90％より低いので、気体の基準値で分類した。"
+              ]
+            },
+            "Category": "区分3",
+            "ExposureRouteName": "吸入：蒸気"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "データなし"
+              ]
+            },
+            "ExposureRouteName": "吸入：ミスト"
+          }
+        ]
+      },
+      "AspirationHazard": {
+        "Category": "分類できない",
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "－"
+              ]
+            }
+          }
+        ]
+      },
+      "Carcinogenicity": {
+        "Category": "区分2",
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "1996年にACGIHでＡ３（ACGIH-TLV(2009)）、EUリスク警句でカテゴリー3(EU-AnnexⅠ(access on May. 2009))に分類されている。IARCではグループ3である(IARC Vol.71(1999))。ラット、マウスを用いた104週間吸入ばく露試験では、F344/DuCrj(Fischer)ラットでは、雄の膀胱に移行上皮がんの発生増加が認められ、がん原性を示す明らかな証拠であると考えられた。また、甲状腺の濾胞状腺腫の発生増加も認められた。雌には、腫瘍の発生増加は認められなかった。Crj:BDF1マウスでは、雌雄ともハーダー腺の腺腫の発生増加が認められ、がん原性を示唆する証拠であると考えられた（厚生労働省がん原性試験 (2003)）。この結果を受け厚生労働省より「国が実施したがん原性試験の結果がん原性を示す証拠が認められた化学物質による労働者の健康障害防止対策の徹底について」(2009)との通達がされていることより区分2とした。"
+              ]
+            }
+          }
+        ]
+      },
+      "EyeDamageOrIrritation": {
+        "Category": "区分1",
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "SIDS (2003)、NITE初期リスク評価書(2008)のウサギを用いた眼刺激性試験結果の記述は「軽度の刺激性（slightly irritating ）」であるが、ACGIH (7th, 2001) のヒトへの影響の記述「痛みと角膜の損傷を伴う重度の刺激性を示し、失明の可能性もある」から、本物質が眼に対して非可逆性の刺激を与える可能性もあると考え、皮膚腐食性物質であることも考慮し、区分1とした。"
+              ]
+            }
+          }
+        ]
+      },
+      "GermCellMutagenicity": {
+        "Category": "区分外",
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "in vivoではラットを用いた2つの変異原性試験（優性致死試験、骨髄を用いた染色体異常試験）で陰性(SIDS (2003))であることから区分外とした。in vitroでは、エームス試験(SIDS(2003))、CHL細胞を用いた染色体異常試験（IARC vol.71(1999)）において複数の陽性結果がある。"
+              ]
+            }
+          }
+        ]
+      },
+      "ReproductiveToxicity": {
+        "Category": "区分2",
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ラットを用いた吸入ばく露による発生毒性試験において、母動物に一般毒性のみられる用量で、胚吸収と着床前および着床後胚損失の有意な増加（SIDS(2003)）がみられることより、区分2とした。"
+              ]
+            }
+          }
+        ]
+      },
+      "RespiratorySensitisation": {
+        "Category": "分類できない",
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "呼吸器感作性：データなし"
+              ]
+            }
+          }
+        ]
+      },
+      "SkinCorrosionIrritation": {
+        "Category": "区分2",
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "SIDS (2003)、NITE初期リスク評価書(2008)のウサギ、マウスを用いた皮膚刺激性試験結果の記述「軽度の刺激性を有する」「限局性の皮膚の損傷 (発赤、腫脹、一部の例に皮膚の壊死) がみられた。」及び、ヒトの皮膚への接触で「皮膚に発赤がみられ、灼熱感、痛みを生じ、接触数時間後に強い骨痛を惹き起こす。」（NITE初期リスク評価書(2008)）との記載から、刺激の強度は不明だが刺激性がみられるため、区分2とした。"
+              ]
+            }
+          }
+        ]
+      },
+      "SkinSensitisation": {
+        "Category": "分類できない",
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "皮膚感作性：データなし"
+              ]
+            }
+          }
+        ]
+      },
+      "SpecificTargetOrganRE": {
+        "AdditionalInfo": {
+          "FullText": [
+            "ヒトについては、「衰弱、感覚異常、末端の麻痺」（環境省リスク評価第２巻 (2003)）、「慢性ばく露により肝臓障害、腎臓障害、末梢神経障害がみられている」（NITE初期リスク評価書(2008)）、「慢性的なばく露により腎臓毒性(糸球体の膜透過性の変化、尿細管の変性、乏尿、排尿時の痛み、夜間頻尿)、神経障害 (手、瞼のふるえ、腱や骨膜反射の増加、多汗、低体温、チアノーゼ、睡眠障害、四肢の感覚異常)、心血管系への影響 (心筋の収縮の減少と心音の低下及び心雑音、痛み)、肝機能の変化」（BUA 186(1995)）等の記述、実験動物については、ラットを用いた吸入ばく露試験において「尾部の運動神経及び感覚神経の伝導速度低下と活動電位の振幅低下に伴う後肢の衰弱（用量：0.181 mg/L(換算値)）、中枢神経系抑制（用量：0.1 mg/L(換算値)）、中心静脈周辺肝細胞の壊死（軽度）（用量：0.0097 mg/L(換算値)）」（NITE初期リスク評価書(2008)）との記述があることから、神経系、腎臓、心臓、肝臓が標的臓器と考えられた。なお、実験動物に対する影響は、区分1に相当するガイダンス値の範囲でみられた。以上より、分類は区分1（神経系、腎臓、心臓、肝臓）とした。"
+          ]
+        },
+        "Category": "区分1（神経系、腎臓、心臓、肝臓）",
+        "TargetOrgan": [
+          "神経系",
+          "腎臓",
+          "心臓",
+          "肝臓"
+        ]
+      },
+      "SpecificTargetOrganSE": {
+        "AdditionalInfo": {
+          "FullText": [
+            "ヒトについては「気道刺激性」「意識喪失」（いずれもNITE初期リスク評価書(2008)）の記述、実験動物については、ラットの経口投与試験において、用量100 mg/kgで腎臓 (曲尿細管の混濁腫脹、変性、糸球体上皮細胞の限局性壊死)、肝臓 (類洞の拡張、肝細胞の混濁腫脹) の組織変化と心筋細胞の変性、活動性の低下、し眠、後肢麻痺、振せん、痙れん等の神経系への症状がみられる（NITE初期リスク評価書(2008)）。ラット・マウスの吸入ばく露試験においては、用量 3.506 mg/L、8.2 mg/L(いずれもラット)、3.13 mg/L(マウス)で肺水腫、腎臓と肝臓のうっ血がみられ（DFGOT vol.18(2002）、ラット・モルモットを用いた吸入ばく露試験でも肺と腎臓に重度の損傷がみられる(PATTY(5th, 2001))。以上より、呼吸器、神経系、腎臓、肝臓を標的臓器とし、麻酔作用をもつと考えられた。なお、実験動物に対する影響は、区分1の範囲でみられた。よって、分類は区分1（呼吸器、神経系、腎臓、肝臓、心臓）、区分3（麻酔作用）とした。"
+          ]
+        },
+        "Category": "区分1（呼吸器、神経系、腎臓、肝臓、心臓）、区分3（麻酔作用）",
+        "TargetOrgan": [
+          "呼吸器",
+          "神経系",
+          "腎臓",
+          "肝臓",
+          "心臓"
+        ]
+      }
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "消防法の規定に従う。",
+        "TransportationType": "陸上規制情報"
+      },
+      {
+        "FullText": "船舶安全法の規定に従う。\n国連番号: 塩化アリル\n容器等級: Ⅰ\n海洋汚染物質: 非該当",
+        "TransportationType": "海上規制情報"
+      },
+      {
+        "FullText": "航空法の規定に従う。\n品名: 塩化アリル\nクラス: 1\n特別安全対策: 移送時にイエローカードの保持が必要。食品や飼料と一緒に輸送してはならない。輸送に際しては、直射日光を避け、容器の破損、腐食、漏れのないように積み込み、荷崩れの防止を確実に行う。重量物を上積みしない。\n緊急時応急措置指針番号: 131",
+        "TransportationType": "航空規制情報"
+      }
+    ],
+    "InternationalRegulations": [
+      {
+        "RegulationName": [
+          {
+            "FullText": "ＩＭＯの規定に従う。\nUN No.: 1100\nProper Shipping Name: ALLYL CHLORIDE\nClass: 6.1\nPacking Group: Ⅰ\nMarine Pollutant: Not Applicable",
+            "TransportationType": "海上輸送(IMDG)"
+          },
+          {
+            "FullText": "ＩＣＡＯ・ＩＡＴＡの規定に従う。\nProper Shipping Name: Allyl chloride\nPacking Group: Ⅰ",
+            "TransportationType": "航空輸送(ICAO/IATA)"
+          }
+        ]
+      }
+    ]
+  }
+}

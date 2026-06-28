@@ -1,0 +1,36 @@
+{
+  "source_language": "ja",
+  "language_auto_detected": false,
+  "populated_sections": [
+    "Identification",
+    "HazardIdentification",
+    "Composition",
+    "FirstAidMeasures",
+    "FireFightingMeasures",
+    "AccidentalReleaseMeasures",
+    "HandlingAndStorage",
+    "ExposureControlPersonalProtection",
+    "PhysicalChemicalProperties",
+    "StabilityReactivity",
+    "ToxicologicalInformation",
+    "EcologicalInformation",
+    "DisposalConsiderations",
+    "TransportInformation",
+    "RegulatoryInformation",
+    "OtherInformation"
+  ],
+  "empty_sections": [],
+  "standardization_notes": [
+    "Section headings follow JIS Z 7253:2019. Section 1 uses '化学品及び会社情報' (JIS Z 7253:2019); older source documents that use '製品及び会社情報' are normalised automatically."
+  ],
+  "warnings": [
+    "[HIGH][S2-GHS-INCOMPLETE] Section 2: HazardStatement present but HazardPictogram is empty — GHS labelling incomplete.",
+    "[MED][S9-VALUE-WITHOUT-UNIT] Section 9: numeric physical property value present without a Unit — add unit (e.g. \"°C\", \"kPa\", \"g/cm³\")."
+  ],
+  "compliance_diff": {
+    "target_country": "Japan",
+    "standard": "JIS Z 7253 / MHLW",
+    "gap_count": 0,
+    "gaps": []
+  }
+}
