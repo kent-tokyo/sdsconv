@@ -186,6 +186,9 @@ enum Commands {
         /// Output warnings as a JSON array (useful for CI)
         #[arg(long)]
         json: bool,
+        /// Strict MHLW mode: exit 1 if any HIGH or CRIT finding is present
+        #[arg(long)]
+        strict_mhlw: bool,
     },
 
     /// Convert MHLW standard JSON to an HTML document
@@ -340,11 +343,20 @@ async fn run_cli() -> anyhow::Result<()> {
             }
         }
 
-        Commands::Validate { input, json } => {
+        Commands::Validate { input, json, strict_mhlw } => {
             let warnings = tasks::run_validate(input, Arc::clone(&log)).await?;
             if json {
                 println!("{}", serde_json::to_string_pretty(&warnings)?);
-            } else if !warnings.is_empty() {
+            }
+            if strict_mhlw {
+                let has_high_or_crit = warnings
+                    .iter()
+                    .any(|w| w.contains("[HIGH]") || w.contains("[CRIT]"));
+                if has_high_or_crit {
+                    eprintln!("strict-mhlw: HIGH/CRIT findings present — see warnings above.");
+                    std::process::exit(1);
+                }
+            } else if !warnings.is_empty() && !json {
                 std::process::exit(1);
             }
         }

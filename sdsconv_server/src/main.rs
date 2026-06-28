@@ -35,8 +35,9 @@ use tower_http::trace::TraceLayer;
 
 use sdsconv_core::{
     convert_bytes_to_json, convert_from_json, converter::html::generate_html,
-    enrich_composition, openai_compat_url, validate, AnthropicBackend, ConvertConfig,
-    Language, LlmBackend, LlmConfig, OpenAiCompatBackend, SdsError, SdsRoot,
+    enrich_composition, openai_compat_url, prune_empty_fields, validate,
+    AnthropicBackend, ConvertConfig, Language, LlmBackend, LlmConfig,
+    OpenAiCompatBackend, SdsError, SdsRoot,
 };
 
 // ---------------------------------------------------------------------------
@@ -293,7 +294,8 @@ async fn to_json(
     }
 
     let warnings_str = warnings.join("; ");
-    let mut response = Json(sds).into_response();
+    let pruned = prune_empty_fields(serde_json::to_value(&sds).unwrap_or_default());
+    let mut response = Json(pruned).into_response();
     if !warnings_str.is_empty() {
         if let Ok(hval) = warnings_str.parse() {
             response.headers_mut().insert("X-Warnings", hval);

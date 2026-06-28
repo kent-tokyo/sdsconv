@@ -10,6 +10,52 @@ pub mod validator;
 
 use std::path::Path;
 
+// ---------------------------------------------------------------------------
+// MHLW §3.3: prune fields with no valid value
+// ---------------------------------------------------------------------------
+
+/// Recursively remove null, empty-string, empty-array, and empty-object fields
+/// from a JSON value tree.
+///
+/// Per MHLW SDS data exchange format §3.3, fields with no valid value must be
+/// omitted entirely rather than serialised as `""` or `null`.
+pub fn prune_empty_fields(v: serde_json::Value) -> serde_json::Value {
+    use serde_json::Value;
+    match v {
+        Value::Object(map) => {
+            let pruned: serde_json::Map<_, _> = map
+                .into_iter()
+                .filter_map(|(k, v)| {
+                    let pv = prune_empty_fields(v);
+                    match &pv {
+                        Value::Null => None,
+                        Value::String(s) if s.trim().is_empty() => None,
+                        Value::Array(a)  if a.is_empty() => None,
+                        Value::Object(o) if o.is_empty() => None,
+                        _ => Some((k, pv)),
+                    }
+                })
+                .collect();
+            Value::Object(pruned)
+        }
+        Value::Array(arr) => {
+            let pruned: Vec<_> = arr
+                .into_iter()
+                .map(prune_empty_fields)
+                .filter(|v| match v {
+                    Value::Null => false,
+                    Value::String(s) if s.trim().is_empty() => false,
+                    Value::Array(a)  if a.is_empty() => false,
+                    Value::Object(o) if o.is_empty() => false,
+                    _ => true,
+                })
+                .collect();
+            Value::Array(pruned)
+        }
+        other => other,
+    }
+}
+
 use serde::{Deserialize, Serialize};
 
 use crate::country::SourceCountry;

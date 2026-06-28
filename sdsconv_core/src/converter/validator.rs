@@ -370,7 +370,198 @@ pub fn validate(sds: &SdsRoot) -> Vec<String> {
         }
     }
 
+    // ── MHLW §3 compliance rules ─────────────────────────────────────────────
+
+    // [HIGH] S2-GHS-INCOMPLETE: H-codes present but GHS labelling elements missing.
+    if let Some(hz) = &sds.hazard_identification {
+        if let Some(hl) = &hz.hazard_labelling {
+            let has_h_codes = hl
+                .hazard_statement
+                .as_deref()
+                .map(|s| !s.is_empty())
+                .unwrap_or(false);
+            if has_h_codes {
+                if hl.hazard_pictogram.as_deref().map(|p| p.is_empty()).unwrap_or(true) {
+                    w.push(
+                        "[HIGH][S2-GHS-INCOMPLETE] Section 2: HazardStatement present but \
+                         HazardPictogram is empty — GHS labelling incomplete."
+                            .into(),
+                    );
+                }
+                if hl.signal_word.as_deref().map(|s| s.trim().is_empty()).unwrap_or(true) {
+                    w.push(
+                        "[HIGH][S2-GHS-INCOMPLETE] Section 2: HazardStatement present but \
+                         SignalWord is missing — GHS labelling incomplete."
+                            .into(),
+                    );
+                }
+                if hz.classification.is_none() {
+                    w.push(
+                        "[HIGH][S2-GHS-INCOMPLETE] Section 2: HazardStatement present but \
+                         Classification is missing — MHLW format requires both."
+                            .into(),
+                    );
+                }
+            }
+        }
+    }
+
+    // [HIGH] S3-CAS-WITHOUT-NAME / S3-NAME-WITHOUT-CAS.
+    if let Some(comp) = &sds.composition {
+        for (i, item) in comp
+            .composition_and_concentration
+            .iter()
+            .flatten()
+            .enumerate()
+        {
+            if let Some(ids) = &item.substance_identifiers {
+                let has_cas = ids
+                    .substance_identity
+                    .as_ref()
+                    .and_then(|si| si.ca_sno.as_ref())
+                    .and_then(|c| c.full_text.as_ref())
+                    .map(|ft| ft.iter().any(|s| !s.trim().is_empty()))
+                    .unwrap_or(false);
+                let has_name = ids
+                    .substance_names
+                    .as_ref()
+                    .map(|n| {
+                        n.iupac_name.as_deref().is_some_and(|s| !s.trim().is_empty())
+                            || n.generic_name.as_deref().is_some_and(|s| !s.trim().is_empty())
+                    })
+                    .unwrap_or(false)
+                    || ids
+                        .common_name
+                        .as_ref()
+                        .and_then(|cn| cn.other_name.as_ref())
+                        .map(|names| names.iter().any(|s| !s.trim().is_empty()))
+                        .unwrap_or(false);
+                if has_cas && !has_name {
+                    w.push(format!(
+                        "[HIGH][S3-CAS-WITHOUT-NAME] Section 3 (Composition[{i}]): \
+                         CAS number present but substance name is missing."
+                    ));
+                } else if has_name && !has_cas {
+                    w.push(format!(
+                        "[HIGH][S3-NAME-WITHOUT-CAS] Section 3 (Composition[{i}]): \
+                         substance name present but CAS number is missing."
+                    ));
+                }
+            }
+        }
+    }
+
+    // [HIGH] S14-UN-INCOMPLETE: UN number present but required transport fields missing.
+    if let Some(ti) = &sds.transport_information {
+        for regs in ti.international_regulations.iter().flatten() {
+            for reg_name in regs.regulation_name.iter().flatten() {
+                if let Some(un) = &reg_name.un_no {
+                    if !un.trim().is_empty() {
+                        if reg_name.proper_shipping_name.as_deref().map(|s| s.trim().is_empty()).unwrap_or(true) {
+                            w.push(format!(
+                                "[HIGH][S14-UN-INCOMPLETE] Section 14: UN No. '{un}' present but \
+                                 ProperShippingName is missing."
+                            ));
+                        }
+                        if reg_name.packing_group.as_deref().map(|s| s.trim().is_empty()).unwrap_or(true) {
+                            w.push(format!(
+                                "[HIGH][S14-UN-INCOMPLETE] Section 14: UN No. '{un}' present but \
+                                 PackingGroup is missing."
+                            ));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // [MED] S2-DUPLICATE-HCODE / S2-DUPLICATE-PCODE.
+    if let Some(hz) = &sds.hazard_identification {
+        if let Some(hl) = &hz.hazard_labelling {
+            // H-codes
+            let h_codes: Vec<String> = hl
+                .hazard_statement
+                .iter()
+                .flatten()
+                .filter_map(|s| s.hazard_statement_code.clone())
+                .map(|c| c.to_uppercase())
+                .collect();
+            let mut seen_h = std::collections::HashSet::new();
+            for code in &h_codes {
+                if !seen_h.insert(code.as_str()) {
+                    w.push(format!(
+                        "[MED][S2-DUPLICATE-HCODE] Section 2: H-code '{code}' appears more than once."
+                    ));
+                }
+            }
+            // P-codes — each sub-list has a distinct concrete type; collect codes separately.
+            if let Some(ps) = &hl.precautionary_statements {
+                let mut p_codes: Vec<String> = Vec::new();
+                for s in ps.prevention.iter().flatten() {
+                    if let Some(c) = &s.precautionary_statement_code { p_codes.push(c.to_uppercase()); }
+                }
+                for s in ps.response.iter().flatten() {
+                    if let Some(c) = &s.precautionary_statement_code { p_codes.push(c.to_uppercase()); }
+                }
+                for s in ps.storage.iter().flatten() {
+                    if let Some(c) = &s.precautionary_statement_code { p_codes.push(c.to_uppercase()); }
+                }
+                for s in ps.disposal.iter().flatten() {
+                    if let Some(c) = &s.precautionary_statement_code { p_codes.push(c.to_uppercase()); }
+                }
+                let mut seen_p = std::collections::HashSet::new();
+                for code in &p_codes {
+                    if !seen_p.insert(code.as_str()) {
+                        w.push(format!(
+                            "[MED][S2-DUPLICATE-PCODE] Section 2: P-code '{code}' appears more than once."
+                        ));
+                    }
+                }
+            }
+        }
+    }
+
+    // [MED] S9-VALUE-WITHOUT-UNIT: numeric physical property value without a unit.
+    if let Some(pcp) = &sds.physical_chemical_properties {
+        let Ok(v) = serde_json::to_value(pcp) else { return w };
+        check_numeric_without_unit(&v, &mut w);
+    }
+
     w
+}
+
+/// Walk a JSON value tree and warn for every `NumericRangeWithUnitAndQualifier`-shaped
+/// object that has a numeric value but no `Unit` field.
+fn check_numeric_without_unit(v: &serde_json::Value, w: &mut Vec<String>) {
+    match v {
+        serde_json::Value::Object(map) => {
+            let has_value = map.contains_key("ExactValue")
+                || map.contains_key("UpperValue")
+                || map.contains_key("LowerValue");
+            let has_unit = map
+                .get("Unit")
+                .and_then(|u| u.as_str())
+                .map(|s| !s.trim().is_empty())
+                .unwrap_or(false);
+            let has_additional_info = map.contains_key("AdditionalInfo");
+            if has_value && !has_unit && !has_additional_info {
+                w.push(
+                    "[MED][S9-VALUE-WITHOUT-UNIT] Section 9: numeric physical property \
+                     value present without a Unit — add unit (e.g. \"°C\", \"kPa\", \"g/cm³\")."
+                        .into(),
+                );
+            }
+            for child in map.values() {
+                check_numeric_without_unit(child, w);
+            }
+        }
+        serde_json::Value::Array(arr) => {
+            for child in arr {
+                check_numeric_without_unit(child, w);
+            }
+        }
+        _ => {}
+    }
 }
 
 // ---------------------------------------------------------------------------

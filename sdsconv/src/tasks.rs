@@ -13,7 +13,7 @@ use sdsconv_core::{
     convert_from_json, convert_from_template, convert_pdf_to_json_vision,
     convert_to_json_with_report, convert_url_to_json,
     detect_language, detect_language_from_file, detect_language_from_url,
-    enrich_composition, validate,
+    enrich_composition, prune_empty_fields, validate,
     extract_text, extract_text_from_url,
     ConversionReport, ConvertConfig, Language, SourceCountry, SdsError, SdsRoot,
 };
@@ -341,9 +341,9 @@ pub async fn run_to_json(params: ToJsonParams, log: LogFn) -> anyhow::Result<()>
             log(format!("CAS: {w}"));
         }
     }
-    // Prune empty strings/arrays/objects per MHLW §3.3 before writing.
+    // Prune empty/null fields per MHLW §3.3 before writing.
     let json_val = serde_json::to_value(&sds)?;
-    let json_val = prune_empty_strings(json_val);
+    let json_val = prune_empty_fields(json_val);
     let json_str = serde_json::to_string_pretty(&json_val)?;
     std::fs::write(&params.output, json_str)
         .with_context(|| format!("writing {}", params.output.display()))?;
@@ -584,33 +584,6 @@ fn report_path_for(json_output: &Path) -> PathBuf {
         .unwrap_or("output");
     let dir = json_output.parent().unwrap_or(Path::new("."));
     dir.join(format!("{stem}_report.json"))
-}
-
-/// JSON value, per MHLW §3.3: fields with no valid value should be omitted
-/// entirely rather than set to `""`.
-fn prune_empty_strings(v: serde_json::Value) -> serde_json::Value {
-    use serde_json::Value;
-    match v {
-        Value::Object(map) => {
-            let pruned: serde_json::Map<_, _> = map
-                .into_iter()
-                .filter_map(|(k, v)| {
-                    let pv = prune_empty_strings(v);
-                    match &pv {
-                        Value::String(s) if s.is_empty() => None,
-                        Value::Array(a)  if a.is_empty() => None,
-                        Value::Object(o) if o.is_empty() => None,
-                        _ => Some((k, pv)),
-                    }
-                })
-                .collect();
-            Value::Object(pruned)
-        }
-        Value::Array(arr) => {
-            Value::Array(arr.into_iter().map(prune_empty_strings).collect())
-        }
-        other => other,
-    }
 }
 
 // ---------------------------------------------------------------------------

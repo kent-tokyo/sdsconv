@@ -251,6 +251,29 @@
   - FP除去: S2-INVALID-SIGNAL-WORD -5件、S14-DG-NO-UN -3件、S14-NO-SHIPPING-NAME -1件
   - 新検出: S2-HAZARD-NO-PICTOGRAM +18件（60%のファイルで画像専用絵表示）、S3-CONC-UNIT-NO-VALUE +10件
 
+## Phase 19: クレートリネーム・CI/CD更新 ✅
+- [x] sds_converter* → sdsconv*、sds_converter_core* → sdsconv_core* にディレクトリ・クレート名を一括リネーム
+- [x] .github/workflows/release.yml を新クレート名・バイナリ名 (`sdsconv`) に更新
+- [x] Homebrew Cask 参照先を `homebrew-sdsconv` / `Casks/sdsconv.rb` に変更
+
+## Phase 20: crates.io 新規公開 ✅
+- [x] `sdsconv-core v0.3.8` — crates.io 新規公開
+- [x] `sdsconv v0.2.8` — crates.io 新規公開
+
+## Phase 21: MHLW JSON 品質向上 ✅
+- [x] `prune_empty_fields` をコアに移動（`converter/mod.rs`）— Null も除去対象に追加、全パス（GUI/Server/CLI）に適用
+- [x] `tasks.rs` のローカル重複 `prune_empty_strings` を削除し core 関数を利用
+- [x] `validator.rs`: MHLW 固有ルール 6 件追加
+  - HIGH: `S2-GHS-INCOMPLETE` — Hコードあり・GHS分類/絵表示/信号語欠落
+  - HIGH: `S3-CAS-WITHOUT-NAME` — CASNoあり・SubstanceName欠落（逆も）
+  - HIGH: `S3-NAME-WITHOUT-CAS` — SubstanceNameあり・CASNo欠落
+  - HIGH: `S14-UN-INCOMPLETE` — UN番号あり・品名/容器等級欠落
+  - MED: `S2-DUPLICATE-HCODE` — Hコード重複
+  - MED: `S2-DUPLICATE-PCODE` — Pコード重複
+  - MED: `S9-VALUE-WITHOUT-UNIT` — 物性数値に単位なし
+- [x] `main.rs`: `--strict-mhlw` フラグ追加（HIGH/CRIT 1件以上で exit 1）
+- [x] `server/main.rs`: `to-json` エンドポイントに `prune_empty_fields` 適用（未適用だったギャップを修正）
+
 ## 残タスク
 - [ ] generator.rs: 表レイアウトDOCX（Section 3 Composition 4列表、Section 2 H/P 2列表、Section 9 物性 2列表）
 - [x] harumi 対応: HTML→PDF 純Rust生成 — harumi v0.4.0 の `html` feature で `render_html_to_pdf` を使用（`converter/pdf.rs` 実装済み）

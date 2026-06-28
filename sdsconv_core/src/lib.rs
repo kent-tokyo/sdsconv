@@ -57,6 +57,7 @@ pub use converter::{
     convert_pdf_to_json_vision, convert_to_json, convert_to_json_with_report,
     convert_url_to_json,
     extract_sds_from_pdf_vision, fill_template, openai_compat_url,
+    prune_empty_fields,
 };
 pub use converter::extractor::{
     detect_format_str, detect_language_from_file, detect_language_from_url,
