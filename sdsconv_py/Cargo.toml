@@ -1,0 +1,15 @@
+[package]
+name = "sdsconv-py"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "_sdsconv"
+crate-type = ["cdylib"]
+
+[dependencies]
+sdsconv-core = { path = "../sdsconv_core" }
+pyo3 = { version = "0.22", features = ["extension-module", "abi3-py39"] }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+reqwest = { workspace = true }
