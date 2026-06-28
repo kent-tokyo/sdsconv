@@ -48,7 +48,7 @@ jobs:
       - name: Smoke test wheel
         shell: bash
         run: |
-          pip install --no-index --find-links dist sdsconv
+          pip install dist/sdsconv-*.whl
           python - <<'PY'
           import json, pathlib, sdsconv
 
