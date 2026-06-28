@@ -1,0 +1,647 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "不活性材料（例えば、乾燥砂又は土等）で流出物を吸収して、化学品廃棄容器に入れる。危険でなければ漏れを止める。"
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "環境中に放出してはならない。排水溝、下水溝、地下室あるいは閉鎖場所への流入を防ぐ。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "すべての発火源を速やかに取除く（近傍での喫煙、火花や火炎の禁止）。直ちに、全ての方向に適切な距離を漏洩区域として隔離する。関係者以外の立入りを禁止する。『８．ばく露防止及び保護措置』に記載の設備対策を行い、保護具を着用する。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "Concentration": {
+          "NumericRangeWithUnitAndQualifier": {
+            "ExactValue": {
+              "Value": 100.0
+            },
+            "Unit": "%"
+          }
+        },
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "2530-83-8"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "γ‐アミノプロピルトリエトキシシラン(gamma-Aminopropyltriethoxysilane)、３‐（トリエトキシシリル）プロピルアミン(3-(Triethoxysilyl)propylamine)",
+            "IupacName": "３－アミノプロピルトリエトキシシラン"
+          }
+        }
+      }
+    ],
+    "CompositionType": "単一物質"
+  },
+  "Datasheet": {
+    "IssueDate": "2024-03-30",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "FullText": "廃棄においては、関連法規並びに地方自治体の基準に従う",
+    "PackagingWaste": [
+      "容器は清浄にしてリサイクルするか、関連法規並びに地方自治体の基準に従って適切な処分を行う。"
+    ],
+    "ProductWaste": [
+      "廃棄の前に、可能な限り無害化、安定化及び中和等の処理を行って危険有害性のレベルを低い状態にする。",
+      "空容器を廃棄する場合は、内容物を完全に除去すること。",
+      "消防法の規制に従う。"
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {}
+          ]
+        },
+        "AquaticChronicToxicity": {
+          "Result": [
+            {}
+          ]
+        }
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "局所排気・全体換気",
+      "ばく露を防止するため、装置の密閉化又は局所排気装置を設置すること。"
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "適切な眼の保護具を着用すること。"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "適切な保護手袋を着用すること。"
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "適切な呼吸器保護具を着用すること。"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "適切な保護衣を着用すること。"
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireAndExplosionHazards": {
+      "FullText": "熱、火花及び火炎で発火するおそれがある。激しく加熱すると燃焼する。火災時に刺激性、腐食性及び毒性のガスを発生するおそれがある。"
+    },
+    "FireFightingProcedures": {
+      "FullText": "棒状放水、噴霧水。危険でなければ火災区域から容器を移動する。容器が熱に晒されているときは、移さない。"
+    },
+    "MediaToBeUsed": {
+      "FullText": "泡消火剤、粉末消火剤、二酸化炭素、乾燥砂"
+    },
+    "SpecialProtectiveEquipmentForFirefighters": {
+      "FullText": "適切な空気呼吸器、防護服（耐熱性）を着用する。立ち入る前に、密閉された場所を換気する。"
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "水で数分間注意深く洗うこと。次に、コンタクトレンズを着用していて容易に外せる場合は外すこと。その後も洗浄を続けること。直ちに医師に連絡すること。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "口をすすぐこと。無理に吐かせないこと。気分が悪い時は医師に連絡すること。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "被災者を新鮮な空気のある場所に移動し、呼吸しやすい姿勢で休息させること。気分が悪い時は医師に連絡すること。"
+      },
+      "FirstAidSkin": {
+        "FullText": "皮膚を流水またはシャワーで洗うこと。多量の水と石鹸で洗うこと。直ちに、汚染された衣類をすべて脱ぐこと、又は取り去ること。気分が悪い時は医師に連絡すること。皮膚刺激または発疹が生じた場合、医師の診断、手当てを受けること。汚染された衣類を再使用する前に洗濯すること。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "取扱い後はよく手を洗うこと。この物質を貯蔵ないし取扱う作業場には洗眼器と安全シャワーを設置すること。消防法の規制に従う。",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "ばく露を防止するため、装置の密閉化又は局所排気装置を設置すること。",
+        "VentilationCondition": "『８．ばく露防止及び保護措置』に記載の局所排気、全体換気を行う。"
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "容器を密閉して換気の良い場所で保管すること。施錠して保管すること。消防法の規制に従う。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "Classification": {
+      "EnvironmentalEffect": {
+        "AquaticToxicityAcute": "区分外",
+        "AquaticToxicityChronic": "区分外"
+      },
+      "HealthEffect": {
+        "AcuteToxicityDermal": "区分外",
+        "AcuteToxicityInhalationGas": "分類対象外",
+        "AcuteToxicityInhalationVapour": "分類できない",
+        "AcuteToxicityOral": "区分4",
+        "AspirationHazard": "分類できない",
+        "Carcinogenicity": "分類できない",
+        "EyeDamageOrIrritation": "区分1",
+        "GermCellMutagenicity": "区分外",
+        "ReproductiveToxicity": {
+          "Category": "分類できない"
+        },
+        "RespiratorySensitisation": "分類できない",
+        "SkinCorrosionIrritation": "区分1",
+        "SkinSensitisation": "区分1",
+        "SpecificTargetOrganRE": [
+          {
+            "Category": "区分2",
+            "TargetOrgan": [
+              "呼吸器"
+            ]
+          }
+        ],
+        "SpecificTargetOrganSE": [
+          {
+            "Category": "区分3",
+            "TargetOrgan": [
+              "気道刺激性",
+              "麻酔作用"
+            ]
+          }
+        ]
+      },
+      "PhysicochemicalEffect": {
+        "CorrosiveToMetals": "分類できない",
+        "Explosives": "分類対象外",
+        "FlammableAerosols": "分類対象外",
+        "FlammableGases": "分類対象外",
+        "FlammableLiquids": "区分外",
+        "FlammableSolids": "分類対象外",
+        "GasesUnderPressure": "分類対象外",
+        "OrganicPeroxides": "分類対象外",
+        "OxidisingGases": "分類対象外",
+        "OxidisingLiquids": "分類できない",
+        "OxidisingSolids": "分類対象外",
+        "PyrophoricLiquids": "分類できない",
+        "PyrophoricSolids": "分類対象外"
+      }
+    },
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "飲み込むと有害"
+        },
+        {
+          "FullText": "重篤な皮膚の薬傷・眼の損傷"
+        },
+        {
+          "FullText": "重篤な眼の損傷"
+        },
+        {
+          "FullText": "アレルギー性皮膚反応を引き起こすおそれ"
+        },
+        {
+          "FullText": "眠気及びめまいのおそれ"
+        },
+        {
+          "FullText": "呼吸器への刺激のおそれ"
+        },
+        {
+          "FullText": "長期又は反復ばく露による呼吸器の障害のおそれ"
+        }
+      ],
+      "PrecautionaryStatements": {
+        "Disposal": [
+          {
+            "FullText": "内容物、容器を都道府県知事の許可を受けた専門の廃棄物処理業者に業務委託すること。"
+          }
+        ],
+        "Prevention": [
+          {
+            "FullText": "この製品を使用する時に、飲食又は喫煙をしないこと。"
+          },
+          {
+            "FullText": "屋外又は換気の良い区域でのみ使用すること。"
+          },
+          {
+            "FullText": "適切な保護手袋、保護衣、保護面、保護眼鏡を着用すること。"
+          },
+          {
+            "FullText": "ミスト、蒸気、スプレーを吸入しないこと。"
+          },
+          {
+            "FullText": "汚染された作業衣は作業場から出さないこと。"
+          },
+          {
+            "FullText": "取扱い後はよく手を洗うこと。"
+          }
+        ],
+        "Response": [
+          {
+            "FullText": "皮膚又は毛に付着した場合、直ちに、汚染された衣類をすべて脱ぎ又は取り除くこと。皮膚を流水又はシャワーで洗うこと。"
+          },
+          {
+            "FullText": "皮膚に付着した場合、多量の水と石鹸で洗うこと。"
+          },
+          {
+            "FullText": "皮膚に付着した場合、皮膚刺激又は発疹が生じた場合は、医師の診断、手当てを受けること。"
+          },
+          {
+            "FullText": "汚染された衣類を再使用する前に洗濯すること。"
+          },
+          {
+            "FullText": "飲み込んだ場合、口をすすぐこと。無理に吐かせないこと。"
+          },
+          {
+            "FullText": "飲み込んだ場合、気分が悪い時は、医師に連絡すること。"
+          },
+          {
+            "FullText": "吸入した場合、被災者を新鮮な空気のある場所に移動し、呼吸しやすい姿勢で休息させること。"
+          },
+          {
+            "FullText": "皮膚に付着した場合、眼に入った場合、飲み込んだ場合、吸入した場合は、直ちに医師に連絡すること。"
+          },
+          {
+            "FullText": "眼に入った場合、水で数分間注意深く洗うこと。次に、コンタクトレンズを着用していて容易に外せる場合は外すこと。その後も洗浄を続けること。"
+          },
+          {
+            "FullText": "吸入した場合、気分が悪い時は医師に連絡すること。"
+          },
+          {
+            "FullText": "眼に入った場合、直ちに医師に連絡すること。"
+          },
+          {
+            "FullText": "気分が悪い時は、医師の診断、手当てを受けること。"
+          }
+        ],
+        "Storage": [
+          {
+            "FullText": "施錠して保管すること。"
+          },
+          {
+            "FullText": "容器を密閉して換気の良い場所で保管すること。"
+          }
+        ]
+      },
+      "SignalWord": "危険"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "東京都△△区△△町△丁目△△番地",
+      "CompanyName": "○○○○株式会社",
+      "Phone": "03-1234-5678"
+    },
+    "TradeProductIdentity": {
+      "ProductNoUser": [
+        "20A2060"
+      ],
+      "TradeNameJP": "３－アミノプロピルトリエトキシシラン(3-Aminopropyltriethoxysilane)"
+    }
+  },
+  "OtherInformation": {
+    "RelatedDocuments": "各データ毎に記載した｡"
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "GHS定義による液体である。",
+      "Odour": "データなし",
+      "PhysicalState": "液体"
+    },
+    "BoilingPointRelated": [
+      {
+        "ItemName": "沸点、初留点及び沸騰範囲",
+        "NumericRangeWithUnitAndQualifier": {
+          "AdditionalInfo": {
+            "FullText": [
+              "119℃: Lide (88th, 2008)"
+            ]
+          },
+          "ExactValue": {
+            "Value": 119.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "Densities": [
+      {
+        "ItemName": "比重（密度）",
+        "NumericRangeWithUnitAndQualifier": {
+          "AdditionalInfo": {
+            "FullText": [
+              "0.94 (4℃/20℃): Sax(11th, 2004)"
+            ]
+          },
+          "ExactValue": {
+            "Value": 0.94
+          }
+        }
+      }
+    ],
+    "FlashPoint": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "AdditionalInfo": {
+            "FullText": [
+              "96℃ (密閉式)"
+            ]
+          },
+          "ExactValue": {
+            "Value": 96.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "MeltingPointRelated": [
+      {
+        "ItemName": "融点・凝固点",
+        "NumericRangeWithUnitAndQualifier": {
+          "AdditionalInfo": {
+            "FullText": [
+              "-70℃: SIDS (access on July 2008)"
+            ]
+          },
+          "ExactValue": {
+            "Value": -70.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "未設定"
+          ]
+        },
+        "ItemName": "ｐＨ"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "蒸発速度（酢酸ブチル＝１）"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "GHS定義による液体である。"
+          ]
+        },
+        "ItemName": "燃焼性（固体、ガス）"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "爆発範囲"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "自然発火温度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "分解温度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "粘度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "蒸気密度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "Log Pow= 0.31: SIDS (access on July 2008)"
+          ]
+        },
+        "ItemName": "オクタノール・水分配係数"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "最小発火エネルギー"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "体積抵抗率(導電率)"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "粉じん爆発下限濃度"
+      }
+    ],
+    "Solubilities": {
+      "WaterSolubility": [
+        {
+          "AdditionalInfo": {
+            "FullText": [
+              "7.6X105 mg/l (25℃): SIDS (access on July 2008)"
+            ]
+          }
+        }
+      ]
+    },
+    "VapourPressure": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "AdditionalInfo": {
+            "FullText": [
+              "0.02hPa(20 ℃) [換算値 2Pa(20 ℃)]: SIDS (access on July 2008)"
+            ]
+          },
+          "ExactValue": {
+            "Value": 0.02
+          },
+          "Unit": "hPa"
+        }
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "消防法",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "第４類引火性液体、第三石油類水溶性液体（法第２条第７項危険物別表第１・第４類）"
+                ]
+              },
+              "RegulationName": "危険物"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "ConditionsToAvoid": "データなし",
+    "HazardousDecompositionProducts": {
+      "Substance": "データなし"
+    },
+    "HazardousReactions": {
+      "FullText": "データなし"
+    },
+    "MaterialsToAvoid": "データなし",
+    "StabilityDescription": "法規制に従った保管及び取扱においては安定と考えられる。"
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ラットを用いた試験において、LD50値 1570 (雌) 、 2830 (雄) mg/kg および 3.65ml/kg (雌/雄) (SIDS, (access on July 2008))のデータが得られた。GLP試験かつ安全側の結果LD50値1570mg/kg (雌)を採用し、EU警句R22「飲み込むと危険」(EU-AnnexⅠ, access on 7. 2008)もあることから、区分4とした。"
+              ]
+            },
+            "ExposureRouteName": "経口"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ウサギを用いた試験における、LD50値4.29g/kg bw (SIDS, (access on July 2008))のデータを採用し、JIS分類基準の区分外(国連分類基準の区分5）とした。"
+              ]
+            },
+            "ExposureRouteName": "経皮"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "分類対象外"
+              ]
+            },
+            "ExposureRouteName": "吸入（ガス）"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ラットの吸入試験におけるLC50値16ppm以上(4h換算値19.6ppm以上)(SIDS, access on 7. 2008)が得られたが、このデータだけでは区分が特定できないことから、データ不足のため分類できないとした。"
+              ]
+            },
+            "ExposureRouteName": "吸入（蒸気）"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "分類対象外"
+              ]
+            },
+            "ExposureRouteName": "吸入（粉じん）"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ラットを用いた吸入4hばく露試験のLC50: 7.35mg/L(換算値：812ppm)(SIDS, access on 7. 2008)に基づき、区分外とした。"
+              ]
+            },
+            "ExposureRouteName": "吸入（ミスト）"
+          }
+        ]
+      },
+      "AdditionalToxicologicalInformation": "呼吸器感作性:データなし\n皮膚感作性:モルモットを用いた試験において、ピーナツオイルを媒体としたデータ(1997)で刺激性が認められたことから区分1とした。また、他の2試験のデータ(1996, 1987)は、生理食塩水および水を媒体としているが、加水分解した物質のデータ(SIDS, access on July 2008)であるため評価に用いなかった。\n生殖細胞変異原性:マウスの腹腔内投与による骨髄細胞を用いた小核試験（体細胞in vivoの変異原性試験)における陰性結果 (SIDS, access on July 2008) に基づいて、区分外とした。なお、In vitro変異原性試験(エームス試験、CHL細胞を用いた染色体異常試験）の結果は陰性である（SIDS(Access on July 2008））。\n発がん性:分類できない\n生殖毒性:ラットの器官形成期に経口投与した発生毒性試験(SIDS, access on 7. 2008)では、親動物への体重増加抑制のみられる投与量で仔に仙椎骨および胸骨分節の非骨性がみられるが、明確な発生毒性はみとめられていない。親動物の性機能および生殖能に関する情報が不十分であり分類できないとした。\n特定標的臓器・全身毒性（単回ばく露）:ラットを用いた経口投与試験（OECD TG　４０１）における動物の死亡する用量(5.0mL/kg)で運動失調、傾眠などの症状がみられる。また、ラットを用いた吸入ばく露試験（OECD TG　４０３）において、立直り反射の低下、呼吸困難、自発運動の抑制、 運動失調、口、鼻、眼よりの分泌物が7.35mg/Lの用量以上で見られ、これら症状は3日後には回復する(SIDS, access on July 2008)ことから区分３（気道刺激性、麻酔作用）とした。\n特定標的臓器・全身毒性（反復ばく露）:ラットを用いたエアロゾル吸入試験で呼吸器系への刺激、炎症、化生様変化等が150mg/m3/6h(4週間ばく露)で発生した（SIDS, access on 7. 2008)ことから区分2(呼吸器）とした。\n吸引性呼吸器有害性:分類できない",
+      "EyeDamageOrIrritation": {
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ウサギを用いた試験(OECD405)のデータを採用。非洗眼群および洗眼群における角膜壊死(SIDS, access on July 2008)の結果に基づき、区分1とした。"
+              ]
+            }
+          }
+        ]
+      },
+      "SkinCorrosionIrritation": {
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ウサギを用いた試験にて、脱毛症、潰瘍、壊死が観察された。また、可逆的ではあるが、斑状出血、中～重度の浮腫が観察されており(SIDS, access on July 2008)、重篤な皮膚への腐食性を示すと考えられたことから区分1とした。Draizeスコアを記載したデータがないため区分1における細分化はできない。"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "輸送に際しては、直射日光を避け、容器の破損、腐食、漏れのないように積み込み、荷崩れの防止を確実に行う。重量物を上積みしない。移送時にイエローカードの保持が必要。食品や飼料と一緒に輸送してはならない。",
+        "TransportationType": "陸上規制情報"
+      },
+      {
+        "FullText": "該当しない",
+        "TransportationType": "海上規制情報"
+      },
+      {
+        "FullText": "該当しない",
+        "TransportationType": "航空規制情報"
+      }
+    ],
+    "InternationalRegulations": [
+      {
+        "RegulationName": [
+          {
+            "FullText": "該当しない",
+            "TransportationType": "海上規制情報"
+          },
+          {
+            "FullText": "該当しない",
+            "TransportationType": "航空規制情報"
+          }
+        ]
+      }
+    ]
+  }
+}

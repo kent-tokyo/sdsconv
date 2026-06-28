@@ -1,0 +1,27 @@
+{
+  "source_language": "en",
+  "language_auto_detected": false,
+  "populated_sections": [
+    "Identification",
+    "HazardIdentification",
+    "Composition",
+    "FirstAidMeasures",
+    "FireFightingMeasures",
+    "AccidentalReleaseMeasures",
+    "HandlingAndStorage",
+    "ExposureControlPersonalProtection",
+    "PhysicalChemicalProperties",
+    "StabilityReactivity",
+    "ToxicologicalInformation",
+    "EcologicalInformation",
+    "DisposalConsiderations",
+    "TransportInformation",
+    "RegulatoryInformation",
+    "OtherInformation"
+  ],
+  "empty_sections": [],
+  "standardization_notes": [
+    "Section headings follow GHS Rev.10 / ISO 11014."
+  ],
+  "warnings": []
+}

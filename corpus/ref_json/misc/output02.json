@@ -1,0 +1,254 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "シートで飛散防止し、容器を回収する。廃棄処分は自社基準による処理・処分または廃棄物処理法に基づく業者委託とする。回収不能残液は多量に公共水域に流さないようにする。転倒防止、少量の場合などで対応する。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "その周辺火災の場合には、移動可能な容器はやかに安全な場所へ移動する。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "Concentration": {
+          "NumericRangeWithUnitAndQualifier": {
+            "ExactValue": {
+              "Value": 100.0
+            },
+            "Unit": "%"
+          }
+        },
+        "SubstanceIdentifiers": {
+          "SubstanceNames": {
+            "GenericName": "水溶性ポリマー"
+          }
+        }
+      }
+    ],
+    "CompositionType": "単一製品"
+  },
+  "Datasheet": {
+    "IssueDate": "2009-01-01",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "FullText": "道府県知事の許可を受けた産業廃棄物処理業者への委託処理により廃棄し、「廃棄物処理法」、「水質汚濁防止法」等関係法令を遵守する",
+    "PackagingWaste": [
+      "包装の破損につながる粗暴な扱いをしない。包装品が雨水等に濡れないよう注意し、落下損傷等のないよう確実に保管する"
+    ],
+    "ProductWaste": [
+      "廃棄物処理法に従い処理する"
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {}
+          ]
+        }
+      },
+      "PersistenceDegradability": {
+        "BiologicalDegradability": "自然界で分解される"
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "保護眼鏡"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "保護手袋"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "定められた作業着、安全靴を着用すること"
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireAndExplosionHazards": {
+      "FullText": "非危険物"
+    },
+    "MediaToBeUsed": {
+      "FullText": "通常の消火方法：水又は泡消火器、水中油型エマルション消火剤、水噴霧消火器"
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "清浄な水で10～15分間洗眼した後、医師の診断を受けること。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "飲んだ場合は、飲料水で多量に飲んでいた場合は医師の診断を受けること。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "吸入した場合は、直ちに空気の新鮮な場所に移動し安静を保つ。"
+      },
+      "FirstAidSkin": {
+        "FullText": "皮膚に付着した場合は、直ちに十分洗い流した後石鹸でよく洗う。異常がある場合は医師の診断を受けること。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "皮膚等への付着を防ぐために、保護眼鏡、ゴム手袋、マスク、保護衣を着用する。作業後は手洗い、洗顔、うがいをする。"
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "直射日光を避けない場所で保管する。高温、多湿状態での保管を避ける。容器の破損等が起こらないよう注意する。雨水などの混入を避ける。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "皮膚刺激あり"
+        },
+        {
+          "FullText": "眼刺激があると考えられる"
+        }
+      ]
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "神戸市東灘区本山南町1丁目26 東神戸センタービル12F",
+      "CompanyName": "テクニカ合同株式会社",
+      "Fax": "078-451-0257",
+      "Phone": "078-436-0280"
+    },
+    "TradeProductIdentity": {
+      "TradeNameEN": "TG Oil Lock",
+      "TradeNameJP": "TGオイルロック"
+    }
+  },
+  "OtherInformation": {
+    "Desclaimer": "この製品安全データシートは現時点において当社が入手している資料及び情報に基づいて作成されたものですから、その利用における危険及び有害性並びに環境影響その他に関する情報をご提供するものです。今後、新たな知見により、記載事項を改訂変更することもあります。"
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "淡黄色液体",
+      "PhysicalState": "液体"
+    },
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "100"
+          ]
+        },
+        "ItemName": "含有量"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非常に良好溶解する"
+          ]
+        },
+        "ItemName": "水への溶解性"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "外気温0℃付近で凍結する"
+          ]
+        },
+        "ItemName": "凍結温度"
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "労働安全衛生法特化則・有機則（表示物質）",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "消防法（危険物）",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "毒物及び劇物取締法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "危険物船舶運送及び貯蔵規則",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "海洋汚染防止法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "水質汚濁防止法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "下水道法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "化学兵器禁止法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "内分泌撹乱物質",
+          "Regulations": [
+            {}
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "HazardousDecompositionProducts": {
+      "Substance": "発火性なし"
+    },
+    "ReactivityDescription": "通常の取扱い条件において安定である",
+    "StabilityDescription": "通常の取扱い条件において安定である"
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {}
+        ]
+      },
+      "AdditionalToxicologicalInformation": "蓄積性 データなし"
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "国連が定義する危険物に該当しない",
+        "TransportationType": "国連分類"
+      }
+    ]
+  }
+}

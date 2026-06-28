@@ -1,0 +1,531 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "掃き集めて適切な廃棄用容器にすくい入れる。環境に関する規制に従い、汚染された床および物質を完全にきれいにする。"
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "環境への放出を避けること。安全を確認してから、もれやこぼれを止める。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "十分な換気を確保する。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "Concentration": {
+          "NumericRangeWithUnitAndQualifier": {
+            "Unit": "%"
+          }
+        },
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "84852-53-9"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "IupacName": "1,1'-(1,2-エタンジイル)ビス(2,3,4,5,6-ペンタブロモベンゼン)"
+          }
+        }
+      }
+    ],
+    "CompositionType": "化学物質"
+  },
+  "Datasheet": {
+    "IssueDate": "2024-08-26",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "PackagingWaste": [
+      "回収／リサイクル業に関する情報について製造業者／供給者に問い合わせること。"
+    ],
+    "ProductWaste": [
+      "内容物および包装の廃棄については、認定施設において地域、地方、国、および国際基準に従って行うこと。"
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "AdditionalEcotoxInformation": "水生環境有害性 短期（急性）: 溶解度限界値における毒性無し\n水生環境有害性 長期（慢性）: 溶解度限界値における毒性無し\nオゾン層への有害性: データなし",
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {},
+            {},
+            {}
+          ]
+        },
+        "AquaticChronicToxicity": {
+          "Result": [
+            {},
+            {},
+            {}
+          ]
+        }
+      },
+      "PersistenceDegradability": {
+        "AbioticDegradation": "水中での安定性: 加水分解の影響を受けにくい\n光分解性: 光分解の影響を受けにくい",
+        "BiologicalDegradability": "好気性、接種: 活性汚泥、酸素消費量、結果: 易分解性ではない。生分解: 0 %、曝露時間: 28 d、方法: OECD テスト ガイドライン 301C"
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "局所換気を行い使用する",
+      "物質で覆われた機器の表面に触れないようにするための組織的措置",
+      "汚染または損傷した手袋はすぐに交換すること",
+      "検査方針によって規定・保証された個人用防護具(PPE)の適切な使用のトレーニング"
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "サイドシールド付き保護眼鏡もしくはゴーグルを着用する"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "化学物質の浸透に耐える適切な手袋を着用する"
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "粉じんおよびエアゾール形成の場合は、適合したフィルターの付いた呼吸装置を使用する"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "肌への接触もしくは衣服への付着が有り得る場合、保護衣を着用すること"
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireAndExplosionHazards": {
+      "FullText": "毒性、刺激性および/または腐食性ガスを放出する可能性がある。火災や爆発の場合は、煙霧を吸い込まない。"
+    },
+    "FireFightingProcedures": {
+      "FullText": "火災の残留物や汚染した消火廃水は、関係法規に従って処理する。"
+    },
+    "MediaToBeUsed": {
+      "FullText": "二酸化炭素（CO2）、粉末消火剤、泡、水噴霧"
+    },
+    "SpecialProtectiveEquipmentForFirefighters": {
+      "FullText": "完全な保護衣と自給式呼吸器を着用する。"
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "眼に入った場合：水で数分間注意深く洗うこと。次にコンタクトレンズを着用していて容易に外せる場合は外すこと。その後も洗浄を続けること。直ちに医師に連絡すること。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "飲み込んだ場合：口を水で洗浄し、その後多量の水を飲む。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "吸入した場合：空気の新鮮な場所に移し，呼吸しやすい姿勢で休息させること。呼吸が困難な場合には酸素吸入を行う。呼吸が不規則であったりとまったりした場合は、人工呼吸を行う。被災者を安静かつ半直立姿勢に保つ。医師に相談する。"
+      },
+      "FirstAidSkin": {
+        "FullText": "皮膚に付着した場合：多量の水と石けん（鹸）で洗うこと。症状が持続する場合は、医師に連絡する。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "粉じんの生成と蓄積を極力避ける。粉じんが発生する場所では局所排気装置が必要である。作業室の換気や排気を十分に行う。個人保護については項目8を参照する。一般的に、労働者への定期的な連絡、研修などの適切なマネジメントシステムを導入することで、排出は制御・防止できる。",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "十分な衛生的作業を行い安全規定に従って取扱う。"
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "乾燥した、涼しい、換気の良い場所で、容器の栓をしっかり閉めて保管する。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "Classification": {
+      "AdditionalInfo": {
+        "FullText": [
+          "GHS分類基準に該当しない"
+        ]
+      }
+    },
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "GHSに定める危険物質ではない"
+        }
+      ],
+      "PrecautionaryStatements": {
+        "Prevention": [
+          {
+            "FullText": "十分な衛生的作業を行い安全規定に従って取扱う"
+          }
+        ]
+      },
+      "SignalWord": "なし"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "東京都港区虎ノ門1丁目3番1号 東京虎ノ門グローバルスクエア11階",
+      "CompanyName": "ハイケム株式会社",
+      "Phone": "03-5251-8567"
+    },
+    "TradeProductIdentity": {
+      "TradeNameJP": "Decabromodiphenyl Ethane(DBDPE)"
+    }
+  },
+  "OtherInformation": {
+    "RelatedDocuments": "本書は寿光卫东化工有限公司のSDSを参考に作成したものです。"
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "白色",
+      "Odour": "無臭",
+      "PhysicalState": "粉末"
+    },
+    "BoilingPointRelated": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非該当 融点 > 300 °C"
+          ]
+        },
+        "ItemName": "沸点／沸騰範囲"
+      }
+    ],
+    "Densities": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 3.23
+          },
+          "Unit": "g/cm3"
+        }
+      }
+    ],
+    "FlashPoint": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非該当 固体"
+          ]
+        }
+      }
+    ],
+    "MeltingPointRelated": [
+      {
+        "ItemName": "融点／凝固点",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 350.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "臭いのしきい(閾)値"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "この製品はGHS分類の可燃性ではない。"
+          ]
+        },
+        "ItemName": "可燃性（固体、気体）"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非該当"
+          ]
+        },
+        "ItemName": "可燃性（液体）"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非該当"
+          ]
+        },
+        "ItemName": "爆発下限界及び爆発上限界／可燃限界"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "融点まで安定。"
+          ]
+        },
+        "ItemName": "分解温度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "pH"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "無視できるほど僅か"
+          ]
+        },
+        "ItemName": "蒸発速度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "なし。"
+          ]
+        },
+        "ItemName": "自然発火温度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非該当 固体"
+          ]
+        },
+        "ItemName": "粘度(粘性率)"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非該当 固体"
+          ]
+        },
+        "ItemName": "動粘度（動粘性率）"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "溶媒に対する溶解性"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "log Pow: 3.55 (25°C)、方法: OPPTS 830.7560"
+          ]
+        },
+        "ItemName": "n-オクタノール／水分配係数（log値）"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "比重"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "相対ガス密度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "化学構造上、この物質は爆発性の特性を有しない。"
+          ]
+        },
+        "ItemName": "爆発特性"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "化学構造上、この物質は酸化性の特性を有しない。"
+          ]
+        },
+        "ItemName": "酸化特性"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "この物質または混合物は自己発熱性としては分類されない。"
+          ]
+        },
+        "ItemName": "自己発熱性化学品"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非該当, 固体"
+          ]
+        },
+        "ItemName": "表面張力"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非該当"
+          ]
+        },
+        "ItemName": "昇華点"
+      },
+      {
+        "ItemName": "分子量",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 971.23
+          },
+          "Unit": "g/mol"
+        }
+      }
+    ],
+    "Solubilities": {
+      "WaterSolubility": [
+        {
+          "AdditionalInfo": {
+            "FullText": [
+              "不溶"
+            ]
+          }
+        }
+      ]
+    },
+    "VapourPressure": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "無視できるほど僅か"
+          ]
+        }
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "消防法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "化審法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "労働安全衛生法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "毒物及び劇物取締法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "化学物質排出把握管理促進法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "高圧ガス保安法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "火薬類取締法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "船舶安全法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "航空法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "海洋汚染等及び海上災害の防止に関する法律",
+          "Regulations": [
+            {}
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "ConditionsToAvoid": "320℃を超える温度。",
+    "HazardousDecompositionProducts": {
+      "Substance": "臭素\n炭素酸化物\n臭化水素。"
+    },
+    "HazardousReactions": {
+      "FullText": "通常の使用条件において既知の危険な反応はない。"
+    },
+    "MaterialsToAvoid": "強酸化剤\n強力な還元剤",
+    "ReactivityDescription": "通常の使用条件において既知の危険な反応はない。",
+    "StabilityDescription": "通常の状態では安定。"
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {},
+          {},
+          {}
+        ]
+      }
+    }
+  ],
+  "TransportInformation": {
+    "InternationalRegulations": [
+      {
+        "RegulationName": [
+          {
+            "FullText": "国連番号: 非該当\n国連輸送名 (Proper shipping name): 非該当\n国連分類 (Class): 非該当\n副次危険性 (Subsidiary risk): 非該当\n容器等級 (Packing group): 非該当\nラベル (Labels): 非該当",
+            "TransportationType": "陸上輸送(UNRTDG)"
+          }
+        ]
+      },
+      {
+        "RegulationName": [
+          {
+            "FullText": "UN/ID番号 (UN/ID number): 非該当\n国連輸送名 (Proper shipping name): 非該当\n国連分類 (Class): 非該当\n副次危険性 (Subsidiary risk): 非該当\n容器等級 (Packing group): 非該当\nラベル (Labels): 非該当\n梱包指示（貨物機） (Packing instruction (cargo aircraft)): 非該当\n梱包指示（旅客機） (Packing instruction (passenger aircraft)): 非該当",
+            "TransportationType": "航空輸送(IATA-DGR)"
+          }
+        ]
+      },
+      {
+        "RegulationName": [
+          {
+            "FullText": "国連番号: 非該当\n国連輸送名: 非該当\n国連分類: 非該当\n副次危険性: 非該当\n容器等級: 非該当\nラベル: 非該当\nEmSコード: 非該当\n海洋汚染物質(該当・非該当): 非該当\nMARPOL 73/78附属書IIおよびIBCコードによるばら積み輸送される液体物質（該当・非該当）: 供給された状態の製品には非該当。",
+            "TransportationType": "海上輸送(IMDG-Code)"
+          }
+        ]
+      }
+    ]
+  }
+}

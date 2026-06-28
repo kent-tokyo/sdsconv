@@ -1,0 +1,426 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "清除所有点火源(禁止现场有吸烟、火花或火焰)。不可接触泄漏物或在其中走动。用水濡湿并构筑防护围栏，之后进行废弃处置。泄漏物用洁净的铁铲装入清洁干燥的容器中，缓缓盖上后再从泄漏场所移走。"
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "防止流入排水沟、下水道、地下室或封闭场所。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "将受害人转移到空气新鲜处，使其保暖并保持安静。呼叫救护车。呼吸停止时应进行人工呼吸。脱掉沾染的衣服和鞋子并进行隔离。如接触到泄漏物，立即用流动清水清洗皮肤或眼睛至少15分钟。如需清除附着在皮肤上固体熔融物，应请求医生帮助。应确保医生了解暴露物质名称，并采取防护措施。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "137902-98-8"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "4,4'-[1-[4-[1-(4-Hydroxyphenyl)-1-methylethyl]phenyl]ethylidene]bisphenol ester with 6-diazo-5,6-dihydro-5-oxo-1-naphthalenesulfonic acid",
+            "IupacName": "6-重氮基-5,6-二氢-5-氧代-1-萘磺酸与4,4'-[1-[4-[1-(4-羟基苯基)-1-甲基乙基]苯基]亚甲基]双苯酚的酯"
+          }
+        }
+      },
+      {
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "123-91-1"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "1,4-Dioxane",
+            "IupacName": "1,4-二噁烷"
+          }
+        }
+      },
+      {
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "7732-18-5"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "Water",
+            "IupacName": "水"
+          }
+        }
+      }
+    ],
+    "CompositionType": "物质"
+  },
+  "Datasheet": {
+    "IssueDate": "2023-09-06",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "PackagingWaste": [
+      "可采取与产品废弃相同的处置方法。废弃空容器时，应彻底清除内装物。"
+    ],
+    "ProductWaste": [
+      "必须依照国家相关法律法规进行处置。禁止将本品丢弃于地表、下水道、排水沟等自然环境中。注意避免排入江河、排水沟、下水道等水体给环境造成影响。遵循相关法规或地方政府条例进行适当处置，或委托为取得许可的专业废弃物处理商进行处置。"
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {}
+          ]
+        },
+        "AquaticChronicToxicity": {
+          "Result": [
+            {}
+          ]
+        }
+      },
+      "PersistenceDegradability": {
+        "BiologicalDegradability": "无快速降解性"
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "操作时应使用局部排气装置。",
+      "操作场所附近应设置洗眼和淋浴装置。"
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "戴防护眼罩、护目镜、防护面具。"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "戴防护手套。"
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "戴防毒面具、防尘口罩。"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "为避免接触产品，应穿适当的化学防护服。"
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireFightingProcedures": {
+      "FullText": "小型火灾：使用干式化学灭火剂、二氧化碳、沙、土壤、酒水、一般泡沫灭火剂。\n大型火灾：使用酒水或一般泡沫灭火剂。\n若无危险，移走容器离开火灾区域。"
+    },
+    "MediaToBeUsed": {
+      "FullText": "干式化学灭火剂、二氧化碳、沙、土壤、酒水、一般泡沫灭火剂。"
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "用水小心冲洗眼睛至少15分钟以上。如戴隐形眼镜并可方便地取出，取出隐形眼镜。继续冲洗。如仍觉眼刺激，求医/就诊。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "漱口。如误吞咽，立即求医/就诊。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "将受害人转移到空气新鲜处，尽量保持安静并使其保暖，保持呼吸舒适的休息姿势。如感觉不适，呼叫解毒中心或医生。"
+      },
+      "FirstAidSkin": {
+        "FullText": "立即用大量肥皂和水冲洗至少15分钟。如发生皮肤刺激，呼叫解毒中心或医生。脱掉沾染的衣服和鞋子并进行隔离。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "不可置于热源附近，不可靠近火花、火焰。迅速清除操作场所附近能成为点火源的物品。禁止使容器翻倒、坠落、受撞击或采取拖拽等粗暴的方式操作处置。避免泄漏、溢漏或飞散等，不可随意让粉尘和蒸气产生。在设有局部排气装置的场所进行作业。作业后彻底清洗手部、脸部。佩戴适当的防护装置，避免接触皮肤。防止进入眼睛。避开日光直射和含紫外线的光源。在黄光灯下进行操作处置。",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "在设有局部排气装置的场所进行作业。"
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "密闭容器，保管在阴冷场所(10℃以下)。0℃以下保管时应采取防止结露的措施。存放处须加锁。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "加热可能起火",
+          "HazardStatementCode": "H242"
+        },
+        {
+          "FullText": "皮肤接触可能有害",
+          "HazardStatementCode": "H313"
+        },
+        {
+          "FullText": "造成轻微皮肤刺激",
+          "HazardStatementCode": "H316"
+        },
+        {
+          "FullText": "可能致癌",
+          "HazardStatementCode": "H350"
+        },
+        {
+          "FullText": "对器官造成损害(中枢神经系统)",
+          "HazardStatementCode": "H370"
+        },
+        {
+          "FullText": "长期或重复接触会对器官造成损害(肝脏、肾脏、中枢神经系统)",
+          "HazardStatementCode": "H372"
+        },
+        {
+          "FullText": "长期或重复接触可能对器官造成损害(呼吸系统)",
+          "HazardStatementCode": "H373"
+        }
+      ],
+      "PrecautionaryStatements": {
+        "Disposal": [
+          {
+            "FullText": "内装物、容器应根据相关法规进行处置。",
+            "PrecautionaryStatementCode": "P501"
+          }
+        ],
+        "Prevention": [
+          {
+            "FullText": "在使用前获取特别指示。",
+            "PrecautionaryStatementCode": "P201"
+          },
+          {
+            "FullText": "在阅读并明了所有安全措施前切勿搬动。",
+            "PrecautionaryStatementCode": "P202"
+          },
+          {
+            "FullText": "远离热源/火花/明火/热表面。禁止吸烟。",
+            "PrecautionaryStatementCode": "P210"
+          },
+          {
+            "FullText": "避开/贮存处远离衣物、可燃物。",
+            "PrecautionaryStatementCode": "P220"
+          },
+          {
+            "FullText": "只能在原容器中存放。",
+            "PrecautionaryStatementCode": "P234"
+          },
+          {
+            "FullText": "不要吸入粉尘、烟雾、蒸气、喷雾。",
+            "PrecautionaryStatementCode": "P260"
+          },
+          {
+            "FullText": "作业后彻底清洗手部、脸部。",
+            "PrecautionaryStatementCode": "P264"
+          },
+          {
+            "FullText": "使用本产品时不要进食、饮水或吸烟。",
+            "PrecautionaryStatementCode": "P270"
+          },
+          {
+            "FullText": "戴防护手套/穿防护服/戴防护眼罩/戴防护面具。",
+            "PrecautionaryStatementCode": "P280"
+          }
+        ],
+        "Response": [
+          {
+            "FullText": "如接触到或有疑虑：立即呼叫医生。",
+            "PrecautionaryStatementCode": "P308+P311"
+          },
+          {
+            "FullText": "如接触到或有疑虑：求医/就诊。",
+            "PrecautionaryStatementCode": "P308+P313"
+          },
+          {
+            "FullText": "如感觉不适，呼叫医生。",
+            "PrecautionaryStatementCode": "P312"
+          },
+          {
+            "FullText": "如感觉不适，须求医/就诊。",
+            "PrecautionaryStatementCode": "P314"
+          },
+          {
+            "FullText": "具体的处治。",
+            "PrecautionaryStatementCode": "P321"
+          },
+          {
+            "FullText": "如发生皮肤刺激：求医/就诊。",
+            "PrecautionaryStatementCode": "P332+P313"
+          },
+          {
+            "FullText": "火灾时：使用干式化学灭火剂、二氧化碳、沙、土壤、酒水、一般泡沫灭火剂灭火。",
+            "PrecautionaryStatementCode": "P370+P378"
+          }
+        ],
+        "Storage": [
+          {
+            "FullText": "存放在通风良好的地方。保持低温。",
+            "PrecautionaryStatementCode": "P403+P235"
+          },
+          {
+            "FullText": "存放处须加锁。",
+            "PrecautionaryStatementCode": "P405"
+          },
+          {
+            "FullText": "贮存温度不超过10℃。",
+            "PrecautionaryStatementCode": "P411"
+          },
+          {
+            "FullText": "单独存放。",
+            "PrecautionaryStatementCode": "P420"
+          }
+        ]
+      },
+      "SignalWord": "危险"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "日本国东京都台东区浅草桥1丁目22番16号 Hulic浅草桥大厦8楼",
+      "CompanyName": "东洋合成工业株式会社",
+      "Email": "tgc_reg@toyogosei.co.jp",
+      "Fax": "+81-3-5822-6187",
+      "Phone": "+81-3-5822-6180"
+    },
+    "TradeProductIdentity": {
+      "TradeNameEN": "4,4'-[1-[4-[1-(4-Hydroxyphenyl)-1-methylethyl]phenyl]ethylidene]bisphenol ester with 6-diazo-5,6-dihydro-5-oxo-1-naphthalenesulfonic acid",
+      "TradeNameJP": "感光化合物(TPPA-250)"
+    }
+  },
+  "OtherInformation": {
+    "Desclaimer": "本SDS是为更安全使用本公司产品而对注意事项等作出的简要概括，所记载的内容均以通常的操作处置为前提。另外，上述所记载的内容是基于目前所能得到的信息而提供，并非产品质量的安全保证书，对于其中危险有害性的评估未必是充分的，敬请慎重处置。此外，对于本SDS中所记载的信息，有可能随时进行修订，请预先知悉。",
+    "RevisionInformation": [
+      {
+        "FullText": "本说明书为第10.0版，按照《化学品安全技术说明书 内容和项目顺序》(GB/T 16483-2008)和《化学品安全技术说明书编写指南》(GB/T 17519-2013)进行编写。最初编制日期：2014年04月25日",
+        "LastUpdateDate": "2023-09-06"
+      }
+    ]
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "淡黄色",
+      "PhysicalState": "固体/粉末"
+    },
+    "FlashPoint": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 86.7
+          },
+          "Unit": "℃"
+        }
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "Log Pow = -0.42"
+          ]
+        },
+        "ItemName": "n-辛醇/水分配系数"
+      }
+    ],
+    "Solubilities": {
+      "WaterSolubility": [
+        {
+          "AdditionalInfo": {
+            "FullText": [
+              "不溶于水，可溶于丙酮、1,4-二噁烷、氯仿"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "中华人民共和国职业病防治法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "危险化学品安全管理条例",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "危险货物道路运输安全管理办法和道路危险货物运输管理规定",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "中华人民共和国海洋环境保护法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "新化学物质环境管理办法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "中国GHS分类国家标准",
+          "Regulations": [
+            {}
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "ConditionsToAvoid": "受撞击、摩擦、热源、光(日光、荧光灯等)",
+    "HazardousDecompositionProducts": {
+      "Substance": "碳、氮、硫的氧化物"
+    },
+    "MaterialsToAvoid": "强酸、强碱、氧化剂",
+    "StabilityDescription": "通常条件下稳定。会因热源、光(日光、荧光灯等)而发生分解。长时间热处理会剧烈分解，且一旦开始发生分解则无法停止。会因热分解而急剧产生浓烟。"
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {},
+          {},
+          {}
+        ]
+      }
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "GB 12268-2012《危险货物品名表》：列入；GB 12463-2009《危险货物运输包装通用技术条件》：适用；GB 6944-2012《危险货物分类和品名编号》：适用",
+        "TransportationType": "中国国内运输"
+      }
+    ],
+    "InternationalRegulations": [
+      {
+        "RegulationName": [
+          {
+            "FullText": "联合国危险货物编号(UN号)：3226；联合国运输名称：D型自反应固体(6-重氮基-5,6-二氢-5-氧代-1-萘磺酸与4,4'-[1-[4-[1-(4-羟基苯基)-1-甲基乙基]苯基]亚甲基]双苯酚的酯)；联合国危险性分类：4.1；海洋污染物(是/否)：否",
+            "TransportationType": "IMDG/ICAO/IATA"
+          }
+        ]
+      }
+    ]
+  }
+}

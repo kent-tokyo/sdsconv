@@ -1,0 +1,361 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "不活性な吸収材で吸収させる。適切な吸収剤を使用して、漏洩物を除去すること。本製品を放出、廃棄する際には、各地方自治体および国の規則に従って処理すること。その放出に使用された物質についても同様である。どの規則が適用されるかを確認する必要がある。多量にこぼれた場合、防液堤を築く等の適切な封じ込め手段を講じて、広がらないようにすること。防液堤に使用した資材をポンプで吸い上げることができる場合には、回収した物質を適切な容器内に保管する。"
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "環境への放出は必ず避けなければならない。安全を確認してから、もれやこぼれを止める。広範囲に広まるのを防ぐ（封じ込めまたはオイルバリアなどによる）。汚染された洗浄水を保管し、処分する。流出が著しく回収できない場合は、地方自治体に通報する。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "安全な取り扱いの助言や、個人保護具の推奨事項に従う。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "MolecularFormula": "C15H38O3Si3",
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "17940-81-7"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "IupacName": "トリス((トリメチルシロキシ)メチル)プロパン"
+          }
+        }
+      }
+    ],
+    "CompositionType": "単一製品"
+  },
+  "Datasheet": {
+    "IssueDate": "2024-10-25",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "PackagingWaste": [
+      "廃容器は内容物を十分除去した後に、法規に従い廃棄する。"
+    ],
+    "ProductWaste": [
+      "「廃棄物の処理及び清掃に関する法律」及び地方条令に定められた方法に従って、焼却等の処理を行う。委託する場合は、許可を受けた廃棄物処理業者に委託する。"
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {}
+          ]
+        },
+        "AquaticChronicToxicity": {
+          "Result": [
+            {}
+          ]
+        }
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "適切な換気装置の下でのみ使用する。",
+      "許容濃度や管理濃度が設定されていない場合、通常の作業は全体換気を行うことで十分である。",
+      "局所排気装置や他の排気装置を使用して、気中濃度が許容濃度や管理濃度より低くなるように管理する。"
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "安全メガネ(サイドシールド付)を着用する。"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "この物質に対し耐薬品性のある手袋を用いること。"
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "許容濃度や管理濃度を超える可能性がある場合、呼吸器保護具を着用すること。許容濃度や管理濃度が設定されていない場合、呼吸器刺激や不快感等がある場合、又はリスク評価において必要であると示された時、呼吸器保護具を着用する。たいていの場合、呼吸用保護具は必要ない。ただし、不快感がある場合は、認可された空気清浄呼吸器を使用する。"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "この物質に耐薬品性のある保護衣を着用する。作業内容に応じて、顔面シールド、長靴、エプロンまたは全身防護服などの保護具を選択する。"
+        }
+      ]
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "数分間眼を徹底的に水で洗い流す。1～2分洗眼してからコンタクトレンズをはずし、さらに数分洗い続ける。症状があれば、医師の診察を受ける。眼科医が望ましい。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "口をすすぐこと。無理に吐かせないこと。直ちに医師に連絡すること。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "新鮮な空気の場所に移動させ、呼吸を快適に保つ。医師の診察を受ける。"
+      },
+      "FirstAidSkin": {
+        "FullText": "多量の水で洗い流す。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "十分な衛生的作業を行い安全規定に従って取扱う。ばく露防止及び保護措置の項の設備対策を参照。漏れや廃棄物を防止し、環境への放出を最小限にするよう注意する。火気厳禁",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "適切な換気装置の下でのみ使用する。",
+        "VentilationCondition": "許容濃度や管理濃度が設定されていない場合、通常の作業は全体換気を行うことで十分である。局所排気装置や他の排気装置を使用して、気中濃度が許容濃度や管理濃度より低くなるように管理する。一部の作業には局所排気装置が必要になることがある。"
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "施錠して保管すること。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "Classification": {
+      "AdditionalInfo": {
+        "FullText": [
+          "本製品は、化学品の分類及び表示に関する世界調和システム（ＧＨＳ）に基づく危険有害性ではない。"
+        ]
+      }
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "東京都港区虎ノ門１－３－１",
+      "CompanyName": "ハイケム株式会社",
+      "Phone": "03-5251-8552"
+    },
+    "TradeProductIdentity": {
+      "TradeNameJP": "トリス((トリメチルシロキシ)メチル)プロパン"
+    }
+  },
+  "OtherInformation": {
+    "Desclaimer": "本モデルデータシートは作成年月日時点における情報に基づいて記載されておりますので、事業場においてSDSを作成するに当たっては、新たな危険有害性情報について確認することが必要です。さらに、本データシートはモデルですので、実際の製品等の性状に基づき追加修正する必要があります。また、特殊な条件下で使用するときは、その使用状況に応じた情報に基づく安全対策が必要となります。",
+    "RelatedDocuments": "各データ毎に記載した。"
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "無色から薄黄色",
+      "Odour": "特徴的な臭い",
+      "PhysicalState": "液体"
+    },
+    "Densities": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 0.86
+          }
+        }
+      }
+    ],
+    "FlashPoint": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "AdditionalInfo": {
+            "FullText": [
+              ">105 °C"
+            ]
+          }
+        }
+      },
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 114.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "ItemName": "n-オクタノール／水分配係数",
+        "NumericRangeWithUnitAndQualifier": {
+          "AdditionalInfo": {
+            "FullText": [
+              "log Pow: -1.48 測定値"
+            ]
+          }
+        }
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "蒸気密度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "溶解度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "粘度（粘性率）"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "蒸発速度（酢酸ブチル＝１）"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "融点・凝固点"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "沸点、初留点及び沸騰範囲"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "自然発火温度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "分解温度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "pH"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "臭いのしきい（閾）値"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "燃焼又は爆発範囲"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "非該当"
+          ]
+        },
+        "ItemName": "燃焼性（固体、気体）"
+      }
+    ],
+    "VapourPressure": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "AdditionalInfo": {
+            "FullText": [
+              "> 35 °C (760 mmHg)"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "労働安全衛生法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "化審法",
+          "Regulations": [
+            {}
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "ConditionsToAvoid": "酸化剤との接触は避ける。",
+    "HazardousDecompositionProducts": {
+      "Substance": "危険有害な分解生成物は知られていない。"
+    },
+    "HazardousReactions": {
+      "FullText": "強い酸化剤と反応することがある。"
+    },
+    "MaterialsToAvoid": "強い酸化剤",
+    "ReactivityDescription": "反応性危険としては分類されない。",
+    "StabilityDescription": "通常の状態では安定。"
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "AdditionalToxicologicalInformation": "喘息の様な(反応性気道)症状を起こすことがある。気管支拡張薬、去痰薬、鎮咳薬およびコルチコステロイドが有効なことがある。特別な解毒剤はない。ばく露に対する治療は、患者の症状に応じて臨床的処置を行う。過剰暴露を繰り返すと、既存の肺疾患が悪化することがある。皮膚接触により既存の皮膚炎が悪化することがある。長時間の皮膚接触で、有害量を吸収することはないであろう。誤飲した場合でも、毒性は非常に低い。少量を誤飲しても有害な影響があるとは予見されない。"
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "第 4 類 引火性液体, 第三石油類, 非水溶性液体, (指定数量 2000 リットル), 危険等級 III, 火気厳禁オルガノシラン",
+        "TransportationType": "消防法"
+      },
+      {
+        "FullText": "船舶安全法の規定に従う。",
+        "TransportationType": "海上規制情報"
+      },
+      {
+        "FullText": "航空法の規定に従う。",
+        "TransportationType": "航空規制情報"
+      },
+      {
+        "FullText": "消防法の規定に従う。",
+        "TransportationType": "陸上規制情報"
+      }
+    ]
+  }
+}

@@ -1,0 +1,462 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "危険でなければ漏れを止める。不活性材料（例えば、乾燥砂又は土等）で流出物を吸収して、化学品廃棄容器に入れる。"
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "環境中に放出してはならない。排水溝、下水溝、地下室あるいは閉鎖場所への流入を防ぐ。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "直ちに、全ての方向に適切な距離を漏洩区域として隔離する。関係者以外の立入りを禁止する。立ち入る前に、密閉された場所を換気する。適切な空気呼吸器、防護服（耐熱性）を着用する。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "Concentration": {
+          "NumericRangeWithUnitAndQualifier": {
+            "ExactValue": {
+              "Value": 100.0
+            },
+            "Unit": "%"
+          }
+        },
+        "MolecularFormula": "C9H23NO3Si",
+        "MolecularWeight": 221.42,
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "2530-83-8"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "γ-アミノプロピルトリエトキシシラン(gamma-Aminopropyltriethoxysilane)、3-(トリエトキシシリル)プロピルアミン(3-(Triethoxysilyl)propylamine)",
+            "IupacName": "3-アミノプロピルトリエトキシシラン"
+          }
+        }
+      }
+    ],
+    "CompositionType": "単一物質"
+  },
+  "Datasheet": {
+    "IssueDate": "2024-03-30",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "FullText": "廃棄の前に、可能な限り無害化、安定化及び中和等の処理を行って危険有害性のレベルを低い状態にする。空容器を廃棄する場合は、内容物を完全に除去すること。消防法の規制に従う。",
+    "PackagingWaste": [
+      "容器は清浄にしてリサイクルするか、関連法規並びに地方自治体の基準に従って適切な処分を行う。"
+    ],
+    "ProductWaste": [
+      "廃棄においては、関連法規並びに地方自治体の基準に従う"
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {}
+          ]
+        }
+      },
+      "PersistenceDegradability": {
+        "BiologicalDegradability": "難水溶性でなく（水溶解度=760000 mg/L（SIDS, 2005））、急性毒性が区分外であることから、区分外とした。"
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "局所排気・全体換気を行うこと。"
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "適切な眼の保護具を着用すること。"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "適切な保護手袋を着用すること。"
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "適切な呼吸器保護具を着用すること。"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "適切な保護衣を着用すること。"
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireFightingProcedures": {
+      "FullText": "安全に対処できるならば着火源を除去すること。危険でなければ火災区域から容器を移動する。容器が熱に晒されているときは、移さない。"
+    },
+    "MediaToBeUsed": {
+      "FullText": "泡消火剤、粉末消火剤、二酸化炭素、乾燥砂"
+    },
+    "SpecialProtectiveEquipmentForFirefighters": {
+      "FullText": "適切な空気呼吸器、防護服（耐熱性）を着用する。"
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "水で数分間注意深く洗うこと。次に、コンタクトレンズを着用していて容易に外せる場合は外すこと。その後も洗浄を続けること。直ちに医師に連絡すること。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "口をすすぐこと。無理に吐かせないこと。気分が悪い時は医師に連絡すること。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "被災者を新鮮な空気のある場所に移動し、呼吸しやすい姿勢で休息させること。気分が悪い時は医師に連絡すること。"
+      },
+      "FirstAidSkin": {
+        "FullText": "直ちに、汚染された衣類をすべて脱ぐこと、又は取り去ること。皮膚を流水またはシャワーで洗うこと。多量の水と石鹸で洗うこと。皮膚刺激または発疹が生じた場合、医師の診断、手当てを受けること。汚染された衣類を再使用する前に洗濯すること。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "すべての発火源を速やかに取除く（近傍での喫煙、火花や火炎の禁止）。この物質を貯蔵ないし取扱う作業場には洗眼器と安全シャワーを設置すること。取扱い後はよく手を洗うこと。",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "ばく露を防止するため、装置の密閉化又は局所排気装置を設置すること。『8．ばく露防止及び保護措置』に記載の設備対策を行い、保護具を着用する。",
+        "VentilationCondition": "『8．ばく露防止及び保護措置』に記載の局所排気、全体換気を行う。"
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "容器を密閉して換気の良い場所で保管すること。施錠して保管すること。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "飲み込むと有害",
+          "HazardStatementCode": "H302"
+        },
+        {
+          "FullText": "重篤な皮膚の薬傷・眼の損傷",
+          "HazardStatementCode": "H314"
+        },
+        {
+          "FullText": "重篤な眼の損傷",
+          "HazardStatementCode": "H318"
+        },
+        {
+          "FullText": "アレルギー性皮膚反応を引き起こすおそれ",
+          "HazardStatementCode": "H317"
+        },
+        {
+          "FullText": "眠気及びめまいのおそれ",
+          "HazardStatementCode": "H336"
+        },
+        {
+          "FullText": "呼吸器への刺激のおそれ",
+          "HazardStatementCode": "H335"
+        },
+        {
+          "FullText": "長期又は反復ばく露による呼吸器の障害のおそれ",
+          "HazardStatementCode": "H373"
+        }
+      ],
+      "PrecautionaryStatements": {
+        "Disposal": [
+          {
+            "FullText": "内容物、容器を都道府県知事の許可を受けた専門の廃棄物処理業者に業務委託すること。",
+            "PrecautionaryStatementCode": "P501"
+          }
+        ],
+        "Prevention": [
+          {
+            "FullText": "ミスト、蒸気、スプレーを吸入しないこと。",
+            "PrecautionaryStatementCode": "P260"
+          },
+          {
+            "FullText": "取扱い後はよく手を洗うこと。",
+            "PrecautionaryStatementCode": "P264"
+          },
+          {
+            "FullText": "この製品を使用する時に、飲食又は喫煙をしないこと。",
+            "PrecautionaryStatementCode": "P270"
+          },
+          {
+            "FullText": "屋外又は換気の良い区域でのみ使用すること。",
+            "PrecautionaryStatementCode": "P271"
+          },
+          {
+            "FullText": "適切な保護手袋、保護衣、保護面、保護眼鏡を着用すること。",
+            "PrecautionaryStatementCode": "P280"
+          }
+        ],
+        "Response": [
+          {
+            "FullText": "飲み込んだ場合、口をすすぐこと。無理に吐かせないこと。",
+            "PrecautionaryStatementCode": "P301+P330+P331"
+          },
+          {
+            "FullText": "皮膚に付着した場合、多量の水と石鹸で洗うこと。",
+            "PrecautionaryStatementCode": "P302+P352"
+          },
+          {
+            "FullText": "吸入した場合、被災者を新鮮な空気のある場所に移動し、呼吸しやすい姿勢で休息させること。",
+            "PrecautionaryStatementCode": "P304+P340"
+          },
+          {
+            "FullText": "眼に入った場合、水で数分間注意深く洗うこと。次に、コンタクトレンズを着用していて容易に外せる場合は外すこと。その後も洗浄を続けること。",
+            "PrecautionaryStatementCode": "P305+P351+P338"
+          },
+          {
+            "FullText": "吸入ばく露の場合、気分が悪い時は医師に連絡すること。",
+            "PrecautionaryStatementCode": "P308+P313"
+          },
+          {
+            "FullText": "直ちに医師に連絡すること。",
+            "PrecautionaryStatementCode": "P310"
+          },
+          {
+            "FullText": "気分が悪い時は、医師の診断、手当てを受けること。",
+            "PrecautionaryStatementCode": "P311"
+          },
+          {
+            "FullText": "飲み込んだ場合、気分が悪い時は、医師に連絡すること。",
+            "PrecautionaryStatementCode": "P312"
+          },
+          {
+            "FullText": "皮膚刺激又は発疹が生じた場合は、医師の診断、手当てを受けること。",
+            "PrecautionaryStatementCode": "P314"
+          },
+          {
+            "FullText": "眼に入った場合、直ちに医師に連絡すること。",
+            "PrecautionaryStatementCode": "P315"
+          }
+        ],
+        "Storage": [
+          {
+            "FullText": "容器を密閉して換気の良い場所で保管すること。施錠して保管すること。",
+            "PrecautionaryStatementCode": "P403+P235"
+          }
+        ]
+      },
+      "SignalWord": "危険"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "東京都△△区△△町△丁目△△番地",
+      "CompanyName": "○○○○株式会社",
+      "Phone": "03-1234-5678"
+    },
+    "TradeProductIdentity": {
+      "ProductNoUser": [
+        "20A2060"
+      ],
+      "TradeNameEN": "3-Aminopropyltriethoxysilane",
+      "TradeNameJP": "3-アミノプロピルトリエトキシシラン"
+    }
+  },
+  "OtherInformation": {
+    "RelatedDocuments": "参考文献 各データ毎に記載した｡"
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "データなし",
+      "Odour": "データなし",
+      "PhysicalState": "液体"
+    },
+    "BoilingPointRelated": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "119℃: Lide (88th, 2008)"
+          ]
+        },
+        "ItemName": "沸点、初留点及び沸騰範囲"
+      }
+    ],
+    "Densities": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 0.94
+          },
+          "Unit": "g/cm3"
+        }
+      }
+    ],
+    "FlashPoint": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 96.0
+          },
+          "Unit": "℃"
+        }
+      }
+    ],
+    "MeltingPointRelated": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "-70℃: SIDS (access on July 2008)"
+          ]
+        },
+        "ItemName": "融点・凝固点"
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "蒸発速度（酢酸ブチル＝１）"
+      },
+      {
+        "ItemName": "オクタノール・水分配係数",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 0.31
+          },
+          "Unit": "Log Pow"
+        }
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "蒸気密度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "粘度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "体積抵抗率(導電率)"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "爆発範囲"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "最小発火エネルギー"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "粉じん爆発下限濃度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "未設定"
+          ]
+        },
+        "ItemName": "自然発火温度"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "データなし"
+          ]
+        },
+        "ItemName": "分解温度"
+      }
+    ],
+    "Solubilities": {
+      "WaterSolubility": [
+        {
+          "NumericRangeWithUnitAndQualifier": {
+            "ExactValue": {
+              "Value": 760000.0
+            },
+            "Unit": "mg/L"
+          }
+        }
+      ]
+    },
+    "VapourPressure": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 0.02
+          },
+          "Unit": "hPa"
+        }
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "消防法",
+          "Regulations": [
+            {}
+          ]
+        }
+      ]
+    }
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      }
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "消防法 第４類引火性液体、第三石油類水溶性液体（法第２条第７項危険物別表第１・第４類）",
+        "TransportationType": "陸上規制情報"
+      },
+      {
+        "FullText": "輸送に際しては、直射日光を避け、容器の破損、腐食、漏れのないように積み込み、荷崩れの防止を確実に行う。重量物を上積みしない。食品や飼料と一緒に輸送してはならない。",
+        "TransportationType": "海上規制情報"
+      },
+      {
+        "FullText": "データなし",
+        "TransportationType": "航空規制情報"
+      }
+    ]
+  }
+}

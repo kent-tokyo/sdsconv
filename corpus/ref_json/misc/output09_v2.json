@@ -1,0 +1,373 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "乾燥砂、不燃性吸収剤などに吸収させて密閉できる容器に回収する。大量の流出には盛土で囲って流出を防止する。付着物、回収物などは、関係法規に基づき速やかに処分する。付近の着火源、高温体などを速やかに取り除く。着火した場合に備えて、消火用器材を準備する。火花を発生しない安全な用具を使用する。"
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "製品が排水路に排出されないよう注意する。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "特別個人用保護具(自給式呼吸器)を着用する。漏出場所の風上から作業し、風下の人を退避させる。十分に換気を行う。漏出した場所の周辺に、ロープを張るなどして関係者以外の立入りを禁止する。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "Concentration": {
+          "NumericRangeWithUnitAndQualifier": {
+            "Unit": "%"
+          }
+        },
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "623-47-2"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "Ethyl Propargylate , Propargylic Acid Ethyl Ester , Propiolic Acid Ethyl Ester",
+            "IupacName": "プロピオル酸エチル"
+          }
+        }
+      }
+    ],
+    "CompositionType": "化学物質"
+  },
+  "Datasheet": {
+    "IssueDate": "2022-03-20",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "FullText": "適切な保護具を着用する。\n地方条例や国内規制に従う。\n焼却処理する場合には、アフターバーナー及びスクラバーを備えた焼却炉で焼却する。\n空容器を処分する時は、内容物を完全に除去した後に行う。\n処理施設がないなどの理由で廃棄できない場合は、許可を受けた産業廃棄物処理業者に委託する。"
+  },
+  "EcologicalInformation": [
+    {
+      "AdditionalEcotoxInformation": "生体蓄積性(BCF)：情報なし\n土壌中の移動性 オクタノール/水分配係数：情報なし\n土壌吸着係数(Koc)：情報なし\nヘンリー定数(PaM 3/mol)：情報なし\nオゾン層への有害性：情報なし",
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {},
+            {},
+            {}
+          ]
+        }
+      },
+      "PersistenceDegradability": {
+        "BiologicalDegradability": "情報なし"
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "密閉化した設備又は局所排気装置を設ける。",
+      "取扱い場所の近くに洗眼及び身体洗浄用の設備を設ける。"
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "保護眼鏡。状況に応じ保護面。"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "保護手袋。"
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "防毒マスク、簡易防毒マスク等。"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "保護衣。状況に応じ、保護長靴。"
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireAndExplosionHazards": {
+      "FullText": "水(火災を拡大し危険な場合がある)"
+    },
+    "FireFightingProcedures": {
+      "FullText": "消火作業は、風上から行い、周囲の状況に応じた適切な消火方法を用いる。関係者以外は安全な場所に退去させる。周辺火災時、容器に水を噴霧して冷却する。安全に対処できるならば着火源を除去すること。"
+    },
+    "MediaToBeUsed": {
+      "FullText": "粉末, 泡, 二酸化炭素"
+    },
+    "SpecialProtectiveEquipmentForFirefighters": {
+      "FullText": "消火作業の際は、必ず保護具を着用する。"
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "水で数分間注意深く洗うこと。コンタクトレンズを容易にはずせる場合は外して洗うこと。眼の刺激が続く場合は、医師の診断、手当てを受けること。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "気分が悪い時は、医師の診断、手当てを受けること。口をすすぐこと。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "空気の新鮮な場所に移し、呼吸しやすい姿勢で休息させること。気分が悪い時は、医師の診断、手当てを受けること。"
+      },
+      "FirstAidSkin": {
+        "FullText": "直ちに、汚染された衣類をすべて脱ぐこと、取り除くこと。多量の水と石鹸で洗うこと。皮膚刺激または発疹が生じた場合は、医師の診断、手当てを受けること。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "漏れ、あふれ、飛散しないよう注意し、みだりに蒸気を発生させない。熱、火花、裸火、高温体などの着火源から遠ざけること。禁煙。静電気対策を行う。設備などは防爆型を用いる。取扱い後は手や顔などをよく洗う。できれば、密閉系で取扱う。皮膚、眼および衣類との接触を避ける。容器の内圧が高くなっている場合がある。開封は充分な注意のもとに行うこと。",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "適切な保護具を着用する。",
+        "VentilationCondition": "取扱いは換気のよい場所で行う。蒸気やエアゾールが発生する場合には、換気、局所排気を用いる。"
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "容器を密栓して換気の良い冷暗所に保管する。不活性ガスを充填する。酸化剤などの混触危険物質から離して保管する。避けるべき保管条件：空気。安全な容器包装材料：法令の定めるところに従う。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "Classification": {
+      "EnvironmentalEffect": {
+        "AquaticToxicityAcute": "該当区分なし"
+      },
+      "HealthEffect": {
+        "EyeDamageOrIrritation": "区分2A",
+        "SkinCorrosionIrritation": "区分2"
+      },
+      "PhysicochemicalEffect": {
+        "FlammableLiquids": "区分3"
+      }
+    },
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "引火性液体および蒸気"
+        },
+        {
+          "FullText": "皮膚刺激"
+        },
+        {
+          "FullText": "強い眼刺激"
+        }
+      ],
+      "PrecautionaryStatements": {
+        "Disposal": [
+          {
+            "FullText": "内容物や容器を、都道府県知事の許可を受けた専門の廃棄物処理業者に委託すること。"
+          }
+        ],
+        "Prevention": [
+          {
+            "FullText": "熱、火花、裸火、高温体などの着火源から遠ざけること。禁煙。"
+          },
+          {
+            "FullText": "容器を密閉しておくこと。"
+          },
+          {
+            "FullText": "容器および受器を接地すること。"
+          },
+          {
+            "FullText": "防爆型の電気機器、換気装置、照明機器を使用すること。火花を発生させない工具を使用すること。静電気放電に対する予防措置を講ずること。"
+          },
+          {
+            "FullText": "取扱い後は手や顔をよく洗うこと。"
+          },
+          {
+            "FullText": "保護手袋、保護眼鏡を着用すること。"
+          }
+        ],
+        "Response": [
+          {
+            "FullText": "皮膚に付着した場合：多量の水と石鹸で洗うこと。皮膚刺激が生じた場合：医師の診断、手当てを受けること。汚染された衣類を再使用する場合には洗濯すること。"
+          },
+          {
+            "FullText": "眼に入った場合：水で数分間注意深く洗うこと。コンタクトレンズを着用していて容易に外せる場合は外すこと。その後も洗浄を続けること。眼の刺激が続く場合は、医師の診断、手当てを受けること。"
+          },
+          {
+            "FullText": "火災の場合：消火するために粉末、乾燥砂、泡を使用すること。"
+          }
+        ],
+        "Storage": [
+          {
+            "FullText": "涼しい所/換気の良い場所で保管すること。"
+          }
+        ]
+      },
+      "SignalWord": "警告"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "東京都北区豊島6丁目15番9号",
+      "CompanyName": "東京化成工業株式会社",
+      "Fax": "03-3668-0520",
+      "Phone": "03-3668-0489"
+    },
+    "TradeProductIdentity": {
+      "ProductNoUser": [
+        "P0529"
+      ],
+      "TradeNameEN": "Ethyl Propiolate"
+    }
+  },
+  "OtherInformation": {
+    "Desclaimer": "このSDSは、我々が知り得た情報を基に誠意をもって作成しておりますが、記載のデータや危険、有害性の評価に関しては、いかなる保証もなすものではありません。ご使用に先立って、危険、有害性情報のみならず、ご使用になる機関、地域、国の最新の規則、条例、法規制などを調査し、それらを最優先してください。\nご購入いただいた商品は、安全性の点からも速やかに消費されることを大前提としております。その後、新たな情報や修正が加えられる場合もありますので万一ご使用時期が大幅にずれ込んだり、ご懸念を抱かれた場合には、改めて弊社にご相談ください。\nまた記載の注意事項は通常の取扱を対象としたものであって、特別な取扱をする場合は状況に適した安全対策を実施の上、充分な注意を払う必要があります。\nすべての化学製品は『未知の危険性、有害性がある』という認識で扱うべきであり、その危険性、有害性も使用時の環境、扱い方、あるいは保管の状態、期間によって大きく異なります。ご使用時はもちろんのこと、開封から保管、廃棄に至るまで、専門的知識、経験のある方のみ、あるいはそれらの方々の指導のもとで取扱うことを警告します。\nご使用各位の責任において、安全な使用条件を設定くださるよう、お願い申し上げます。",
+    "RevisionInformation": [
+      {
+        "FullText": "作成・改定日 2022/03/20",
+        "LastUpdateDate": "2022-03-20"
+      }
+    ]
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "無色 ～ うすい黄色",
+      "Odour": "情報なし",
+      "PhysicalState": "液体"
+    },
+    "BoilingPointRelated": [
+      {
+        "ItemName": "沸点又は初留点及び沸騰範囲",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 119.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "Densities": [
+      {
+        "ItemName": "密度及び／又は相対密度(g/ml)",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 0.96
+          },
+          "Unit": "g/ml"
+        }
+      }
+    ],
+    "FlashPoint": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 25.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "MeltingPointRelated": [
+      {
+        "ItemName": "融点／凝固点",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 9.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "透明"
+          ]
+        },
+        "ItemName": "形状"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "情報なし"
+          ]
+        },
+        "ItemName": "オクタノール/水分配係数"
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "消防法",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "第4類 第二石油類 危険等級Ⅲ 非水溶性"
+                ]
+              },
+              "RegulationName": "消防法"
+            }
+          ]
+        },
+        {
+          "LegislationName": "安衛法(施行令別表第一)",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "危険物 四 引火性のもの"
+                ]
+              },
+              "RegulationName": "安衛法(施行令別表第一)"
+            }
+          ]
+        },
+        {
+          "LegislationName": "船舶安全法",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "危規則危険物告示 別表第1 引火性液体"
+                ]
+              },
+              "RegulationName": "船舶安全法"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "ConditionsToAvoid": "火花, 裸火, 静電放電",
+    "HazardousDecompositionProducts": {
+      "Substance": "二酸化炭素, 一酸化炭素"
+    },
+    "MaterialsToAvoid": "酸化剤",
+    "ReactivityDescription": "特別な反応性は報告されていない。",
+    "StabilityDescription": "適切な条件下においては安定。"
+  },
+  "ToxicologicalInformation": [
+    {
+      "AdditionalToxicologicalInformation": "急性毒性：情報なし\n皮膚腐食性／刺激性：情報なし\n眼に対する重篤な損傷性／刺激性：情報なし\n生殖細胞変異原性：情報なし\n発がん性：IARC = 情報なし　NTP = 情報なし\n生殖毒性：情報なし\n特定標的臓器毒性-短回暴露：情報なし\n特定標的臓器毒性-反復暴露：情報なし\n誤えん有害性：情報なし"
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "運搬に際しては容器に漏れのないことを確かめ､転倒､落下､損傷のないように積み込み､荷崩れの防止を確実に行い､法令の定めるところに従う。",
+        "TransportationType": "陸上輸送"
+      }
+    ],
+    "InternationalRegulations": [
+      {
+        "RegulationName": [
+          {
+            "FullText": "国連番号：3272\n品名(国連輸送名)：Esters, n.o.s.\n国連分類：クラス3(引火性液体)\n容器等級：Ⅲ",
+            "TransportationType": "国際輸送"
+          }
+        ]
+      }
+    ]
+  }
+}

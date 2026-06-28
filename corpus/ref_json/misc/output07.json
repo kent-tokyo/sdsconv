@@ -1,0 +1,372 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "酸で中和する。\n不活性の吸収材（例えば、砂、シリカゲル、酸性結合剤、汎用結合剤、おがくず）で吸収させる。\n廃棄に備え適切な容器に入れて蓋をしておく。"
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "製品を排水施設に流してはならない。\n安全を確認してから、もれやこぼれを止める。\n製品が河川、湖水または排水管を汚染した場合は、関連当局に連絡する。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "保護具を使用する。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "Concentration": {
+          "NumericRangeWithUnitAndQualifier": {
+            "Unit": "%"
+          }
+        },
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "9046-10-0"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "IupacName": "ポリ（プロピレングリコール）ジアミン"
+          }
+        }
+      }
+    ],
+    "CompositionType": "化学物質"
+  },
+  "Datasheet": {
+    "IssueDate": "2024-07-10",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "PackagingWaste": [
+      "残りの容器を空にする。製品入り容器と同様に処分する。空の容器を再使用しない。"
+    ],
+    "ProductWaste": [
+      "本製品を排水溝、水路、土壌に侵入させないこと。薬剤または使用済み容器で池、水路、溝を汚染しないこと。認可された廃棄物処理業者へ委託する。"
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "AdditionalEcotoxInformation": "職業上の規則に反した取り扱い、処理が行われた場合は、環境に及ぼす危険性を除外して考えることはできない。長期継続的影響によって水生生物に有害。",
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {},
+            {},
+            {}
+          ]
+        }
+      },
+      "PersistenceDegradability": {
+        "BiologicalDegradability": "結果: 分解性なし\n生分解:  < 60 %\nばく露時間: 28 d"
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "純水入りの眼洗浄ボトル"
+        },
+        {
+          "FullText": "密着性の高い安全ゴーグル"
+        },
+        {
+          "FullText": "作業中に異常が発生した場合は、顔面保護シールドと保護衣を着用する。"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "ある特定の作業場の適正度は、防護手袋製造者との相談で決定すべきである。"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "不浸透性衣服"
+        },
+        {
+          "FullText": "作業場にある危険物質の量および濃度に応じて、保護具を選択する。"
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireAndExplosionHazards": {
+      "FullText": "火災時には消火用水が排水溝ないし水路へ流出しないよう防止すること。"
+    },
+    "FireFightingProcedures": {
+      "FullText": "汚染した消火廃水は回収すること。排水施設に流してはならない。\n火災の残留物や汚染した消火廃水は、関係法規に従って処理する。"
+    },
+    "MediaToBeUsed": {
+      "AdditionalInfo": {
+        "FullText": [
+          "本製品自体のデータなし"
+        ]
+      }
+    },
+    "SpecialProtectiveEquipmentForFirefighters": {
+      "FullText": "消火活動時には必要に応じて 自給式呼吸装置を装着する。"
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "少量が目に入った場合、不可逆的な角膜の損傷や失明を起こすことがある。\n眼に入った場合は、直ちに多量の水で洗浄し、医師の手当てを受ける。\n病院に運ぶ間にも、眼を洗浄し続けてください。\nコンタクトレンズをはずす。\n損傷していない眼を保護する。\n洗浄中は眼を大きく開ける。\n眼刺激が治まらない場合は、専門医に相談する。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "気道を確保する。\n無理に吐かせないこと。\nミルクやアルコール飲料を与えない。\n意識がない場合、口から絶対に何も与えないこと。\n症状が持続する場合は、医師に連絡する。\n直ちに被災者を病院に連れて行く。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "意識がない場合は、回復体勢にし、医師の指示を受ける。\n症状が持続する場合は、医師に連絡する。"
+      },
+      "FirstAidSkin": {
+        "FullText": "皮膚腐食による傷は直ちに治療処置を行ってください。時間が経つと治癒が遅れて回復が難しくなります。\n皮膚に付着した場合は、水で十分にすすいでください。\n衣服に付いた場合、衣服を脱ぐ。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "標準的な防火方法。",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "蒸気/粉塵を吸い込まない。\n皮膚や眼への接触を避けること。\n個人保護については項目 8 を参照する。\n作業エリアでは、喫煙、飲食は禁止する。\n取扱い中のこぼれを防止するには、金属製のトレイにボトルを載せておく。\n洗浄水は、国及び地方自治体の規制に従い処分する。"
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "容器を密閉し、乾燥した換気の良い場所に保管する。\n一度開けた容器は注意深く再度密封し、漏れを避けるためまっすぐ立てておく。\nラベルの予防措置を遵守する。\n電気設備及び作業資材は技術安全基準に準拠していなければならない。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "飲み込むと有害。",
+          "HazardStatementCode": "H302"
+        },
+        {
+          "FullText": "重篤な皮膚の薬傷及び眼の損傷。",
+          "HazardStatementCode": "H314"
+        },
+        {
+          "FullText": "長期継続的影響によって水生生物に有害。",
+          "HazardStatementCode": "H412"
+        }
+      ],
+      "PrecautionaryStatements": {
+        "Disposal": [
+          {
+            "FullText": "内容物、容器を都道府県知事の許可を受けた専門の廃棄物処理業者に業務委託すること。",
+            "PrecautionaryStatementCode": "P501"
+          }
+        ],
+        "Prevention": [
+          {
+            "FullText": "取扱い後は皮膚をよく洗うこと。",
+            "PrecautionaryStatementCode": "P264"
+          },
+          {
+            "FullText": "この製品を使用するときに，飲食又は喫煙をしないこと。",
+            "PrecautionaryStatementCode": "P270"
+          },
+          {
+            "FullText": "環境への放出を避けること。",
+            "PrecautionaryStatementCode": "P273"
+          },
+          {
+            "FullText": "保護手袋/保護衣/保護眼鏡/保護面を着用すること。",
+            "PrecautionaryStatementCode": "P280"
+          }
+        ],
+        "Response": [
+          {
+            "FullText": "飲み込んだ場合：気分が悪いときは医師に連絡すること。口をすすぐこと。",
+            "PrecautionaryStatementCode": "P301+P312+P330"
+          },
+          {
+            "FullText": "飲み込んだ場合：口をすすぐこと。無理に吐かせないこと。",
+            "PrecautionaryStatementCode": "P301+P330+P331"
+          },
+          {
+            "FullText": "皮膚（又は髪）に付着した場合：直ちに汚染された衣類を全て脱ぐこと。皮膚を流水/シャワーで洗うこと。",
+            "PrecautionaryStatementCode": "P303+P361+P353"
+          },
+          {
+            "FullText": "吸入した場合：空気の新鮮な場所に移し，呼吸しやすい姿勢で休息させること。 直ちに医師に連絡すること。",
+            "PrecautionaryStatementCode": "P304+P340+P310"
+          },
+          {
+            "FullText": "眼に入った場合：水で数分間注意深く洗うこと。次にコンタクトレンズを着用していて容易に外せる場合は外すこと。その後も洗浄を続けること。直ちに医師に連絡すること。",
+            "PrecautionaryStatementCode": "P305+P351+P338+P310"
+          },
+          {
+            "FullText": "汚染された衣類を再使用する場合には洗濯をすること。",
+            "PrecautionaryStatementCode": "P363"
+          }
+        ],
+        "Storage": [
+          {
+            "FullText": "施錠して保管すること。",
+            "PrecautionaryStatementCode": "P405"
+          }
+        ]
+      },
+      "SignalWord": "危険"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "東京都港区虎ノ門1丁目3番1号 東京虎ノ門グローバルスクエア11階",
+      "CompanyName": "ハイケム株式会社",
+      "Phone": "03-5251-8567"
+    },
+    "TradeProductIdentity": {
+      "TradeNameJP": "Amine-Terminated Polyether ZD-1200"
+    }
+  },
+  "OtherInformation": {
+    "RelatedDocuments": "本書は山东尚正新材料科技股份有限公司のSDSを参考に作成したものです。",
+    "RevisionInformation": [
+      {
+        "FullText": "初版作成",
+        "LastUpdateDate": "2024-07-10"
+      },
+      {
+        "FullText": "製品名を変更\nPOLYETHERAMINE ZD-1200　→　Amine-Terminated Polyether ZD-1200",
+        "LastUpdateDate": "2024-09-30"
+      }
+    ]
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "淡黄色",
+      "Odour": "アンモニア臭",
+      "PhysicalState": "液体"
+    },
+    "BoilingPointRelated": [
+      {
+        "ItemName": "沸点",
+        "NumericRangeWithUnitAndQualifier": {
+          "Unit": "°C"
+        }
+      }
+    ],
+    "Densities": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 0.99
+          },
+          "Unit": "比重"
+        }
+      }
+    ],
+    "FlashPoint": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 248.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "ItemName": "pH",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 10.5
+          }
+        }
+      },
+      {
+        "ItemName": "動粘度",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 248.0
+          },
+          "Unit": "mm2/s"
+        }
+      },
+      {
+        "ItemName": "分子量",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 2000.0
+          },
+          "Unit": "g/mol"
+        }
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "溶剤: メタノール\n説明: 僅かに溶ける"
+          ]
+        },
+        "ItemName": "溶媒に対する溶解性"
+      }
+    ],
+    "VapourPressure": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 1.1997
+          },
+          "Unit": "hPa"
+        }
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "化審法",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "労働安全衛生法",
+          "Regulations": [
+            {}
+          ]
+        }
+      ]
+    }
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {},
+          {}
+        ]
+      }
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "消防法: 第四類, 第4石油類危険等級III",
+        "TransportationType": "国内規制"
+      }
+    ],
+    "InternationalRegulations": [
+      {
+        "RegulationName": [
+          {
+            "FullText": "UN/ID 番号: UN 2735\n国連輸送名: Amines, liquid, corrosive, n.o.s. (POLYOXYPROPYLENEDIAMINE)\n国連分類: 8\n容器等級: II\nラベル: Corrosive\n梱包指示（貨物機）: 855\n梱包指示（旅客機）: 851",
+            "TransportationType": "IATA"
+          },
+          {
+            "FullText": "UN/ID 番号: UN 2735\n国連輸送名: AMINES, LIQUID, CORROSIVE, N.O.S. (POLYOXYPROPYLENEDIAMINE)\n国連分類: 8\n容器等級: II\nラベル: 8\nEmS コード: F-A, S-B\n海洋汚染物質: 非該当",
+            "TransportationType": "IMDG"
+          }
+        ]
+      }
+    ]
+  }
+}

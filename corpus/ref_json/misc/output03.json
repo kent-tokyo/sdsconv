@@ -1,0 +1,408 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "Use any feasible mechanical means (e.g. vacuum, sweeping) but avoid dusting during clean-up. The product can cause slippery conditions if wet. Even at low concentration, the product renders the discharge in liquid effluent highly visible."
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "Prevent run-off from entering ground, storm sewers and ditches which lead to natural waterways."
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "Avoid generating dust: Prevent generating with spraying water. Ensure adequate ventilation. Wear personal protective equipment. Wear proper equipment and avoid contact with skin and inhalation of vapor. Keep away personnel except for authorized ones from spillage area by stretching ropes. Keep upwind."
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "1317-61-9"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "Triiron tetraoxide"
+          }
+        }
+      },
+      {
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "7439-89-6"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "Iron"
+          }
+        }
+      },
+      {
+        "Concentration": {
+          "NumericRangeWithUnitAndQualifier": {
+            "Unit": "%"
+          }
+        },
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "1344-43-0"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "Manganese(II) oxide"
+          }
+        }
+      }
+    ],
+    "CompositionType": "Mixture"
+  },
+  "Datasheet": {
+    "IssueDate": "2015-06-01",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "PackagingWaste": [
+      "Contaminated packages are not considered hazardous. If recycling is not practicable, dispose of in compliance with local regulations"
+    ],
+    "ProductWaste": [
+      "Dispose of in compliance with local and national regulations"
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {}
+          ]
+        },
+        "AquaticChronicToxicity": {
+          "Result": [
+            {}
+          ]
+        }
+      },
+      "PersistenceDegradability": {
+        "BiologicalDegradability": "No data available"
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "Ensure sufficient ventilation.",
+      "Reduce inhalation hazards in minimizing occupational exposure.",
+      "Engineering controls and safe systems of work should be used in preference to Personal Protective Equipment (PPE) to minimize the risk of exposure."
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "The use of dustproof goggles or glasses with side protections is recommended if dust concentrations are likely to exceed the occupational exposure limit."
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "Prolonged exposure should be avoided by wearing suitable impervious protective gloves."
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "A respirator must be used if the dust concentration is likely to exceed the occupational exposure limit. An approved dust respirator is recommended as appropriate depending on dust levels and other workplace factors."
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "Respect main rules concerning protective clothing for chemical handling."
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireAndExplosionHazards": {
+      "FullText": "On burning: release of toxic and corrosive gases/vapors, generating dust. Pour water: may cause environmental pollution."
+    },
+    "FireFightingProcedures": {
+      "FullText": "Move containers from fire-fighting area, if it can be done without risk. Sprinkle to cool containers and its surrounding area, if containers can't be moved. Cool containers with flooding quantities of water, after the fire is out."
+    },
+    "MediaToBeUsed": {
+      "FullText": "Use extinguishing media suitable for surrounding fire. This product is not combustible."
+    },
+    "SpecialProtectiveEquipmentForFirefighters": {
+      "FullText": "Use protective measures that suit the hazard condition."
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "Rinse immediately with plenty of water. If irritation persists, seek medical attention."
+      },
+      "FirstAidIngestion": {
+        "FullText": "No adverse health effects anticipated by this route; however, in the event of ingestion, increase intake of liquid in order to flush from the body. In case of persistent symptoms, consult a doctor."
+      },
+      "FirstAidInhalation": {
+        "FullText": "Move to a fresh air atmosphere. In case of persistent symptoms, consult a doctor."
+      },
+      "FirstAidSkin": {
+        "FullText": "Wash with soap and water."
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "Avoid raising and breathing dust. Observe good industrial hygiene practice for chemical handling.",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "Avoid raising dust. Handling systems and areas should be operated in such a way as to minimize exposure to dust. Local exhaust ventilation may be necessary. Minimize dust during handling. Take precautionary measures against static discharge."
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "Products should not be stored in outside areas exposed to the weather. Care should be taken to avoid exposure to moisture."
+      }
+    }
+  },
+  "HazardIdentification": {
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "May causes damage to central nervous system and lung through prolonged or repeated exposure.",
+          "HazardStatementCode": "H373"
+        }
+      ],
+      "PrecautionaryStatements": {
+        "Disposal": [
+          {
+            "FullText": "Dispose in compliance with governmental and local regulations.",
+            "PrecautionaryStatementCode": "P501"
+          }
+        ],
+        "Prevention": [
+          {
+            "FullText": "Do not breathe mist/vapours/spray.",
+            "PrecautionaryStatementCode": "P260"
+          }
+        ],
+        "Response": [
+          {
+            "FullText": "Get medical advice/attention if you feel unwell.",
+            "PrecautionaryStatementCode": "P314"
+          }
+        ]
+      },
+      "SignalWord": "Warning"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "3-15 EDOBORI, 1-CHOME, NISHI-KU, OSAKA, 550-0002 JAPAN",
+      "CompanyName": "ISHIHARA SANGYO KAISHA, LTD.",
+      "Phone": "+81-6-6444-1451"
+    },
+    "TradeProductIdentity": {
+      "ProductNoUser": [
+        "EXG-201"
+      ],
+      "TradeNameEN": "MT-V3"
+    }
+  },
+  "OtherInformation": {
+    "Desclaimer": "Information provided in this safety data sheet (SDS) is described based on the best knowledge and information available at the date of publication. This SDS will be amended when any new knowledge is obtained. The information given, including safe handling, use, storage, transport, disposal and release, is described for normal conditions. You are encouraged to collect any specific information you need for yourself. ISHIHARA SANGYO KAISHA, LTD. gives no guarantees for quality specifications or use, and assumes no responsibility for how this information is used",
+    "RelatedDocuments": "IUCLID (2000), Information on Chemicals ECHA, CICAD (1999)"
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "Black",
+      "Odour": "None",
+      "PhysicalState": "Black powder"
+    },
+    "Densities": [
+      {
+        "ItemName": "Specific gravity"
+      }
+    ],
+    "FlashPoint": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No data available"
+          ]
+        }
+      }
+    ],
+    "MeltingPointRelated": [
+      {
+        "ItemName": "Melting point",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 1538.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "Indicate 6.0-8.5 when suspended in water (1:10)"
+          ]
+        },
+        "ItemName": "pH"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No data available"
+          ]
+        },
+        "ItemName": "Odor threshold"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No data available"
+          ]
+        },
+        "ItemName": "Initial boiling point and boiling range"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No applicable"
+          ]
+        },
+        "ItemName": "Evaporation rate"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "Incombustible"
+          ]
+        },
+        "ItemName": "Flammability"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No data available"
+          ]
+        },
+        "ItemName": "Upper/lower flammability or explosive limits"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No data available"
+          ]
+        },
+        "ItemName": "Vapor density"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No data available"
+          ]
+        },
+        "ItemName": "Partition coefficient; n-octanol/water"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No data available"
+          ]
+        },
+        "ItemName": "Auto ignition temperature"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No data available"
+          ]
+        },
+        "ItemName": "Decomposition temperature"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "Not applicable"
+          ]
+        },
+        "ItemName": "Viscosity"
+      }
+    ],
+    "Solubilities": {
+      "WaterSolubility": [
+        {
+          "AdditionalInfo": {
+            "FullText": [
+              "Insoluble in water"
+            ]
+          }
+        }
+      ]
+    },
+    "VapourPressure": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "No data available"
+          ]
+        }
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "Chemical Inventory Status",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "General Compliance",
+          "Regulations": [
+            {}
+          ]
+        },
+        {
+          "LegislationName": "Chemical Safety Assessment",
+          "Regulations": [
+            {}
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "ConditionsToAvoid": "Light, Heat, Avoid dust formation",
+    "HazardousReactions": {
+      "FullText": "None known"
+    },
+    "MaterialsToAvoid": "Acid. Strong oxidant. Calcium hypochlorite. Hydrogen peroxide",
+    "ReactivityDescription": "None known",
+    "StabilityDescription": "Stable under normal conditions"
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {}
+        ]
+      }
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "Not regulated for transport by DOT, IMO/IMDG, IATA/ICAO, ADR/RID. Do not pile up high to avoid falling and loosening. Product should be prevented from falling, loosening or tumbling during transport. Avoid direct sunlight",
+        "TransportationType": "General"
+      }
+    ]
+  }
+}

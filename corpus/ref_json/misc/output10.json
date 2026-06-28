@@ -1,0 +1,343 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "Adhered or collected material should be promptly disposed of, in accordance with appropriate laws and regulations. Remove all sources of ignition. Use spark-proof tools and explosion-proof equipment."
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "Discharge into the environment must be avoided."
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "Emergency personnel wear positive pressure self-contained breathing apparatus. Wear protective and anti-static clothing. Wear chemical impermeable gloves. Ensure adequate ventilation. Remove all sources of ignition. Evacuate personnel to safe areas. Keep people away from and upwind of spill/leak. Use personal protective equipment. Avoid breathing vapours, mist, gas or dust."
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "Concentration": {
+          "NumericRangeWithUnitAndQualifier": {
+            "ExactValue": {
+              "Value": 99.5
+            },
+            "Unit": "%"
+          }
+        },
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "110-17-8"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "Fumaric Acid"
+          }
+        }
+      }
+    ],
+    "CompositionType": "単一物質"
+  },
+  "Datasheet": {
+    "IssueDate": "2024-01-06",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "FullText": "Recycle as much as possible.",
+    "ProductWaste": [
+      "Contaminated packaging: Residual hazards may still exist after the contents of the packaging are emptied. Keep away from heat and sources of ignition. If possible, recycle them to the supplier for recycling."
+    ]
+  },
+  "EcologicalInformation": [
+    {
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {}
+          ]
+        },
+        "AquaticChronicToxicity": {
+          "Result": [
+            {}
+          ]
+        }
+      },
+      "PersistenceDegradability": {
+        "BiologicalDegradability": "Not available"
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "Ensure adequate ventilation, especially in confined areas.",
+      "Ensure that eyewash stations and safety showers are close to the workstation location.",
+      "Use explosion-proof electrical/ventilating/lighting/equipment.",
+      "Set up emergency exit and necessary risk-elimination area."
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "Tightly fitting safety goggles (approved by EN 166(EU) or NIOSH (US)."
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "Wear protective gloves (such as butyl rubber), passing the tests according to EN 374(EU), US F739 or AS/NZS 2161.1 standard."
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "Wear ordinary protective masks."
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "Wear ordinary protective clothing."
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "MediaToBeUsed": {
+      "FullText": "Water, alcohol-resistant foam, dry powder, carbon dioxide."
+    },
+    "SpecialProtectiveEquipmentForFirefighters": {
+      "FullText": "As in any fire, wear self-contained breathing apparatus (MSHA/NIOSH approved or equivalent) and full protective gear. Fight fire from a safe distance, with adequate cover. Prevent fire extinguishing water from contaminating surface water or the ground water system."
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "Wash with running water or saline, Seek medical attention if necessary."
+      },
+      "FirstAidIngestion": {
+        "FullText": "Clean up the mouth, induce vomiting, seek medical attention."
+      },
+      "FirstAidInhalation": {
+        "FullText": "Move to fresh air, Keep the airway open, Seek medical attention if you feel unwell."
+      },
+      "FirstAidSkin": {
+        "FullText": "Rinse with clean water, Ensure that you understand the relevant personal protection knowledge, Take precautions to protect themselves."
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "Closed operation, full ventilation. Operators must be specially trained to strictly abide by the operating procedures. It is recommended that operators wear self-priming filter dust masks and chemical safety glasses. Keep away from fire, heat, and smoking in the workplace. Use explosion-proof ventilation systems and equipment."
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "Store in a cool, ventilated warehouse. Keep away from fire and heat. It should be stored separately from oxidants, reducing agents, halogens, etc., and should not be mixed."
+      }
+    }
+  },
+  "HazardIdentification": {
+    "HazardLabelling": {
+      "HazardStatement": [
+        {
+          "FullText": "Causes severe eye irritation",
+          "HazardStatementCode": "H319"
+        }
+      ],
+      "PrecautionaryStatements": {
+        "Disposal": [
+          {
+            "FullText": "Dispose of contents/container according to international/local state regulations.",
+            "PrecautionaryStatementCode": "P501"
+          }
+        ],
+        "Prevention": [
+          {
+            "FullText": "Wash face and hands thoroughly after handling.",
+            "PrecautionaryStatementCode": "P264"
+          },
+          {
+            "FullText": "Wear protective gloves / protective clothing / eye protection / face protection.",
+            "PrecautionaryStatementCode": "P280"
+          }
+        ],
+        "Response": [
+          {
+            "FullText": "If eye irritation persists: Get medical advice / attention.",
+            "PrecautionaryStatementCode": "P337+P313"
+          },
+          {
+            "FullText": "IF IN EYES: Rinse cautiously with water for several minutes. Remove contact lenses, if present and easy to do. Continue rinsing.",
+            "PrecautionaryStatementCode": "P305+P351+P338"
+          }
+        ],
+        "Storage": [
+          {
+            "FullText": "Keep away from heat/sparks/open flames/hot surfaces. — No smoking.",
+            "PrecautionaryStatementCode": "P210"
+          },
+          {
+            "FullText": "Protect from sunlight.",
+            "PrecautionaryStatementCode": "P410"
+          },
+          {
+            "FullText": "Store in a well-ventilated place. Keep cool.",
+            "PrecautionaryStatementCode": "P403+P235"
+          }
+        ]
+      },
+      "SignalWord": "Warning"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "NO.6 JINCHONG ROAD MOHEKOU INDUSTRIAL PARK HUAISHANG DISTRICT BENGBU ANHUI PROVINCE CHINA",
+      "CompanyName": "Anhui Sealong Biotechnology Co., Ltd. (Shanghai) Co., Ltd.",
+      "Phone": "+86(0)552-5877908"
+    },
+    "TradeProductIdentity": {
+      "ProductNoUser": [
+        "T240106103E"
+      ],
+      "TradeNameEN": "Fumaric Acid"
+    }
+  },
+  "OtherInformation": {
+    "Desclaimer": "This Safety Data Sheet (SDS) was prepared according to UN GHS (the 9th revised edition). The data included was derived from international authoritative database and provided by the enterprise. Other information was based on the present state of our knowledge. We try to ensure the correctness of all information. However, due to the diversity of information sources and the limitations of our knowledge, this document is only for user's reference. Users should make their independent judgment of suitability of this information for their particular purposes. We do not assume responsibility for loss, damage or expense arising out of or in any way connected with the handling, storage, use or disposal of the product.",
+    "RelatedDocuments": "IPCS: The International Chemical Safety Cards (ICSC), IARC, OECD: The Global Portal to Information on Chemical Substances, CAMEO Chemicals, NLM: ChemIDplus, EPA: Integrated Risk Information System, U.S. Department of Transportation: ERG, Germany GESTIS-database on hazard substance",
+    "RevisionInformation": [
+      {
+        "FullText": "Version: 2024",
+        "LastUpdateDate": "2024-01-06"
+      }
+    ]
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Odour": "Weak odor",
+      "PhysicalState": "White powder"
+    },
+    "BoilingPointRelated": [
+      {
+        "ItemName": "Initial boiling point and boiling range",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 200.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "Densities": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 1.64
+          },
+          "Unit": "g/cm3"
+        }
+      }
+    ],
+    "FlashPoint": [
+      {
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 273.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "MeltingPointRelated": [
+      {
+        "ItemName": "Melting point/freezing point",
+        "NumericRangeWithUnitAndQualifier": {
+          "ExactValue": {
+            "Value": 287.0
+          },
+          "Unit": "°C"
+        }
+      }
+    ],
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "Non-flammable"
+          ]
+        },
+        "ItemName": "Flammability (solid or gas)"
+      }
+    ]
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "International chemical inventory",
+          "Regulations": [
+            {}
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "ConditionsToAvoid": "Electrostatic discharge, heat, humidity, etc.",
+    "HazardousDecompositionProducts": {
+      "Substance": "Under normal conditions of storage and use, hazardous decomposition products should not be produced."
+    },
+    "MaterialsToAvoid": "Strong oxides, strong acids, strong bases.",
+    "ReactivityDescription": "Contact with incompatible materials can cause decomposition or other chemical reactions.",
+    "StabilityDescription": "Stable under the correct conditions of use and storage."
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "Not available"
+              ]
+            }
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "Not available"
+              ]
+            }
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "Not available"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "The product is not dangerous. UN proper shipping name: None. UN Risk Classification: None. Packing Category: None.",
+        "TransportationType": "UN Classification"
+      }
+    ],
+    "InternationalRegulations": [
+      {
+        "RegulationName": [
+          {
+            "FullText": "The substance is not subject to IMO IMDG Code.",
+            "TransportationType": "IMO IMDG Code"
+          }
+        ]
+      },
+      {
+        "RegulationName": [
+          {
+            "FullText": "The substance is not subject to IATA DGR.",
+            "TransportationType": "IATA DGR"
+          }
+        ]
+      }
+    ]
+  }
+}

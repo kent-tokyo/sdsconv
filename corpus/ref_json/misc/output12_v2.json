@@ -1,0 +1,298 @@
+{
+  "AccidentalReleaseMeasures": {
+    "ContainmentAndCleaningUp": {
+      "FullText": "粉塵の飛散に注意しながら掃き集め、密閉容器に回収する。\n付着物、回収物などは、関係法規に基づき速やかに処分する。"
+    },
+    "EnvironmentalPrecautions": {
+      "FullText": "製品が排水路に排出されないよう注意する。"
+    },
+    "HumanExposureAndEmergencyMeasuress": {
+      "FullText": "個人用保護具を着用する。\n漏出場所の風上から作業し、風下の人を退避させる。\n漏出した場所の周辺に、ロープを張るなどして関係者以外の立入りを禁止する。"
+    }
+  },
+  "Composition": {
+    "CompositionAndConcentration": [
+      {
+        "SubstanceIdentifiers": {
+          "SubstanceIdentity": {
+            "CASno": {
+              "FullText": [
+                "9002-89-5"
+              ]
+            }
+          },
+          "SubstanceNames": {
+            "GenericName": "PVA (n=approx. 2,000) (degree of saponification ca. 80mol%)",
+            "IupacName": "ポリ(ビニルアルコール)(n=約2,000)(けん化度 約80mol%)"
+          }
+        }
+      }
+    ],
+    "CompositionType": "化学物質"
+  },
+  "Datasheet": {
+    "IssueDate": "2022-03-20",
+    "SDS-SchemaVersionNo": "1.0"
+  },
+  "DisposalConsiderations": {
+    "FullText": "適切な保護具を着用する。\n地方条例や国内規制に従う。\n焼却処理する場合には、可燃性溶剤に溶解または混合した後、アフターバーナー及びスクラバーを備えた焼却炉で焼却する。\n空容器を処分する時は、内容物を完全に除去した後に行う。\n処理施設がないなどの理由で廃棄できない場合は、許可を受けた産業廃棄物処理業者に委託する。"
+  },
+  "EcologicalInformation": [
+    {
+      "EcotoxicologicalInformation": {
+        "AquaticAcuteToxicity": {
+          "Result": [
+            {}
+          ]
+        }
+      }
+    }
+  ],
+  "ExposureControlPersonalProtection": {
+    "AppropriateEngineeringControls": [
+      "作業者が直接暴露されないように、できるだけ密閉化した設備又は局所排気装置を設ける。取扱い場所の近くに洗眼及び身体洗浄用の設備を設ける。"
+    ],
+    "PersonalProtectionEquipment": {
+      "EyeProtection": [
+        {
+          "FullText": "保護眼鏡。状況に応じ保護面。"
+        }
+      ],
+      "HandProtection": [
+        {
+          "FullText": "保護手袋。"
+        }
+      ],
+      "RespiratoryProtection": [
+        {
+          "FullText": "防塵マスク、簡易防塵マスク等。"
+        }
+      ],
+      "SkinProtection": [
+        {
+          "FullText": "保護衣。状況に応じ、保護長靴。"
+        }
+      ]
+    }
+  },
+  "FireFightingMeasures": {
+    "FireFightingProcedures": {
+      "FullText": "消火作業は、風上から行い、周囲の状況に応じた適切な消火方法を用いる。\n関係者以外は安全な場所に退去させる。\n周辺火災時、移動可能な容器は、速やかに安全な場所に移す。"
+    },
+    "MediaToBeUsed": {
+      "FullText": "粉末, 泡, 水噴霧, 二酸化炭素"
+    },
+    "SpecialProtectiveEquipmentForFirefighters": {
+      "FullText": "消火作業の際は、必ず保護具を着用する。"
+    }
+  },
+  "FirstAidMeasures": {
+    "ExposureRoute": {
+      "FirstAidEye": {
+        "FullText": "水で数分間注意深く洗うこと。コンタクトレンズを容易にはずせる場合は外して洗うこと。眼の刺激が続く場合は、医師の診断、手当てを受けること。"
+      },
+      "FirstAidIngestion": {
+        "FullText": "気分が悪い時は、医師の診断、手当てを受けること。口をすすぐこと。"
+      },
+      "FirstAidInhalation": {
+        "FullText": "空気の新鮮な場所に移し、呼吸しやすい姿勢で休息させること。気分が悪い時は、医師の診断、手当てを受けること。"
+      },
+      "FirstAidSkin": {
+        "FullText": "直ちに、汚染された衣類をすべて脱ぐこと、取り除くこと。皮膚を流水、シャワーで洗うこと。皮膚刺激または発疹が生じた場合は、医師の診断、手当てを受けること。"
+      }
+    }
+  },
+  "HandlingAndStorage": {
+    "SafeHandling": {
+      "HandlingPrecautions": "粉塵が飛散しないように注意する。\n取扱い後は手や顔などをよく洗う。\n皮膚、眼および衣類との接触を避ける。",
+      "TechnicalMeasuresAndStorageConditions": {
+        "ProtectiveMeasures": "適切な保護具を着用する。",
+        "VentilationCondition": "取扱いは換気のよい場所で行う。\n粉塵やエアゾールが発生する場合には、局所排気を用いる。"
+      }
+    },
+    "Storage": {
+      "ConditionsForSafeStorage": {
+        "TechnicalMeasuresAndStorageConditions": "容器を密栓して冷暗所に保管する。\n酸化剤などの混触危険物質から離して保管する。\n法令の定めるところに従う。"
+      }
+    }
+  },
+  "HazardIdentification": {
+    "HazardLabelling": {
+      "SignalWord": "該当区分なし"
+    }
+  },
+  "Identification": {
+    "SupplierInformation": {
+      "Address": "東京都北区豊島6丁目15番9号",
+      "CompanyName": "東京化成工業株式会社",
+      "Fax": "03-3668-0520",
+      "Phone": "03-3668-0489"
+    },
+    "TradeProductIdentity": {
+      "ProductNoUser": [
+        "P0804"
+      ],
+      "TradeNameJP": "Poly(vinyl Alcohol) (n=approx. 2000) (degree of saponification ca. 80mol%)"
+    }
+  },
+  "OtherInformation": {
+    "Desclaimer": "このSDSは、我々が知り得た情報を基に誠意をもって作成しておりますが、記載のデータや危険、有害性の評価に関しては、いかなる保証もなすものではありません。ご使用に先立って、危険、有害性情報のみならず、ご使用になる機関、地域、国の最新の規則、条例、法規制などを調査し、それらを最優先してください。\nご購入いただいた商品は、安全性の点からも速やかに消費されることを大前提としております。その後、新たな情報や修正が加えられる場合もありますので万一ご使用時期が大幅にずれ込んだり、ご懸念を抱かれた場合には、改めて弊社にご相談ください。\nまた記載の注意事項は通常の取扱を対象としたものであって、特別な取扱をする場合は状況に適した安全対策を実施の上、充分な注意を払う必要があります。\nすべての化学製品は『未知の危険性、有害性がある』という認識で扱うべきであり、その危険性、有害性も使用時の環境、扱い方、あるいは保管の状態、期間によって大きく異なります。ご使用時はもちろんのこと、開封から保管、廃棄に至るまで、専門的知識、経験のある方のみ、あるいはそれらの方々の指導のもとで取扱うことを警告します。\nご使用各位の責任において、安全な使用条件を設定くださるよう、お願い申し上げます。",
+    "RelatedDocuments": "記載内容の問い合わせ先：東京都中央区日本橋本町4丁目10番2号 学術部 電話番号：03-5640-8863 FAX番号：03-5640-8868"
+  },
+  "PhysicalChemicalProperties": {
+    "BasePhysicalChemicalProperties": {
+      "Colour": "白色 ～ うすい黄色",
+      "Odour": "情報なし",
+      "PhysicalState": "固体"
+    },
+    "OtherPhysicalChemicalProperty": [
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "結晶 ～ 粉末"
+          ]
+        },
+        "ItemName": "形状"
+      },
+      {
+        "AdditionalInfo": {
+          "FullText": [
+            "情報なし"
+          ]
+        },
+        "ItemName": "オクタノール/水分配係数"
+      }
+    ],
+    "Solubilities": {
+      "OtherSolubility": [
+        {
+          "AdditionalInfo": {
+            "FullText": [
+              "情報なし"
+            ]
+          }
+        }
+      ],
+      "WaterSolubility": [
+        {
+          "AdditionalInfo": {
+            "FullText": [
+              "難溶"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "RegulatoryInformation": {
+    "OtherLegislation": {
+      "Legislation": [
+        {
+          "LegislationName": "適用法令",
+          "Regulations": [
+            {
+              "AdditionalInfo": {
+                "FullText": [
+                  "該当なし"
+                ]
+              },
+              "RegulationName": "該当なし"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "StabilityReactivity": {
+    "HazardousDecompositionProducts": {
+      "Substance": "一酸化炭素、二酸化炭素など"
+    },
+    "MaterialsToAvoid": "酸化剤",
+    "ReactivityDescription": "特別な反応性は報告されていない。",
+    "StabilityDescription": "適切な条件下においては安定。"
+  },
+  "ToxicologicalInformation": [
+    {
+      "AcuteToxicity": {
+        "ExposureRoute": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "ipr-mus LD50:2000 mg/kg"
+              ]
+            },
+            "ExposureRouteName": "腹腔内投与"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "orl-mus LD50:>4000 mg/kg\norl-rat LD50:>20 g/kg"
+              ]
+            },
+            "ExposureRouteName": "経口"
+          },
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "rec-mus LD50:>1000 mg/kg"
+              ]
+            },
+            "ExposureRouteName": "直腸内投与"
+          }
+        ]
+      },
+      "AdditionalToxicologicalInformation": "RTECS番号：TR8100000",
+      "Carcinogenicity": {
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "IARC = 3 (人に対して発癌性があると分類できない化学品)"
+              ]
+            }
+          }
+        ]
+      },
+      "GermCellMutagenicity": {
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "cyt-mus-ivg 0.5 ppb\nslt-mus-ivg 0.5 ppb"
+              ]
+            }
+          }
+        ]
+      },
+      "ReproductiveToxicity": {
+        "Result": [
+          {
+            "AdditionalInfo": {
+              "FullText": [
+                "scu-rat TDLo:2500 mg/kg\nimp-rat TDLo:10 g/kg"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "TransportInformation": {
+    "DomesticRegulations": [
+      {
+        "FullText": "運搬に際しては容器に漏れのないことを確かめ､転倒､落下､損傷のないように積み込み､荷崩れの防止を確実に行い､法令の定めるところに従う。",
+        "TransportationType": "陸上輸送"
+      }
+    ],
+    "InternationalRegulations": [
+      {
+        "RegulationName": [
+          {
+            "FullText": "国連番号：該当なし。\n国連分類：国連の分類基準に該当せず。",
+            "TransportationType": "国際輸送"
+          }
+        ]
+      }
+    ]
+  }
+}
