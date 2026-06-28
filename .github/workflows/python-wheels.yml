@@ -37,7 +37,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           command: build
-          args: --release --strip --manifest-path sdsconv_py/pyproject.toml --out dist
+          args: --release --strip --manifest-path sdsconv_py/Cargo.toml --out dist
           manylinux: auto
 
       - name: Upload wheel artifact
@@ -60,7 +60,7 @@ jobs:
       - uses: PyO3/maturin-action@v1
         with:
           command: sdist
-          args: --manifest-path sdsconv_py/pyproject.toml --out dist
+          args: --manifest-path sdsconv_py/Cargo.toml --out dist
       - uses: actions/upload-artifact@v4
         with:
           name: sdist
