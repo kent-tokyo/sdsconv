@@ -765,16 +765,23 @@ pub async fn run_eval_corpus(params: EvalCorpusParams, log: LogFn) -> anyhow::Re
                     let _ = std::fs::write(&ev_path, serde_json::to_string_pretty(&ev_report).unwrap_or_default());
 
                     // 4. QC via quality_check.py
+                    // quality_check.py requires a lang arg: ja / en / zh-cn / zh-tw
+                    let qc_lang = match source_language.as_str() {
+                        "zh-CN" => "zh-cn",
+                        "zh-TW" => "zh-tw",
+                        "en"    => "en",
+                        _       => "ja",
+                    };
                     let (critical_count, high_count, medium_count, qc_lines) =
-                        run_qc_script(&qc_script, &json_path, &log2).await;
+                        run_qc_script(&qc_script, &json_path, qc_lang, &log2).await;
                     // Save QC findings
                     let qc_path = output_dir.join("validation_reports").join(format!("{stem}_qc.jsonl"));
                     let _ = std::fs::write(&qc_path, qc_lines.join("\n"));
 
                     // 5. Score
-                    let total_checks = (critical_count + high_count + medium_count).max(1);
+                    // Flat penalty: CRIT=-40, HIGH=-5, MED=-1 (capped at 0)
                     let penalty = critical_count * 40 + high_count * 5 + medium_count;
-                    let overall_score = (100.0f32 - (penalty as f32 / total_checks as f32 * 100.0)).max(0.0);
+                    let overall_score = (100.0f32 - penalty as f32).max(0.0);
                     let grade = compute_grade(overall_score, critical_count, high_count);
 
                     Ok(EvalRecord {
@@ -866,6 +873,7 @@ fn compute_grade(score: f32, crit: usize, high: usize) -> String {
 async fn run_qc_script(
     qc_script: &Path,
     json_path: &Path,
+    lang: &str,
     log: &LogFn,
 ) -> (usize, usize, usize, Vec<String>) {
     if !json_path.exists() {
@@ -874,10 +882,12 @@ async fn run_qc_script(
     let result = tokio::task::spawn_blocking({
         let qc   = qc_script.to_path_buf();
         let json = json_path.to_path_buf();
+        let lang = lang.to_string();
         move || {
             std::process::Command::new("python3")
                 .arg(&qc)
                 .arg(&json)
+                .arg(&lang)
                 .arg("--jsonl")
                 .output()
         }
@@ -890,24 +900,23 @@ async fn run_qc_script(
     };
 
     let stdout = String::from_utf8_lossy(&output.stdout);
-    let mut crit = 0usize;
-    let mut high = 0usize;
-    let mut med  = 0usize;
-    let mut lines: Vec<String> = Vec::new();
+    let lines: Vec<String> = stdout.lines()
+        .map(|l| l.trim().to_string())
+        .filter(|l| !l.is_empty())
+        .collect();
 
-    for line in stdout.lines() {
-        let line = line.trim();
-        if line.is_empty() { continue; }
-        lines.push(line.to_string());
-        if let Ok(v) = serde_json::from_str::<serde_json::Value>(line) {
-            match v.get("level").and_then(|l| l.as_str()) {
-                Some("CRIT") => crit += 1,
-                Some("HIGH") => high += 1,
-                Some("MED")  => med  += 1,
-                _ => {}
-            }
-        }
-    }
+    // quality_check.py --jsonl appends ONE summary JSON at the end:
+    // {"crit": N, "high": N, "med": N, "issues": [{...}, ...]}
+    let (crit, high, med) = lines.iter().rev()
+        .find_map(|line| {
+            let v = serde_json::from_str::<serde_json::Value>(line).ok()?;
+            let c = v.get("crit").and_then(|x| x.as_u64()).unwrap_or(0) as usize;
+            let h = v.get("high").and_then(|x| x.as_u64()).unwrap_or(0) as usize;
+            let m = v.get("med").and_then(|x| x.as_u64()).unwrap_or(0) as usize;
+            Some((c, h, m))
+        })
+        .unwrap_or((0, 0, 0));
+
     (crit, high, med, lines)
 }
 
@@ -980,13 +989,20 @@ fn write_failures_by_rule(out_dir: &Path, recs: &[EvalRecord]) -> anyhow::Result
         let stem = path.file_stem().and_then(|s| s.to_str()).unwrap_or("").to_string();
         let file_stem = stem.trim_end_matches("_qc").to_string();
         if let Ok(content) = std::fs::read_to_string(&path) {
-            for line in content.lines() {
-                if let Ok(v) = serde_json::from_str::<serde_json::Value>(line) {
-                    let rule  = v["rule"].as_str().unwrap_or("UNKNOWN").to_string();
-                    let level = v["level"].as_str().unwrap_or("?").to_string();
-                    let entry = rule_map.entry(rule).or_insert_with(|| (level.clone(), 0, Default::default()));
-                    entry.1 += 1;
-                    entry.2.insert(file_stem.clone());
+            // quality_check.py --jsonl: the summary JSON is the last JSON-parseable line
+            // It contains an "issues" array: [{"level": "HIGH", "rule": "...", "message": "..."}]
+            let summary: Option<serde_json::Value> = content.lines()
+                .filter_map(|l| serde_json::from_str(l).ok())
+                .last();
+            if let Some(v) = summary {
+                if let Some(issues) = v.get("issues").and_then(|i| i.as_array()) {
+                    for issue in issues {
+                        let rule  = issue["rule"].as_str().unwrap_or("UNKNOWN").to_string();
+                        let level = issue["level"].as_str().unwrap_or("?").to_string();
+                        let e = rule_map.entry(rule).or_insert_with(|| (level.clone(), 0, Default::default()));
+                        e.1 += 1;
+                        e.2.insert(file_stem.clone());
+                    }
                 }
             }
         }
