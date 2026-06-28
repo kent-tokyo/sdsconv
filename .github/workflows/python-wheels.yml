@@ -40,6 +40,28 @@ jobs:
           args: --release --strip --manifest-path sdsconv_py/Cargo.toml --out dist
           manylinux: auto
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Smoke test wheel
+        shell: bash
+        run: |
+          pip install --no-index --find-links dist sdsconv
+          python - <<'PY'
+          import json, pathlib, sdsconv
+
+          assert hasattr(sdsconv, "extract_text"), "extract_text missing"
+          assert hasattr(sdsconv, "validate"),     "validate missing"
+
+          data = json.loads(
+              pathlib.Path("examples/mhlw_allyl_chloride/expected.json").read_text(encoding="utf-8")
+          )
+          findings = sdsconv.validate(data)
+          print(f"smoke OK — validate() returned {len(findings)} findings")
+          PY
+
       - name: Upload wheel artifact
         uses: actions/upload-artifact@v4
         with:
