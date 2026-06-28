@@ -1,230 +1,216 @@
 # sdsconv
 
-安全データシート（SDS）文書（Word/PDF）と厚生労働省が定める標準フォーマット（JSON）を**双方向に変換**するGUI + CLIツールです。
-
-**日本語**・英語・簡体字中国語・繁体字中国語のSDS文書に対応。
+**SDS文書を厚生労働省SDSデータ交換フォーマットJSONへ変換し、スキーマ検証・GHS/CAS検証・コーパス規模品質評価まで行う Python-first / Rust-powered ツールキット。**
 
 [English](README.md) | [中文](README_zh.md)
 
 ---
 
-## ダウンロード
+## インストール
 
-| プラットフォーム | ダウンロード |
+```bash
+pip install sdsconv                   # Python バインディング
+pip install "sdsconv[analysis]"       # + causasv 品質分析
+cargo install sdsconv                 # CLI / GUI バイナリ
+```
+
+---
+
+## クイックスタート — Python
+
+```python
+import sdsconv, os
+
+# SDS文書 → 厚労省標準JSON
+data, report = sdsconv.to_json_with_report(
+    "sample.pdf",
+    lang="ja",
+    strict_mhlw=True,
+)
+
+# 構造化 findings を取得
+findings = sdsconv.validate(data, strict_mhlw=True)
+
+print(f"抽出セクション数: {len(report['populated_sections'])}")
+print(f"検知件数: {len(findings)} (HIGH: {sum(1 for f in findings if f['level']=='HIGH')})")
+
+# MHLW JSON を保存
+sdsconv.write_json(data, "output.json")
+```
+
+コーパス規模評価（人手レビュー不要）:
+
+```python
+from sdsconv.eval import eval_corpus
+
+df = eval_corpus(
+    input_dir="data/sds_raw",
+    output_dir="runs/eval_001",
+    jobs=8,
+)
+print(df[["filename", "overall_score", "grade", "high_count"]].head(20))
+```
+
+---
+
+## なぜ sdsconv か
+
+- **MHLW ネイティブ**: 厚生労働省 SDS データ交換フォーマット v1.0（`SDS_Schema_v1.0.json`）への直接変換とスキーマ検証に対応。
+- **根拠付き抽出**: LLM が SDS 自由記述文を約200の深いネストフィールドへマッピング。フィールド単位の原文照合によりハルシネーションを検出。
+- **コーパス規模品質評価**: `eval_corpus` は数百件の SDS を処理し、ルール別失敗件数・セクションスコア・`causasv_features.csv` を出力。人手レビュー不要。
+- **ロックインなし**: Anthropic Claude・OpenAI GPT・Google Gemini・Mistral・Groq・Cohere・任意の OpenAI 互換ローカルエンドポイントに対応。
+- **Rust コア**: 抽出・スキーマ検証・GHS/CAS チェック・DOCX/HTML 生成はネイティブコードで実行。Python バインディングは薄いラッパー。
+
+---
+
+## MHLW 準拠
+
+令和7年3月31日公開の厚労省 SDS データ交換フォーマット v1.0 に準拠します。
+
+| ルール | 動作 |
 |---|---|
-| **macOS**（Homebrew） | `brew tap kent-tokyo/sdsconv && brew install --cask sdsconv` |
-| **macOS**（直接ダウンロード — ユニバーサル、Apple Silicon + Intel） | [sdsconv-macos.zip](https://github.com/kent-tokyo/sdsconv/releases/latest/download/sdsconv-macos.zip) |
-| **Windows**（ポータブル .exe — インストール不要） | [sdsconv-windows-portable.zip](https://github.com/kent-tokyo/sdsconv/releases/latest/download/sdsconv-windows-portable.zip) |
-| **Rust / CLI** | `cargo install sdsconv` |
+| スキーマ検証 | `SDS_Schema_v1.0.json` に対して検証 |
+| 空フィールド除去 | §3.3 準拠で `""`・`null`・`[]`・`{}` を除去 |
+| AdditionalInfo | 公式スキーマ外の情報は `AdditionalInfo.FullText` に格納 |
+| `--strict-mhlw` | HIGH/CRIT が存在する場合は終了コード1（CLI）または `ValueError`（Python） |
+| CRIT/HIGH/MED findings | ルールID・重大度・パス・メッセージを含む構造化レポート |
 
-→ [全リリース・更新履歴](https://github.com/kent-tokyo/sdsconv/releases)
+**検証ルール例:** GHS H/P コード妥当性（GHS Rev.10）、CAS フォーマット＋チェックデジット、Section 2 GHS 整合性（H コード ↔ 絵表示 ↔ 注意喚起語）、Section 3 成分行対応（名前/CAS/濃度）、UN 番号完全性、濃度範囲チェック、コード重複検出など。
 
-> **Windows の注意：** SmartScreen に「Windows によって PC が保護されました」と表示された場合は、**「詳細情報」→「実行」**をクリックしてください。
+品質ベースライン（30件ランダムサンプル、seed=42）:
+> CRIT=0 · 平均スコア 89.6 · 主要課題: `S2-HAZARD-NO-PICTOGRAM`・`S15-ZHCN-NO-GB`・`S14-NO-SHIPPING-NAME`
+
+全ルール詳細 → [docs/quality-check_ja.md](docs/quality-check_ja.md)
+
+---
+
+## コーパス評価
+
+人手レビューなしで実行:
+
+```python
+from sdsconv.eval import eval_corpus
+
+df = eval_corpus("data/sds_raw", "runs/eval_001", jobs=8)
+```
+
+ファイルごとの出力:
+
+| ファイル | 内容 |
+|---|---|
+| `generated/<stem>.json` | MHLW 標準 JSON |
+| `reports/<stem>.json` | ConversionReport（言語・セクション・警告） |
+| `findings/<stem>.json` | 構造化 validation findings |
+| `summary.csv` | ファイルごとのスコア・グレード |
+| `failures_by_rule.csv` | ルール別失敗件数・影響ファイル数 |
+
+[causasv](https://github.com/kent-tokyo/causasv) で失敗要因を因果分析:
+
+```python
+from sdsconv.causasv_bridge import print_ranking
+print_ranking("runs/eval_001/causasv_features.csv")
+```
+
+---
+
+## CLI
+
+```bash
+# PDF/DOCX/XLSX/HTML/URL → MHLW JSON
+sdsconv to-json --input input.pdf --output output.json --lang ja
+
+# 補正パス＋PubChem照合付き
+sdsconv to-json --input input.pdf --output output.json --correct --enrich
+
+# JSON → Word文書（JIS Z 7253 16項目）
+sdsconv to-docx --input output.json --output result.docx --lang ja
+
+# JSON → HTML（印刷対応・A4・inline CSS）
+sdsconv to-html --input output.json --output result.html --lang ja
+
+# strict MHLW モードで検証
+sdsconv validate --input output.json --strict-mhlw
+
+# バッチ処理（ディレクトリ単位）
+sdsconv to-json --input-dir data/ --output-dir out/ --jobs 8
+
+# コーパス評価
+sdsconv eval-corpus --input-dir data/sds_raw --output-dir runs/eval_001 --jobs 8
+```
+
+CLI 詳細リファレンス → [sdsconv/README_ja.md](./sdsconv/README_ja.md)
+
+---
+
+## REST API
+
+```bash
+# サーバー起動（デフォルト: 127.0.0.1:3000）
+SDS_SERVER_TOKEN=secret sdsconv-server
+
+# PDF を変換
+curl -X POST http://localhost:3000/api/to-json \
+  -H "Authorization: Bearer secret" \
+  -F "file=@input.pdf"
+```
+
+エンドポイント: `POST /api/to-json` · `POST /api/to-docx` · `POST /api/to-html` · `POST /api/validate` · `GET /api/health`
 
 ---
 
 ## GUI
 
-`sdsconv` を**引数なし**で起動（またはダウンロードしたアプリをダブルクリック）するとGUIが開きます:
+引数なしで起動するとグラフィカルインターフェースが開きます:
 
 ```bash
 sdsconv
 ```
 
-5つのタブを持つウィンドウが起動します:
+5タブ構成: **変換** · **文書生成** · **検証** · **テキスト抽出** · **設定**
 
-| タブ | 機能 |
-|---|---|
-| **変換** | SDS文書（PDF/DOCX/XLSX/HTML/URL）→ MHLW標準JSON |
-| **文書生成** | MHLW JSON → DOCX / HTML / PDF（DOCXテンプレート対応） |
-| **検証** | MHLW JSONの構造検証（OK/警告/エラーをカラー表示） |
-| **テキスト抽出** | 文書からテキスト抽出（LLM API不要） |
-| **設定** | APIキー・モデル名・base URL・品質・言語・UI言語 |
-
-| 変換タブ | 文書生成タブ | テキスト抽出タブ |
-|---|---|---|
-| ![変換タブ](docs/tab_convert.png) | ![文書生成タブ](docs/tab_generate.png) | ![テキスト抽出タブ](docs/tab_extract.png) |
-
-ファイルを任意のタブに**ドラッグ&ドロップ**すると入力フィールドに自動入力されます。
-設定は `~/.config/sdsconv/config.toml` に保存され、次回起動時に復元されます。
+デスクトップアプリ: [macOS](https://github.com/kent-tokyo/sdsconv/releases/latest/download/sdsconv-macos.zip) · [Windows](https://github.com/kent-tokyo/sdsconv/releases/latest/download/sdsconv-windows-portable.zip) · `brew install --cask sdsconv`
 
 ---
 
-## 特徴
+## 対応入力・言語・バックエンド
 
-- **SDS文書 → JSON**: PDF/DOCX/XLSX/TXT/**HTML・URL** からテキストを抽出し、厚生労働省のSDS情報交換標準フォーマット v1.0（JSON）に変換します。並列抽出・自動リトライ対応。PDFは3段階フォールバックで処理: `pdf-extract` → `pdftotext`（CIDフォント/Shift-JIS日本語PDF）→ `pdftoppm`+`tesseract` OCRまたはClaude Vision API（スキャンPDF）。
-- **JSON → DOCX**: 標準JSONからJIS Z 7253準拠の16項目Word文書を生成します。言語別の項目見出しに対応。
-- **JSON → HTML**: inline CSS と `@media print` 対応の自己完結型HTML5文書を生成します（`to-html`）。
-- **JSON → PDF**: LibreOffice CLI経由でPDFに変換します（`to-pdf`、要 `soffice`）。
-- **GHS/CASバリデーション**: GHS Rev.10準拠のH-code（H200–H420）・P-code（P101–P503）検証、CAS番号フォーマット＋チェックデジット検証。`--enrich` フラグでPubChem照合も可能。
-- **多国SDS対応**: `--lang` からソース国を自動推論（zh-cn→中国、zh-tw→台湾、ja→日本）。`--country cn|tw|kr|jp` で明示的に上書き可能。国別LLM抽出ルールをシステムプロンプトに注入 — 中国（GB/T 16483）: 24時間緊急連絡先・GBZ 2 OEL・GB 13690規制参照；台湾（CNS 15030）: CNS見出し・NERC緊急連絡先；韓国（K-GHS Rev.6）: KEC番号・KOSHA参照・K-REACH状況。国別バリデーション（`validate_country()`）とコンプライアンスギャップレポート（`ComplianceDiffReport`）を `ConversionReport` に含めます。
-- **バリデーション駆動補正パス**: `--correct` フラグで第2のLLMコールが有効になり、バリデーターが検出した無効なGHS H/P-codeを修正します。CASチェックデジット補正はLLMコールなしで確定的に実行されます。
-- **多言語対応**: `ja` / `en` / `zh-CN` / `zh-TW` の入出力に対応。
-- **LLMバックエンドを拡張可能**: Anthropic Claude、OpenAI GPT、Google Gemini、Mistral、Groq、Cohere の実装を同梱。`LlmBackend`トレイトを実装すれば任意のLLMを使用可能。
-- **ライブラリ + CLI**: Rustライブラリとして組み込み利用、またはCLIとして単独利用できます。
-- **セキュリティ強化済みRESTサーバー**: タイミング攻撃対策済みBearer token認証（`constant_time_eq`）、IPv6フルカバレッジのSSRF対策（`fc00::/7`・`fe80::/10`・IPv4マップアドレス）、リダイレクト無効化HTTPクライアント、50MBアップロード上限。
+**入力形式:** PDF（テキスト・CID/Shift-JIS フォント・スキャン）· DOCX · XLSX · TXT · HTML · URL
 
----
+**ソース言語:** `ja`（JIS Z 7253）· `en`（GHS/OSHA HazCom）· `zh-cn`（GB/T 16483）· `zh-tw`（CNS 15030）
 
-## なぜLLMを使うのか
-
-SDS文書は**非構造化の文章**であり、スプレッドシートのような定形データではありません。同じ規格に準拠していても、文書ごとに以下のような差異があります：
-
-- **項目順序の違い** — メーカーによって16項目の記載順が異なる
-- **表現・表記の多様性** — 同じデータが「≥99.5%」「99.5%以上」「約100%含有」など様々な表現で書かれる
-- **見出し名の差異** — JIS Z 7253、GHS/OSHA HazCom、GB/T 16483、CNS 15030で同じ概念に異なるラベルが使われる
-- **多言語の混在** — 日本語SDS内に英語の化学物質名・CAS番号が混在することが多い
-
-厚生労働省の標準フォーマットには**約200の深くネストされたフィールド**があります。文書のバリエーションごとにルールベースのパーサを書くことは非現実的です。LLMは人間と同様に文書を読み、書式に依存せず自由形式のテキストを正しいスキーマフィールドにマッピングし、多言語文書もネイティブに処理できます。
-
-`LlmBackend`トレイトにより抽出エンジンを差し替え可能で、Claude・GPT-4o・Geminiや将来の新モデルにも対応できます。
-
----
-
-## クイックスタート
-
-```bash
-# CLIをインストール
-cargo install sdsconv
-
-# PDF → MHLW標準JSON
-export ANTHROPIC_API_KEY=sk-ant-...
-sdsconv to-json --input input.pdf --output output.json
-
-# URLから直接変換
-sdsconv to-json --input https://example.com/sds.html --output output.json
-
-# JSON → Word文書
-sdsconv to-docx --input output.json --output result.docx --lang ja
-
-# JSON → HTML（印刷対応・A4）
-sdsconv to-html --input output.json --output result.html --lang ja
-
-# JSON → PDF（LibreOffice が必要）
-sdsconv to-pdf --input output.json --output result.pdf --lang ja
-
-# JSONをバリデーション（GHSコード・CAS番号検証含む）
-sdsconv validate --input output.json
-
-# 変換後にPubChem照合（--enrich）
-sdsconv to-json --input input.pdf --output output.json --enrich
-
-# 中国語SDS（GB/T 16483）を国指定＋補正パスで変換
-sdsconv to-json --input input.pdf --output output.json --lang zh-cn --country cn --correct
-```
-
-CLIの詳細は [`sdsconv` README](./sdsconv/README.md)、ライブラリAPIは [`sdsconv-core` README](./sdsconv_core/README.md) を参照してください。
+**LLM バックエンド:** Anthropic Claude · OpenAI GPT · Google Gemini · Mistral · Groq · Cohere · ローカル（OpenAI 互換エンドポイント）
 
 ---
 
 ## 開発者向け
 
-| クレート | 説明 |
-|---|---|
-| [`sdsconv`](https://crates.io/crates/sdsconv) | CLI + GUIバイナリ |
-| [`sdsconv-core`](https://crates.io/crates/sdsconv-core) | Rustライブラリ — LLM抽出・DOCX/HTML生成・MHLWスキーマ |
+**Rust ライブラリ:**
 
 ```toml
 [dependencies]
 sdsconv-core = "0.3"
 ```
 
+Rust API 詳細 → [sdsconv_core/README_ja.md](./sdsconv_core/README_ja.md)
+
+**クレート:** [`sdsconv`](https://crates.io/crates/sdsconv) · [`sdsconv-core`](https://crates.io/crates/sdsconv-core)
+
+**Python パッケージ:** [`sdsconv`](https://pypi.org/project/sdsconv/) — `pip install sdsconv`
+
 ---
 
-## 言語対応
+## セキュリティ・プライバシー
 
-| 言語 | `--lang` | ソース文書形式 | 出力DOCX見出し |
-|---|---|---|---|
-| 日本語 | `ja` | JIS Z 7253準拠SDS | JIS Z 7253 |
-| 英語 | `en` | GHS/OSHA HazCom形式 | GHS Rev.10 / ISO 11014 |
-| 簡体字中国語 | `zh-cn` | GB/T 16483形式 | GB/T 16483-2012 |
-| 繁体字中国語 | `zh-tw` | CNS 15030形式 | CNS 15030 |
+- **クラウド LLM の注意事項**: クラウド LLM バックエンドを使用する場合、SDS 文書のテキストが API プロバイダーに送信されます。機密情報・営業秘密を含む SDS をクラウド API に送信しないでください。
+- **ローカル運用**: `--backend local` と任意の OpenAI 互換エンドポイント（Ollama・LM Studio 等）を使用することで完全オフライン運用が可能です。データは機器外に出ません。
+- **raw SDS コーパス**: `corpus/raw/` · `data/sds_raw/` を `.gitignore` に追加してください。`corpus/manifest.jsonl`（URL と sha256 ハッシュのみ）のみコミットしてください。
+- **REST サーバー**: タイミング攻撃対策済み Bearer token 認証、IPv6 フルカバレッジの SSRF 対策、リダイレクト無効化 HTTP クライアント、50 MB アップロード上限。
 
 ---
 
 ## 競合製品との比較
 
-### オープンソースツール
-
-| | **sdsconv**（本ツール） | [sds_parser](https://github.com/astepe/sds_parser) | [tungsten](https://github.com/CrucibleSDS/tungsten) |
-|---|---|---|---|
-| 言語 | Rust | Python | Python |
-| AI/LLM | あり（差し替え可能） | なし（正規表現） | なし（ルールベース） |
-| 厚労省JSON | あり | なし | なし |
-| 双方向変換 | あり（DOCX + HTML + PDF） | なし | なし |
-| HTML/URL入力 | あり | なし | なし |
-| GHS/CAS検証 | あり | なし | なし |
-| 多言語対応 | ja / en / zh-CN / zh-TW | 限定的 | 英語のみ |
-
-### 商用製品（日本）
-
-| | **sdsconv**（本ツール） | [SDS Meister](https://www.kcs.co.jp/ja/service/ind/general/chemical/sds.html) | [SmartSDS](https://smartsds.jp/) | [Dr.EHS Chemical](https://www.iad.co.jp/drehs/chemical2/) |
-|---|---|---|---|---|
-| 提供元 | — | さくらケーシーエス | テクノヒル | アイアンドディー |
-| AI | あり（自前APIキー） | なし | あり（翻訳） | AI-OCR |
-| 厚労省JSON | あり | あり | あり | あり |
-| PDF→JSON変換 | あり | なし（作成専用） | 一部（日本語のみ） | あり |
-| オープンソース | あり（MIT/Apache-2.0） | なし | なし | なし |
-
-### 商用製品（海外）
-
-| | **sdsconv**（本ツール） | [Affinda](https://www.affinda.com/documents/material-safety-data-sheet) | [SDS Manager API](https://sdsmanager.com/) | [safetydatasheetapi.com](https://safetydatasheetapi.com/) | [EcoOnline](https://www.ecoonline.com/) |
-|---|---|---|---|---|---|
-| AI/LLM | 差し替え可能なLLM | LLM（学習型） | NLP/ML | ML + OCR | AI/NLP |
-| 入力 | PDF / DOCX | PDF / Word | PDF | PDF（スキャン含む） | PDF |
-| 出力 | 厚労省JSON + DOCX | カスタムJSON | JSON / XML | JSON / XML / CSV | 内部データのみ |
-| オープンソース | あり | なし | なし | なし | なし |
-
-**本ツールの強み**: 厚生労働省標準JSON・双方向変換（JSON→DOCX/HTML/PDF）・クラウド不要のローカル実行・GHS Rev.10バリデーション・PubChem照合・差し替え可能なLLMバックエンドに対応する、唯一のオープンソースソリューションです。
-
----
-
-## ロードマップ
-
-### 次期リリース（0.3.x）
-- [ ] DOCXの表レイアウト — 第3項（成分情報・4列表）、第2項（H/Pコード・2列表）、第9項（物性・2列表）
-
-### 0.3.8 / 0.2.8 で完了
-- [x] QC r27: S2-HAZARD-NO-PICTOGRAM（MED）— アクティブ信号語＋H-codeあり・Pictogram完全ゼロ（PDF画像専用絵表示の検出不能パターンを検出）
-- [x] QC r27: S3-CONC-UNIT-NO-VALUE（MED）— 混合物成分の濃度に単位（%）はあるが数値なし
-- [x] QC r27: 偽陽性修正 — `危險`（zh-tw 繁体字「危険」）と `Not applicable`（en）を有効信号語に追加；S14 UN番号・包装等級・正式品名の検出を繁体字・簡体字形式に拡張
-- [x] 新ツール `tools/roundtrip_random30.py` — シード固定・件数可変のランダムサンプリング変換テスト（ルール別ランキングレポート付き）
-- [x] ラウンドトリップテスト r27 ベースライン（seed=42, n=30）: 30/30 JSON ✓、30/30 DOCX ✓、CRIT=0・HIGH=14・MED=239
-
-### 0.3.6 / 0.2.6 〜 0.3.7 / 0.2.7 で完了
-- [x] QC r24: 新規5ルール（S1-ZH-NO-EMERGENCY・S7-FLAMMABLE-STORAGE-TEMP・S8-NO-ENG-CONTROLS・S10-NO-INCOMPATIBLE・CROSS-STALE-DATE）
-- [x] QC r24: S8-OEL-NO-NUMERIC 誤検知修正 — 中国語「単位→数値」形式・「OEL不要」表現の除外パターン追加
-- [x] QC r24: S5-EMPTY 閾値 30→15 文字（中国語の簡潔な消火情報の誤検知削減）
-- [x] ラウンドトリップテスト: JSONLパース修正・バリデータ文字列配列対応; r24ベースライン 30/30 成功、CRIT=0・HIGH=9・MED=176
-- [x] QC r25: S2-EXPLOSIVE-NO-GHS01 / S2-ENV-NO-GHS09 偽陰性バグ修正（日付・Hコード内 "01"/"09" による誤スキップ）；新ルール S3-NAME-IS-CAS（HIGH）・S16-REVISION-BEFORE-ISSUE（HIGH）
-- [x] ラウンドトリップテスト r25 ベースライン: 30/30 成功、CRIT=0・HIGH=13・MED=175
-- [x] QC r26: S2-FLAMMABLE-NO-GHS02・S2-CORROSIVE-NO-GHS05・S2-ACUTETOX-NO-GHS06（全て MED）— 引火性・腐食性・急性毒性 Cat 1–3 のピクトグラム整合性チェック；S4-H314-NO-REMOVE-CLOTHING（MED）— P361 汚染衣類脱去指示
-- [x] ラウンドトリップテスト r26 ベースライン: 30/30 成功、CRIT=0・HIGH=14・MED=181
-- [x] LLMプロンプト: Section 1 Use フォールバック — セクション1.2が存在するが使用目的不明の場合、ソーステキストを Use 配列に格納（`'无相关详细资料'` 等）
-- [x] LLMプロンプト: Section 8 OEL「不要求」検出 — `不要求`/`无需监控`/`不适用` 等を `AdditionalInfo.FullText` に格納（省略しない）
-- [x] LLMプロンプト: Section 9 Densities 必須抽出、引火性製品（H224/H225/H226/H330–H332）の VapourPressure 抽出
-- [x] LLMプロンプト: Section 12 残留性/分解性サブセクション存在時は `PersistenceDegradability.BiologicalDegradability` を常に格納
-
-### 0.3.5 / 0.2.5 で完了
-- [x] 多国SDS対応（`--country cn|tw|kr|jp`）— 国別LLM抽出ルール注入・コンプライアンスギャップレポート生成
-- [x] バリデーション駆動補正パス（`--correct`）— 無効H/P-codeを第2LLMコールで修正、CASチェックデジット確定的補正
-- [x] CAS連結文字列の正規化 — `\n`・カンマ・セミコロン区切りの複数CASを個別エントリに分割
-- [x] 非危険物スタブ挿入 — 非危険物でLLMがHazardIdentificationを省略した際の最小スタブ挿入
-- [x] zh-cn/zh-tw表現を追加したH-codeマッピングテーブル拡張・複合ハザード分割指示
-- [x] P-codeアノテーション除去 — Pコードフィールドから `[H315]` 形式の括弧内H-codeを除去
-- [x] VisionパスへのテキストパスのCRITICAL指示適用
-- [x] バリデーター強化: 濃度フィールド内の日付検出・製品名プレースホルダー検出・分類網羅性チェック・中国語キーワードによるH290クロスチェック・混合物対応AcuteToxicityクロスチェック
-
-### 計画中
-- [x] GUIアプリケーション（eframe/egui）— 変換・文書生成・検証・テキスト抽出・設定タブ、ドラッグ&ドロップ対応、設定永続化、3言語UI
-- [x] crates.io公開（`sdsconv-core` + `sdsconv`）
-- [ ] HTML/DOCXへのGHS絵表示（ピクトグラム）埋め込み
-
-### 外部依存待ち
-- [x] 純Rust PDF生成 — [`harumi`](https://crates.io/crates/harumi) v0.4.0 の `html` feature で `render_html_to_pdf` が利用可能になりました
-- [x] スキャンPDFのOCR対応 — `pdftoppm` + `tesseract` CLI でフォールバック（テキスト抽出が200文字未満のとき自動起動）
-- [x] 日本語CIDフォントPDFの `pdftotext` フォールバック — Shift-JISエンコードPDFで `pdf-extract` がパニックする問題を修正
-- [x] スキーマ互換性強化（v0.3.3）— `CASno.FullText` への `flex_vec_string_opt` 追加、`Colour`/`Odour`/`PhysicalState` の JSON オブジェクト→文字列変換、`pdftotext` フォールバックの `-utf8` 廃止オプション削除
+→ [docs/comparison.md](docs/comparison.md)
 
 ---
 
@@ -233,11 +219,10 @@ sdsconv-core = "0.3"
 - [厚生労働省 — SDS情報交換のための標準的フォーマット等の公開について](https://www.mhlw.go.jp/stf/newpage_56484.html)
 - [SDSデータ交換フォーマット データ利用マニュアル（PDF）](https://www.mhlw.go.jp/content/11305000/001467068.pdf)
 - [JSON 品質チェック詳細マニュアル — 53 チェック項目をセクション別に解説](docs/quality-check_ja.md) ([English](docs/quality-check.md) / [中文](docs/quality-check_zh.md))
+- [CHANGELOG](CHANGELOG.md)
 
 ---
 
 ## ライセンス
 
-以下のいずれかを選択：
-- Apache License, Version 2.0
-- MIT License
+MIT または Apache-2.0 — どちらかを選択。

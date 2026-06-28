@@ -1,245 +1,200 @@
 # sdsconv
 
-用于**双向转换**安全数据表（SDS）文档（Word/PDF）与日本厚生劳动省（MHLW）标准JSON格式的GUI + CLI工具。
+**Python优先、Rust驱动的SDS文档转换与MHLW JSON质量评估工具包。**
 
-支持**日语、英语、简体中文、繁体中文**的SDS文档处理。
+将安全数据表（SDS）转换为日本厚生劳动省SDS数据交换格式JSON，并提供模式验证、GHS/CAS检查和语料库规模质量评估。
 
 [English](README.md) | [日本語](README_ja.md)
 
 ---
 
-## 下载
+## 安装
 
-| 平台 | 下载 |
+```bash
+pip install sdsconv                   # Python绑定
+pip install "sdsconv[analysis]"       # + causasv质量分析
+cargo install sdsconv                 # CLI / GUI二进制
+```
+
+---
+
+## 快速开始 — Python
+
+```python
+import sdsconv, os
+
+# SDS文档 → MHLW标准JSON
+data, report = sdsconv.to_json_with_report(
+    "sample.pdf",
+    lang="zh-cn",
+    strict_mhlw=True,
+)
+
+# 获取结构化检查结果
+findings = sdsconv.validate(data, strict_mhlw=True)
+
+print(f"已提取章节: {len(report['populated_sections'])}")
+print(f"发现问题: {len(findings)} (HIGH: {sum(1 for f in findings if f['level']=='HIGH')})")
+
+# 保存MHLW JSON
+sdsconv.write_json(data, "output.json")
+```
+
+语料库规模评估（无需人工审核）：
+
+```python
+from sdsconv.eval import eval_corpus
+
+df = eval_corpus(
+    input_dir="data/sds_raw",
+    output_dir="runs/eval_001",
+    jobs=8,
+)
+print(df[["filename", "overall_score", "grade", "high_count"]].head(20))
+```
+
+---
+
+## 为什么选择 sdsconv
+
+- **MHLW原生支持**: 直接转换为日本厚生劳动省SDS数据交换格式v1.0（`SDS_Schema_v1.0.json`），并进行官方模式验证。
+- **基于证据的提取**: 使用LLM将自由格式SDS文本映射到约200个深层嵌套字段，字段级原文交叉验证可检测幻觉。
+- **语料库规模质量评估**: `eval_corpus`处理数百份SDS文档，输出规则失败计数、章节分数和`causasv_features.csv`，无需人工审核。
+- **无供应商锁定**: 支持Anthropic Claude、OpenAI GPT、Google Gemini、Mistral、Groq、Cohere及任何OpenAI兼容本地端点。
+- **Rust核心**: 提取、模式验证、GHS/CAS检查和DOCX/HTML生成均在原生代码中运行，Python绑定为轻量封装。
+
+---
+
+## MHLW合规性
+
+针对2025年3月31日发布的MHLW SDS数据交换格式v1.0。
+
+| 规则 | 行为 |
 |---|---|
-| **macOS**（Homebrew） | `brew tap kent-tokyo/sdsconv && brew install --cask sdsconv` |
-| **macOS**（直接下载 — 通用版，Apple Silicon + Intel） | [sdsconv-macos.zip](https://github.com/kent-tokyo/sdsconv/releases/latest/download/sdsconv-macos.zip) |
-| **Windows**（便携版 .exe — 无需安装） | [sdsconv-windows-portable.zip](https://github.com/kent-tokyo/sdsconv/releases/latest/download/sdsconv-windows-portable.zip) |
-| **Rust / CLI** | `cargo install sdsconv` |
+| 模式验证 | 根据`SDS_Schema_v1.0.json`进行验证 |
+| 空字段删除 | 按§3.3规定删除`""`、`null`、`[]`、`{}` |
+| AdditionalInfo | 官方模式外的内容写入`AdditionalInfo.FullText` |
+| `--strict-mhlw` | 存在HIGH/CRIT时退出代码1（CLI）或抛出`ValueError`（Python） |
+| CRIT/HIGH/MED发现 | 包含规则ID、严重程度、路径、消息的结构化报告 |
 
-→ [全部版本与更新日志](https://github.com/kent-tokyo/sdsconv/releases)
+**验证规则包括：** GHS H/P代码有效性（GHS Rev.10）、CAS格式及校验位、第2节GHS完整性、第3节成分行对应、UN编号完整性、浓度范围检查、重复代码检测等。
 
-> **Windows 注意事项：** 若 SmartScreen 显示「Windows 已保护你的电脑」，请点击**「更多信息」→「仍要运行」**。
+质量基准（30份随机样本，seed=42）：
+> CRIT=0 · 平均分89.6 · 主要问题：`S2-HAZARD-NO-PICTOGRAM`、`S15-ZHCN-NO-GB`、`S14-NO-SHIPPING-NAME`
+
+完整规则目录 → [docs/quality-check_zh.md](docs/quality-check_zh.md)
+
+---
+
+## 语料库评估
+
+无需人工审核：
+
+```python
+from sdsconv.eval import eval_corpus
+
+df = eval_corpus("data/sds_raw", "runs/eval_001", jobs=8)
+```
+
+每个文件的输出：
+
+| 文件 | 内容 |
+|---|---|
+| `generated/<stem>.json` | MHLW标准JSON |
+| `reports/<stem>.json` | ConversionReport（语言、章节、警告） |
+| `findings/<stem>.json` | 结构化验证结果 |
+| `summary.csv` | 每文件分数和等级 |
+| `failures_by_rule.csv` | 规则失败次数和受影响文件数 |
+
+---
+
+## CLI
+
+```bash
+# PDF/DOCX/XLSX/HTML/URL → MHLW JSON
+sdsconv to-json --input input.pdf --output output.json --lang zh-cn
+
+# 带修正流程和PubChem富集
+sdsconv to-json --input input.pdf --output output.json --correct --enrich
+
+# JSON → Word文档（16节JIS Z 7253格式）
+sdsconv to-docx --input output.json --output result.docx --lang zh-cn
+
+# 严格MHLW模式验证
+sdsconv validate --input output.json --strict-mhlw
+
+# 批量处理目录
+sdsconv to-json --input-dir data/ --output-dir out/ --jobs 8
+
+# 语料库评估
+sdsconv eval-corpus --input-dir data/sds_raw --output-dir runs/eval_001 --jobs 8
+```
 
 ---
 
 ## GUI界面
 
-无参数运行 `sdsconv`（或双击下载的应用程序）即可启动图形界面：
+无参数运行即可打开图形界面：
 
 ```bash
 sdsconv
 ```
 
-将打开包含五个标签页的窗口：
+五个标签页：**转换** · **生成文档** · **验证** · **提取文本** · **设置**
 
-| 标签页 | 功能 |
-|---|---|
-| **转换** | SDS文档（PDF/DOCX/XLSX/HTML/URL）→ MHLW标准JSON |
-| **文档生成** | MHLW JSON → DOCX / HTML / PDF（支持DOCX模板） |
-| **验证** | MHLW JSON结构验证（OK/警告/错误彩色显示） |
-| **文本提取** | 从文档提取原始文本（无需LLM API） |
-| **设置** | API密钥、模型名称、Base URL、质量、语言、界面语言 |
-
-| 转换标签页 | 文档生成标签页 | 文本提取标签页 |
-|---|---|---|
-| ![转换标签页](docs/tab_convert.png) | ![文档生成标签页](docs/tab_generate.png) | ![文本提取标签页](docs/tab_extract.png) |
-
-将文件**拖放**至任意标签页可自动填充输入字段。
-设置保存至 `~/.config/sdsconv/config.toml`，下次启动时自动恢复。
+桌面应用下载：[macOS](https://github.com/kent-tokyo/sdsconv/releases/latest/download/sdsconv-macos.zip) · [Windows](https://github.com/kent-tokyo/sdsconv/releases/latest/download/sdsconv-windows-portable.zip) · `brew install --cask sdsconv`
 
 ---
 
-## 功能特点
+## 支持的输入、语言和后端
 
-- **SDS文档 → JSON**: 从PDF/DOCX/XLSX/TXT/**HTML/URL**中提取文本，并转换为符合MHLW SDS数据交换标准格式v1.0的JSON。支持并行提取与自动重试。PDF提取采用三级回退：`pdf-extract` → `pdftotext`（CID/Shift-JIS日语字体）→ `pdftoppm`+`tesseract` OCR或Claude Vision API（扫描PDF）。
-- **JSON → DOCX**: 从标准JSON生成符合JIS Z 7253规范的16节Word文档，支持多语言节标题。
-- **JSON → HTML**: 生成包含内联CSS和`@media print`支持的自包含UTF-8 HTML5文档（`to-html`）。
-- **JSON → PDF**: 通过LibreOffice CLI转换为PDF（`to-pdf`，需要`soffice`）。
-- **GHS/CAS验证**: 依据GHS Rev.10验证H码（H200–H420）和P码（P101–P503），验证CAS编号格式及校验位。支持`--enrich`标志通过PubChem交叉核验成分信息。
-- **多国SDS支持**: 自动从 `--lang` 推断来源国（zh-cn→中国、zh-tw→台湾、ja→日本）。可用 `--country cn|tw|kr|jp` 显式覆盖。向LLM提示注入国家特定提取规则 — 中国（GB/T 16483）: 24小时应急联系方式、GBZ 2 OEL、GB 13690法规引用；台湾（CNS 15030）: CNS标题、NERC应急联系方式；韩国（K-GHS Rev.6）: KEC编号、KOSHA参考、K-REACH状态。国家特定验证（`validate_country()`）和合规差距报告（`ComplianceDiffReport`）包含在 `ConversionReport` 中。
-- **验证驱动纠错通道**: `--correct` 标志启用第二次针对性LLM调用，修复验证器发现的无效GHS H/P码；CAS校验位纠错无需LLM调用，确定性执行。
-- **多语言支持**: 支持 `ja` / `en` / `zh-CN` / `zh-TW` 的输入和输出。
-- **可扩展LLM后端**: 内置Anthropic Claude、OpenAI GPT、Google Gemini、Mistral、Groq、Cohere实现。通过实现 `LlmBackend` trait可接入任意LLM。
-- **库 + CLI**: 可作为Rust库嵌入使用，也可作为独立命令行工具使用。
-- **安全加固REST服务器**: 使用 `constant_time_eq` 实现抗时序攻击的Bearer token认证、完整IPv6覆盖的SSRF防护（`fc00::/7`、`fe80::/10`、IPv4映射地址）、禁用重定向的HTTP客户端，以及50 MB上传限制。
+**输入格式：** PDF（文本型、CID/Shift-JIS字体、扫描件）· DOCX · XLSX · TXT · HTML · URL
 
----
+**源语言：** `ja`（JIS Z 7253）· `en`（GHS/OSHA HazCom）· `zh-cn`（GB/T 16483）· `zh-tw`（CNS 15030）
 
-## 为何使用LLM？
-
-SDS文档是**非结构化的自然语言文本**，而非电子表格。即使遵循同一标准，不同文档之间也存在以下差异：
-
-- **章节顺序不同** — 各厂商对16节的排列顺序各有不同
-- **表述方式多样** — 同一数据可能写作"≥99.5%"、"99.5%以上"或"含量约100%"等不同形式
-- **标题名称各异** — JIS Z 7253、GHS/OSHA HazCom、GB/T 16483、CNS 15030对同一概念使用不同标签
-- **多语言混用** — 日语SDS中常混有英语化学品名和CAS编号
-
-MHLW标准JSON格式包含**约200个深度嵌套的字段**。为每种文档格式编写基于规则的解析器几乎不可行。LLM能像人类一样阅读文档，无论格式如何，都能将自由文本映射到正确的模式字段，并原生支持多语言文档。
-
-通过`LlmBackend` trait，LLM后端可灵活替换，支持Claude、GPT-4o、Gemini或未来的任何新模型。
-
----
-
-## 快速开始
-
-```bash
-# 安装CLI工具
-cargo install sdsconv
-
-# PDF → MHLW标准JSON
-export ANTHROPIC_API_KEY=sk-ant-...
-sdsconv to-json --input input.pdf --output output.json
-
-# 直接从URL转换
-sdsconv to-json --input https://example.com/sds.html --output output.json
-
-# JSON → Word文档
-sdsconv to-docx --input output.json --output result.docx --lang zh-cn
-
-# JSON → HTML（支持打印，A4）
-sdsconv to-html --input output.json --output result.html --lang zh-cn
-
-# JSON → PDF（需要LibreOffice）
-sdsconv to-pdf --input output.json --output result.pdf --lang zh-cn
-
-# 验证JSON（含GHS编码和CAS编号验证）
-sdsconv validate --input output.json
-
-# 转换并通过PubChem交叉核验成分（--enrich）
-sdsconv to-json --input input.pdf --output output.json --enrich
-
-# 转换中文SDS（GB/T 16483），指定国家并启用纠错通道
-sdsconv to-json --input input.pdf --output output.json --lang zh-cn --country cn --correct
-```
-
-完整CLI参考请查看 [`sdsconv` README](./sdsconv/README.md)，库API请查看 [`sdsconv-core` README](./sdsconv_core/README.md)。
+**LLM后端：** Anthropic Claude · OpenAI GPT · Google Gemini · Mistral · Groq · Cohere · 本地（任意OpenAI兼容端点）
 
 ---
 
 ## 开发者
 
-| 包 | 说明 |
-|---|---|
-| [`sdsconv`](https://crates.io/crates/sdsconv) | CLI + GUI工具（本工具） |
-| [`sdsconv-core`](https://crates.io/crates/sdsconv-core) | Rust库 — LLM提取、DOCX/HTML生成、MHLW模式 |
-
-嵌入Rust项目：
+**Rust库：**
 
 ```toml
 [dependencies]
 sdsconv-core = "0.3"
 ```
 
----
+**Crate：** [`sdsconv`](https://crates.io/crates/sdsconv) · [`sdsconv-core`](https://crates.io/crates/sdsconv-core)
 
-## 语言支持
-
-| 语言 | `--lang` | 源文档格式 | 输出DOCX标题 |
-|---|---|---|---|
-| 日语 | `ja` | JIS Z 7253标准SDS | JIS Z 7253 |
-| 英语 | `en` | GHS/OSHA HazCom格式 | GHS Rev.10 / ISO 11014 |
-| 简体中文 | `zh-cn` | GB/T 16483格式 | GB/T 16483-2012 |
-| 繁体中文 | `zh-tw` | CNS 15030格式 | CNS 15030 |
+**Python包：** [`sdsconv`](https://pypi.org/project/sdsconv/) — `pip install sdsconv`
 
 ---
 
-## 与同类产品对比
+## 安全与隐私
 
-### 开源工具
-
-| | **sdsconv**（本工具） | [sds_parser](https://github.com/astepe/sds_parser) | [tungsten](https://github.com/CrucibleSDS/tungsten) |
-|---|---|---|---|
-| 语言 | Rust | Python | Python |
-| AI/LLM | 有（可替换） | 无（正则表达式） | 无（规则驱动） |
-| MHLW JSON | 有 | 无 | 无 |
-| 双向转换 | 有（DOCX + HTML + PDF） | 无 | 无 |
-| HTML/URL输入 | 有 | 无 | 无 |
-| GHS/CAS验证 | 有 | 无 | 无 |
-| 多语言 | ja / en / zh-CN / zh-TW | 有限 | 仅英文 |
-
-### 商业产品（日本）
-
-| | **sdsconv**（本工具） | [SDS Meister](https://www.kcs.co.jp/ja/service/ind/general/chemical/sds.html) | [SmartSDS](https://smartsds.jp/) | [Dr.EHS Chemical](https://www.iad.co.jp/drehs/chemical2/) |
-|---|---|---|---|---|
-| 提供商 | — | さくらケーシーエス | テクノヒル | アイアンドディー |
-| AI | 有（自备API密钥） | 无 | 有（翻译） | AI-OCR |
-| MHLW JSON | 有 | 有 | 有 | 有 |
-| PDF→JSON | 有 | 无（仅创作） | 部分（仅日语） | 有 |
-| 开源 | 有（MIT/Apache-2.0） | 无 | 无 | 无 |
-
-### 商业产品（全球）
-
-| | **sdsconv**（本工具） | [Affinda](https://www.affinda.com/documents/material-safety-data-sheet) | [SDS Manager API](https://sdsmanager.com/) | [safetydatasheetapi.com](https://safetydatasheetapi.com/) | [EcoOnline](https://www.ecoonline.com/) |
-|---|---|---|---|---|---|
-| AI/LLM | 可替换LLM | LLM（自适应） | NLP/ML | ML + OCR | AI/NLP |
-| 输入 | PDF / DOCX | PDF / Word | PDF | PDF（含扫描件） | PDF |
-| 输出 | MHLW JSON + DOCX | 自定义JSON | JSON / XML | JSON / XML / CSV | 仅内部数据 |
-| 开源 | 有 | 无 | 无 | 无 | 无 |
-
-**本工具的核心优势**：唯一支持MHLW标准JSON、双向转换（JSON→DOCX/HTML/PDF）、无需云订阅的本地运行、GHS Rev.10验证、PubChem富集以及可替换LLM后端的开源解决方案。
+- **云端LLM注意事项**: 使用云端LLM后端时，SDS文档文本将发送至API提供商。请勿将含有机密信息的SDS文档发送至云端API。
+- **本地运行**: 使用`--backend local`与任意OpenAI兼容端点（如Ollama）可实现完全离线运行。
+- **原始SDS语料库**: 将`corpus/raw/`和`data/sds_raw/`添加至`.gitignore`。仅`corpus/manifest.jsonl`（URL和sha256哈希）可安全提交。
+- **REST服务器**: 具有时序攻击防护的Bearer token认证、全IPv6覆盖的SSRF防护、禁用重定向的HTTP客户端、50 MB上传上限。
 
 ---
 
-## 路线图
+## 与竞品比较
 
-### 下一版本（0.3.x）
-- [ ] DOCX表格布局 — 第3节成分信息（4列）、第2节H/P编码（2列）、第9节物化性质（2列）
-
-### 0.3.8 / 0.2.8 已完成
-- [x] QC r27：S2-HAZARD-NO-PICTOGRAM（MED）— 活性信号词＋H码存在但Pictogram列表完全为空（检测PDF中仅有图像的象形图提取失败模式）
-- [x] QC r27：S3-CONC-UNIT-NO-VALUE（MED）— 混合物组分的浓度有单位（%）但无数值
-- [x] QC r27：误报修复 — 将`危險`（繁体中文"危险"，zh-tw）和`Not applicable`（英文非危险品）加入有效信号词；S14 UN编号、包装类别、正式品名的检测扩展支持繁体/简体中文格式
-- [x] 新工具 `tools/roundtrip_random30.py` — 可配置种子和数量的随机抽样轮转测试（含逐规则排名报告）
-- [x] 轮转测试 r27 基线（seed=42, n=30）：30/30 JSON ✓、30/30 DOCX ✓、CRIT=0、HIGH=14、MED=239
-
-### 0.3.6 / 0.2.6 〜 0.3.7 / 0.2.7 已完成
-- [x] QC r24：新增5条规则（S1-ZH-NO-EMERGENCY、S7-FLAMMABLE-STORAGE-TEMP、S8-NO-ENG-CONTROLS、S10-NO-INCOMPATIBLE、CROSS-STALE-DATE）
-- [x] QC r24：S8-OEL-NO-NUMERIC 误报修复 — 中文"单位→数值"格式识别、新增"无需OEL"豁免短语
-- [x] QC r24：S5-EMPTY 阈值 30→15 字符（减少中文简短灭火信息的误报）
-- [x] 循环测试：修复 JSONL 解析及验证器字符串数组处理；r24 基线 30/30 成功，CRIT=0、HIGH=9、MED=176
-- [x] QC r25：修复 S2-EXPLOSIVE-NO-GHS01 / S2-ENV-NO-GHS09 漏报（日期/H码中"01"/"09"子串误跳过）；新增 S3-NAME-IS-CAS（HIGH）、S16-REVISION-BEFORE-ISSUE（HIGH）
-- [x] 循环测试 r25 基线：30/30 成功，CRIT=0、HIGH=13、MED=175
-- [x] QC r26：S2-FLAMMABLE-NO-GHS02、S2-CORROSIVE-NO-GHS05、S2-ACUTETOX-NO-GHS06（均为 MED）— 易燃、腐蚀性、急性毒性 Cat 1–3 象形图一致性检查；S4-H314-NO-REMOVE-CLOTHING（MED）— P361 脱除污染衣物合规
-- [x] 循环测试 r26 基线：30/30 成功，CRIT=0、HIGH=14、MED=181
-- [x] LLM提示词：第1节Use回退 — 第1.2节存在但无具体用途时，将原文（如`'无相关详细资料'`）存入Use数组
-- [x] LLM提示词：第8节OEL"不要求"检测 — `不要求`/`无需监控`/`不适用`等表述存入`AdditionalInfo.FullText`（不再省略）
-- [x] LLM提示词：第9节Densities必须提取；易燃/挥发性产品（H224/H225/H226/H330–H332）提取VapourPressure
-- [x] LLM提示词：第12节存在持续性/降解性子节时，必须填充`PersistenceDegradability.BiologicalDegradability`
-
-### 0.3.5 / 0.2.5 已完成
-- [x] 多国SDS支持（`--country cn|tw|kr|jp`）— 国家特定LLM提取规则注入、合规差距报告生成
-- [x] 验证驱动纠错通道（`--correct`）— 第二次LLM调用修复无效H/P码，CAS校验位确定性纠错
-- [x] CAS连接字符串规范化 — 将 `\n`、逗号、分号分隔的多CAS字符串拆分为独立条目
-- [x] 非危险品存根插入 — LLM对非危险品省略HazardIdentification时插入最小存根
-- [x] H码映射表扩展（添加zh-cn/zh-tw表述）+ 多重危害拆分指令
-- [x] P码注释消歧 — 从P码字段中去除括号内的H码（如 `[H315]`）
-- [x] Vision路径与文本路径CRITICAL指令同步
-- [x] 验证器增强：浓度字段日期检测、产品名称占位符检测、分类完整性检查、中文关键词H290交叉核验、混合物感知AcuteToxicity交叉核验
-
-### 计划中
-- [x] GUI应用程序（eframe/egui）— 转换/生成/验证/文本提取/设置标签页，支持拖放、配置持久化和三语言界面
-- [x] 发布至crates.io（`sdsconv-core` + `sdsconv`）
-- [ ] 在HTML和DOCX输出中嵌入GHS象形图
-
-### 依赖外部进展
-- [x] 纯Rust PDF生成 — [`harumi`](https://crates.io/crates/harumi) v0.4.0 的 `html` feature 中 `render_html_to_pdf` 现已可用
-- [x] 扫描PDF的OCR支持 — `pdftoppm` + `tesseract` CLI自动回退（文本提取少于200字时自动触发）
-- [x] 日语CID字体PDF的 `pdftotext` 回退 — 修复 `pdf-extract` 在Shift-JIS编码PDF上崩溃的问题
-- [x] Schema兼容性增强（v0.3.3）— 为 `CASno.FullText` 添加 `flex_vec_string_opt`，将 `Colour`/`Odour`/`PhysicalState` JSON对象强制转换为字符串，移除 `pdftotext` 回退中已弃用的 `-utf8` 选项
+→ [docs/comparison.md](docs/comparison.md)
 
 ---
 
-## 参考链接
+## 参考资料
 
-- [厚生劳动省 — SDS信息交换标准格式发布页面](https://www.mhlw.go.jp/stf/newpage_56484.html)（日语）
-- [SDS数据交换格式开发者手册（PDF）](https://www.mhlw.go.jp/content/11305000/001467068.pdf)（日语）
-- [JSON 质量检查详细手册 — 53项检查按章节说明](docs/quality-check_zh.md) ([English](docs/quality-check.md) / [日本語](docs/quality-check_ja.md))
+- [厚生劳动省 — SDS信息交换标准格式公开页面](https://www.mhlw.go.jp/stf/newpage_56484.html)（日语）
+- [SDS数据交换格式数据使用手册（PDF）](https://www.mhlw.go.jp/content/11305000/001467068.pdf)（日语）
+- [JSON质量检查详细手册 — 53条规则按章节说明](docs/quality-check_zh.md) ([English](docs/quality-check.md) / [日本語](docs/quality-check_ja.md))
+- [CHANGELOG](CHANGELOG.md)
 
 ---
 
 ## 许可证
 
-以下两种许可证任选其一：
-- Apache License, Version 2.0
-- MIT License
+MIT 或 Apache-2.0 — 任选其一。
