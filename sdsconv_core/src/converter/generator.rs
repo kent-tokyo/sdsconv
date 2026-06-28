@@ -403,7 +403,12 @@ pub fn generate_docx(sds: &SdsRoot, output_path: &Path, lang: Language) -> Resul
         );
 
         if let Some(val) = root_val.get(*key) {
-            doc = render_value(doc, val, 0, lang);
+            match i {
+                1 => doc = render_section2_hp_table(doc, val, lang),   // Section 2 H/P codes
+                2 => doc = render_section3_composition_table(doc, val, lang), // Section 3 Composition
+                8 => doc = render_section9_properties_table(doc, val, lang),  // Section 9 Physical props
+                _ => doc = render_value(doc, val, 0, lang),
+            }
         }
     }
 
@@ -593,4 +598,278 @@ fn add_label_value_multiline(doc: Docx, label: &str, value: &str, indent: usize)
         );
     }
     d
+}
+
+// ---------------------------------------------------------------------------
+// Table helpers
+// ---------------------------------------------------------------------------
+
+/// Page usable width in twips (A4 with 2.5 cm margins ≈ 8505 twips).
+const PAGE_WIDTH: usize = 8505;
+
+fn cell_text(text: &str, width: usize) -> TableCell {
+    TableCell::new()
+        .width(width, WidthType::Dxa)
+        .add_paragraph(Paragraph::new().add_run(Run::new().add_text(text)))
+}
+
+fn cell_bold(text: &str, width: usize) -> TableCell {
+    TableCell::new()
+        .width(width, WidthType::Dxa)
+        .shading(Shading::new().fill("D9D9D9"))
+        .add_paragraph(Paragraph::new().add_run(Run::new().add_text(text).bold()))
+}
+
+// ---------------------------------------------------------------------------
+// Section 2: H/P code 2-column tables
+// ---------------------------------------------------------------------------
+
+fn render_section2_hp_table(doc: Docx, val: &Value, lang: Language) -> Docx {
+    let mut d = doc;
+
+    // Render Classification and other top-level fields as normal
+    if let Value::Object(map) = val {
+        for (key, child) in map {
+            if key == "HazardLabelling" {
+                d = render_hazard_labelling_tables(d, child, lang);
+            } else {
+                {
+                    let mut m = serde_json::Map::new();
+                    m.insert(key.clone(), child.clone());
+                    d = render_value(d, &Value::Object(m), 0, lang);
+                }
+            }
+        }
+    }
+    d
+}
+
+fn render_hazard_labelling_tables(doc: Docx, val: &Value, lang: Language) -> Docx {
+    let mut d = doc;
+
+    // Signal word and pictograms as plain text
+    for key in &["SignalWord", "HazardPictogram"] {
+        if let Some(v) = val.get(key) {
+            let label = translate_key(key, lang);
+            d = add_label_value_multiline(d, &label, &value_to_text(v), 0);
+        }
+    }
+
+    let (col_code, col_desc) = match lang {
+        Language::Japanese          => ("コード", "説明"),
+        Language::English           => ("Code", "Description"),
+        Language::ChineseSimplified => ("代码", "说明"),
+        Language::ChineseTraditional=> ("代碼", "說明"),
+    };
+
+    // H-code table
+    if let Some(stmts) = val.get("HazardStatement").and_then(|v| v.as_array()) {
+        let h_label = translate_key("HazardStatement", lang);
+        d = add_label(d, &h_label, 0);
+        let w_code = 1200usize;
+        let w_desc = PAGE_WIDTH - w_code;
+        let header = TableRow::new(vec![cell_bold(col_code, w_code), cell_bold(col_desc, w_desc)]);
+        let rows: Vec<TableRow> = std::iter::once(header).chain(stmts.iter().map(|s| {
+            let code = s.get("HazardStatementCode").map(value_to_text).unwrap_or_default();
+            let desc = s.get("FullText").map(value_to_text).unwrap_or_default();
+            TableRow::new(vec![cell_text(&code, w_code), cell_text(&desc, w_desc)])
+        })).collect();
+        d = d.add_table(Table::new(rows));
+    }
+
+    // P-code tables by category
+    if let Some(ps) = val.get("PrecautionaryStatements") {
+        let p_label = translate_key("PrecautionaryStatements", lang);
+        d = add_label(d, &p_label, 0);
+        let w_code = 1200usize;
+        let w_desc = PAGE_WIDTH - w_code;
+        for cat in &["Prevention", "Response", "Storage", "Disposal"] {
+            if let Some(stmts) = ps.get(cat).and_then(|v| v.as_array()) {
+                if stmts.is_empty() { continue; }
+                let cat_label = translate_key(cat, lang);
+                d = add_label(d, &cat_label, 1);
+                let header = TableRow::new(vec![cell_bold(col_code, w_code), cell_bold(col_desc, w_desc)]);
+                let rows: Vec<TableRow> = std::iter::once(header).chain(stmts.iter().map(|s| {
+                    let code = s.get("PrecautionaryStatementCode").map(value_to_text).unwrap_or_default();
+                    let desc = s.get("FullText").map(value_to_text).unwrap_or_default();
+                    TableRow::new(vec![cell_text(&code, w_code), cell_text(&desc, w_desc)])
+                })).collect();
+                d = d.add_table(Table::new(rows));
+            }
+        }
+    }
+
+    // AdditionalInfo
+    if let Some(ai) = val.get("AdditionalInfo").and_then(|v| v.get("FullText")) {
+        let text = value_to_text(ai);
+        if !text.is_empty() { d = add_leaf_multiline(d, &text, 0); }
+    }
+    d
+}
+
+// ---------------------------------------------------------------------------
+// Section 3: Composition 4-column table
+// ---------------------------------------------------------------------------
+
+fn render_section3_composition_table(doc: Docx, val: &Value, lang: Language) -> Docx {
+    let mut d = doc;
+
+    // CompositionType and other metadata as plain text
+    if let Value::Object(map) = val {
+        for (key, child) in map {
+            if key == "CompositionAndConcentration" {
+                d = render_composition_table(d, child, lang);
+            } else {
+                let label = translate_key(key, lang);
+                d = add_label_value_multiline(d, &label, &value_to_text(child), 0);
+            }
+        }
+    }
+    d
+}
+
+fn render_composition_table(doc: Docx, val: &Value, lang: Language) -> Docx {
+    let items = match val.as_array() {
+        Some(a) if !a.is_empty() => a,
+        _ => return render_value(doc, val, 0, lang),
+    };
+
+    let (h_name, h_cas, h_conc, h_note) = match lang {
+        Language::Japanese           => ("成分名", "CAS番号", "濃度", "備考"),
+        Language::English            => ("Substance Name", "CAS No.", "Concentration", "Note"),
+        Language::ChineseSimplified  => ("成分名", "CAS号", "浓度", "备注"),
+        Language::ChineseTraditional => ("成分名", "CAS號", "濃度", "備註"),
+    };
+
+    let w = [3000usize, 1800, 1200, PAGE_WIDTH - 3000 - 1800 - 1200];
+    let header = TableRow::new(vec![
+        cell_bold(h_name, w[0]), cell_bold(h_cas, w[1]),
+        cell_bold(h_conc, w[2]), cell_bold(h_note, w[3]),
+    ]);
+
+    let mut rows = vec![header];
+    for item in items {
+        let ids = item.get("SubstanceIdentifiers");
+
+        // Substance name: IupacName or GenericName or CommonName
+        let name = ids.and_then(|i| i.get("SubstanceNames")).and_then(|n| {
+            n.get("IupacName").or_else(|| n.get("GenericName"))
+        }).map(value_to_text)
+        .or_else(|| ids.and_then(|i| i.get("CommonName")).and_then(|c| c.get("OtherName")).and_then(|a| a.as_array()).and_then(|a| a.first()).map(value_to_text))
+        .unwrap_or_default();
+
+        // CAS number
+        let cas = ids.and_then(|i| i.get("SubstanceIdentity")).and_then(|si| si.get("CASno")).and_then(|c| c.get("FullText")).map(value_to_text).unwrap_or_default();
+
+        // Concentration
+        let conc = item.get("Concentration").map(|c| {
+            if let Some(nr) = c.get("NumericRangeWithUnitAndQualifier") {
+                let unit = nr.get("Unit").map(value_to_text).unwrap_or_default();
+                let val = nr.get("ExactValue").and_then(|v| v.get("Value")).map(value_to_text)
+                    .or_else(|| {
+                        let lo = nr.get("LowerValue").and_then(|v| v.get("Value")).map(value_to_text).unwrap_or_default();
+                        let hi = nr.get("UpperValue").and_then(|v| v.get("Value")).map(value_to_text).unwrap_or_default();
+                        if lo.is_empty() && hi.is_empty() { None }
+                        else { Some(format!("{lo}–{hi}")) }
+                    }).unwrap_or_default();
+                format!("{val} {unit}").trim().to_string()
+            } else {
+                value_to_text(c)
+            }
+        }).unwrap_or_default();
+
+        // Note / AdditionalInfo
+        let note = item.get("AdditionalInfo").and_then(|ai| ai.get("FullText")).map(value_to_text).unwrap_or_default();
+
+        rows.push(TableRow::new(vec![
+            cell_text(&name, w[0]), cell_text(&cas, w[1]),
+            cell_text(&conc, w[2]), cell_text(&note, w[3]),
+        ]));
+    }
+
+    doc.add_table(Table::new(rows))
+}
+
+// ---------------------------------------------------------------------------
+// Section 9: Physical/Chemical properties 2-column table
+// ---------------------------------------------------------------------------
+
+fn render_section9_properties_table(doc: Docx, val: &Value, lang: Language) -> Docx {
+    let mut d = doc;
+    if let Value::Object(map) = val {
+        for (key, child) in map {
+            if key == "BasePhysicalChemicalProperties" {
+                d = render_properties_table(d, child, lang);
+            } else {
+                {
+                    let mut m = serde_json::Map::new();
+                    m.insert(key.clone(), child.clone());
+                    d = render_value(d, &Value::Object(m), 0, lang);
+                }
+            }
+        }
+    }
+    d
+}
+
+fn render_properties_table(doc: Docx, val: &Value, lang: Language) -> Docx {
+    let Value::Object(map) = val else { return render_value(doc, val, 0, lang) };
+    if map.is_empty() { return doc; }
+
+    let (col_prop, col_val) = match lang {
+        Language::Japanese           => ("項目", "値"),
+        Language::English            => ("Property", "Value"),
+        Language::ChineseSimplified  => ("项目", "值"),
+        Language::ChineseTraditional => ("項目", "值"),
+    };
+
+    let w_prop = 3000usize;
+    let w_val  = PAGE_WIDTH - w_prop;
+
+    let header = TableRow::new(vec![cell_bold(col_prop, w_prop), cell_bold(col_val, w_val)]);
+    let mut rows = vec![header];
+
+    for (key, child) in map {
+        let label = translate_key(key, lang);
+        let text = extract_property_text(child);
+        if text.is_empty() { continue; }
+        rows.push(TableRow::new(vec![cell_text(&label, w_prop), cell_text(&text, w_val)]));
+    }
+
+    if rows.len() == 1 { return doc; } // only header, no data
+    doc.add_table(Table::new(rows))
+}
+
+/// Extract a readable text value from a physical property node.
+/// Handles NumericRangeWithUnitAndQualifier, AdditionalInfo, and plain strings.
+fn extract_property_text(val: &Value) -> String {
+    match val {
+        Value::Object(map) => {
+            // NumericRangeWithUnitAndQualifier
+            if let Some(nr) = map.get("NumericRangeWithUnitAndQualifier") {
+                let unit = nr.get("Unit").map(value_to_text).unwrap_or_default();
+                let num = nr.get("ExactValue").and_then(|v| v.get("Value")).map(value_to_text)
+                    .or_else(|| {
+                        let lo = nr.get("LowerValue").and_then(|v| v.get("Value")).map(value_to_text).unwrap_or_default();
+                        let hi = nr.get("UpperValue").and_then(|v| v.get("Value")).map(value_to_text).unwrap_or_default();
+                        if lo.is_empty() && hi.is_empty() { None }
+                        else { Some(format!("{lo}–{hi}")) }
+                    }).unwrap_or_default();
+                let qual = nr.get("Qualifier").map(value_to_text).unwrap_or_default();
+                let text = format!("{qual} {num} {unit}").trim().to_string();
+                if !text.is_empty() { return text; }
+            }
+            // AdditionalInfo.FullText
+            if let Some(ai) = map.get("AdditionalInfo").and_then(|a| a.get("FullText")) {
+                return value_to_text(ai);
+            }
+            // FullText directly
+            if let Some(ft) = map.get("FullText") {
+                return value_to_text(ft);
+            }
+            // Fallback: collect all scalar values
+            map.values().map(value_to_text).filter(|s| !s.is_empty()).collect::<Vec<_>>().join("; ")
+        }
+        _ => value_to_text(val),
+    }
 }
