@@ -74,6 +74,7 @@ def to_json_with_report(
     max_tokens: int = 16_384,
     correct: bool = False,
     enrich: bool = False,
+    strict_mhlw: bool = False,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Convert a file to MHLW standard JSON.
 
@@ -85,7 +86,10 @@ def to_json_with_report(
         str(path), backend, key, model, lang, country,
         max_chars, max_tokens, correct, enrich,
     )
-    return json.loads(sds_str), json.loads(report_str)
+    data, report = json.loads(sds_str), json.loads(report_str)
+    if strict_mhlw:
+        validate(data, strict_mhlw=True)
+    return data, report
 
 
 def to_json(
@@ -100,12 +104,13 @@ def to_json(
     max_tokens: int = 16_384,
     correct: bool = False,
     enrich: bool = False,
+    strict_mhlw: bool = False,
 ) -> dict[str, Any]:
     """Convert a file to MHLW standard JSON. Returns the SDS dict."""
     data, _ = to_json_with_report(
         path, backend=backend, api_key=api_key, model=model,
         lang=lang, country=country, max_chars=max_chars, max_tokens=max_tokens,
-        correct=correct, enrich=enrich,
+        correct=correct, enrich=enrich, strict_mhlw=strict_mhlw,
     )
     return data
 
@@ -122,6 +127,7 @@ def to_json_bytes_with_report(
     max_chars: int = 80_000,
     max_tokens: int = 16_384,
     correct: bool = False,
+    strict_mhlw: bool = False,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Convert in-memory bytes to MHLW standard JSON (for API/web use)."""
     key = _resolve_api_key(api_key, backend)
@@ -129,12 +135,15 @@ def to_json_bytes_with_report(
         data, filename, backend, key, model, lang, country,
         max_chars, max_tokens, correct,
     )
-    return json.loads(sds_str), json.loads(report_str)
+    sds_data, report = json.loads(sds_str), json.loads(report_str)
+    if strict_mhlw:
+        validate(sds_data, strict_mhlw=True)
+    return sds_data, report
 
 
-def to_json_bytes(data: bytes, filename: str, **kwargs) -> dict[str, Any]:
+def to_json_bytes(data: bytes, filename: str, *, strict_mhlw: bool = False, **kwargs) -> dict[str, Any]:
     """Convert in-memory bytes to MHLW standard JSON."""
-    result, _ = to_json_bytes_with_report(data, filename, **kwargs)
+    result, _ = to_json_bytes_with_report(data, filename, strict_mhlw=strict_mhlw, **kwargs)
     return result
 
 
@@ -149,6 +158,7 @@ def to_json_url_with_report(
     max_chars: int = 80_000,
     max_tokens: int = 16_384,
     correct: bool = False,
+    strict_mhlw: bool = False,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Fetch an SDS from a URL and convert to MHLW standard JSON."""
     key = _resolve_api_key(api_key, backend)
@@ -156,12 +166,15 @@ def to_json_url_with_report(
         url, backend, key, model, lang, country,
         max_chars, max_tokens, correct,
     )
-    return json.loads(sds_str), json.loads(report_str)
+    sds_data, report = json.loads(sds_str), json.loads(report_str)
+    if strict_mhlw:
+        validate(sds_data, strict_mhlw=True)
+    return sds_data, report
 
 
-def to_json_url(url: str, **kwargs) -> dict[str, Any]:
+def to_json_url(url: str, *, strict_mhlw: bool = False, **kwargs) -> dict[str, Any]:
     """Fetch an SDS from a URL and convert to MHLW standard JSON."""
-    result, _ = to_json_url_with_report(url, **kwargs)
+    result, _ = to_json_url_with_report(url, strict_mhlw=strict_mhlw, **kwargs)
     return result
 
 
