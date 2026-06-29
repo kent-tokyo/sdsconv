@@ -15,4 +15,5 @@ memo.txt
 data/sds_raw/
 runs/
 corpus/raw/
+corpus/output/
 examples/mhlw_allyl_chloride/source.pdf
