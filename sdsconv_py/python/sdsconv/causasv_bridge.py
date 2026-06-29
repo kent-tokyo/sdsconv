@@ -68,6 +68,10 @@ FEATURE_COLS = [
     "cas_count_in_source", "h_code_count_in_source",
     "p_code_count_in_source", "un_count_in_source",
     "cas_coverage", "h_code_coverage", "p_code_coverage", "un_coverage",
+    "cas_recall", "cas_precision", "cas_hallucinated_count",
+    "h_code_recall", "h_code_precision", "h_code_hallucinated_count",
+    "p_code_recall", "p_code_precision", "p_code_hallucinated_count",
+    "un_recall", "un_precision", "un_hallucinated_count",
     "populated_section_count", "empty_section_count",
     "high_count", "medium_count",
 ]

@@ -57,28 +57,29 @@ def _compute_grade(score: float, crit: int, high: int) -> str:
 # Source-text feature extraction (regex, no LLM)
 # ---------------------------------------------------------------------------
 
-def _count_unique(pattern: str, text: str) -> int:
-    return len(set(re.findall(pattern, text, re.IGNORECASE)))
+def _extract_cas(text: str) -> set[str]:
+    return set(re.findall(r'\b\d{2,7}-\d{2}-\d\b', text, re.IGNORECASE))
 
-def _extract_from_json(pattern: str, data: dict) -> set:
-    return set(re.findall(pattern, json.dumps(data, ensure_ascii=False), re.IGNORECASE))
+def _extract_h_codes(text: str) -> set[str]:
+    return set(re.findall(r'\bH[23456]\d{2}\b', text, re.IGNORECASE))
 
-def _coverage(json_set: set, src_count: int) -> float:
-    if src_count == 0:
-        return 1.0   # source に該当なし → coverage 不問
-    return min(1.0, len(json_set) / src_count)
+def _extract_p_codes(text: str) -> set[str]:
+    return set(re.findall(r'\bP[123456]\d{2}\b', text, re.IGNORECASE))
 
-def _count_cas(text: str) -> int:
-    return _count_unique(r'\b\d{2,7}-\d{2}-\d\b', text)
+def _extract_un_numbers(text: str) -> set[str]:
+    return {re.sub(r'\s+', '', m) for m in re.findall(r'UN\s*\d{4}', text, re.IGNORECASE)}
 
-def _count_h_codes(text: str) -> int:
-    return _count_unique(r'\bH[23456]\d{2}\b', text)
+def _recall(src: set, jsn: set) -> float:
+    """Fraction of source items captured in JSON (recall)."""
+    if not src:
+        return 1.0
+    return len(src & jsn) / len(src)
 
-def _count_p_codes(text: str) -> int:
-    return _count_unique(r'\bP[123456]\d{2}\b', text)
-
-def _count_un_numbers(text: str) -> int:
-    return _count_unique(r'\bUN\s*\d{4}\b', text)
+def _precision(src: set, jsn: set) -> float:
+    """Fraction of JSON items that exist in source (precision)."""
+    if not jsn:
+        return 1.0
+    return len(src & jsn) / len(jsn)
 
 # ---------------------------------------------------------------------------
 # Single-file evaluation
@@ -114,11 +115,15 @@ def eval_one(
             raw_text = sdsconv.extract_text(str(path))
         except Exception:
             raw_text = ""
+        src_cas = _extract_cas(raw_text)
+        src_h   = _extract_h_codes(raw_text)
+        src_p   = _extract_p_codes(raw_text)
+        src_un  = _extract_un_numbers(raw_text)
         record["text_length_chars"]      = len(raw_text)
-        record["cas_count_in_source"]    = _count_cas(raw_text)
-        record["h_code_count_in_source"] = _count_h_codes(raw_text)
-        record["p_code_count_in_source"] = _count_p_codes(raw_text)
-        record["un_count_in_source"]     = _count_un_numbers(raw_text)
+        record["cas_count_in_source"]    = len(src_cas)
+        record["h_code_count_in_source"] = len(src_h)
+        record["p_code_count_in_source"] = len(src_p)
+        record["un_count_in_source"]     = len(src_un)
 
         data, report = sdsconv.to_json_with_report(
             path,
@@ -149,14 +154,34 @@ def eval_one(
         high = sum(1 for f in findings if f.get("level") == "HIGH")
         med  = sum(1 for f in findings if f.get("level") == "MED")
 
-        cas_in_json = _extract_from_json(r'\b\d{2,7}-\d{2}-\d\b', data)
-        h_in_json   = _extract_from_json(r'\bH[23456]\d{2}\b', data)
-        p_in_json   = _extract_from_json(r'\bP[123456]\d{2}\b', data)
-        un_in_json  = _extract_from_json(r'\bUN\s*\d{4}\b', data)
-        record["cas_coverage"]    = _coverage(cas_in_json, record.get("cas_count_in_source", 0))
-        record["h_code_coverage"] = _coverage(h_in_json,   record.get("h_code_count_in_source", 0))
-        record["p_code_coverage"] = _coverage(p_in_json,   record.get("p_code_count_in_source", 0))
-        record["un_coverage"]     = _coverage(un_in_json,  record.get("un_count_in_source", 0))
+        json_text = json.dumps(data, ensure_ascii=False)
+        jsn_cas = _extract_cas(json_text)
+        jsn_h   = _extract_h_codes(json_text)
+        jsn_p   = _extract_p_codes(json_text)
+        jsn_un  = _extract_un_numbers(json_text)
+
+        record["cas_recall"]             = _recall(src_cas, jsn_cas)
+        record["cas_precision"]          = _precision(src_cas, jsn_cas)
+        record["cas_missing_count"]      = len(src_cas - jsn_cas)
+        record["cas_hallucinated_count"] = len(jsn_cas - src_cas)
+        record["h_code_recall"]             = _recall(src_h, jsn_h)
+        record["h_code_precision"]          = _precision(src_h, jsn_h)
+        record["h_code_missing_count"]      = len(src_h - jsn_h)
+        record["h_code_hallucinated_count"] = len(jsn_h - src_h)
+        record["p_code_recall"]             = _recall(src_p, jsn_p)
+        record["p_code_precision"]          = _precision(src_p, jsn_p)
+        record["p_code_missing_count"]      = len(src_p - jsn_p)
+        record["p_code_hallucinated_count"] = len(jsn_p - src_p)
+        record["un_recall"]             = _recall(src_un, jsn_un)
+        record["un_precision"]          = _precision(src_un, jsn_un)
+        record["un_missing_count"]      = len(src_un - jsn_un)
+        record["un_hallucinated_count"] = len(jsn_un - src_un)
+
+        # backward compat aliases
+        record["cas_coverage"]    = record["cas_recall"]
+        record["h_code_coverage"] = record["h_code_recall"]
+        record["p_code_coverage"] = record["p_code_recall"]
+        record["un_coverage"]     = record["un_recall"]
 
         record["critical_count"] = crit
         record["high_count"]     = high
@@ -181,8 +206,15 @@ def eval_one(
                   "h_code_count_in_source", "p_code_count_in_source",
                   "un_count_in_source"):
             record.setdefault(k, 0)
-        for k in ("cas_coverage", "h_code_coverage", "p_code_coverage", "un_coverage"):
+        for k in ("cas_coverage", "h_code_coverage", "p_code_coverage", "un_coverage",
+                  "cas_recall", "cas_precision", "h_code_recall", "h_code_precision",
+                  "p_code_recall", "p_code_precision", "un_recall", "un_precision"):
             record.setdefault(k, 0.0)
+        for k in ("cas_missing_count", "cas_hallucinated_count",
+                  "h_code_missing_count", "h_code_hallucinated_count",
+                  "p_code_missing_count", "p_code_hallucinated_count",
+                  "un_missing_count", "un_hallucinated_count"):
+            record.setdefault(k, 0)
 
     return record
 
@@ -290,6 +322,10 @@ _CAUSASV_COLS = [
     "cas_count_in_source", "h_code_count_in_source",
     "p_code_count_in_source", "un_count_in_source",
     "cas_coverage", "h_code_coverage", "p_code_coverage", "un_coverage",
+    "cas_recall", "cas_precision", "cas_missing_count", "cas_hallucinated_count",
+    "h_code_recall", "h_code_precision", "h_code_missing_count", "h_code_hallucinated_count",
+    "p_code_recall", "p_code_precision", "p_code_missing_count", "p_code_hallucinated_count",
+    "un_recall", "un_precision", "un_missing_count", "un_hallucinated_count",
     "critical_count", "high_count", "medium_count",
     "overall_score", "grade",
 ]
