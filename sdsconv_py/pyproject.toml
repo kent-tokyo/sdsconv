@@ -4,9 +4,19 @@ build-backend = "maturin"
 
 [project]
 name = "sdsconv"
-version = "0.1.2"
+version = "0.1.3"
 description = "Python bindings for sdsconv — SDS ↔ MHLW standard JSON converter"
+readme = { file = "../README.md", content-type = "text/markdown" }
+license = { text = "MIT OR Apache-2.0" }
 requires-python = ">=3.9"
+keywords = ["sds", "mhlw", "ghs", "safety-data-sheet", "chemistry"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Rust",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
+]
 dependencies = ["pandas>=2", "tqdm>=4"]
 
 [project.optional-dependencies]

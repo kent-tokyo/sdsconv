@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -43,19 +44,33 @@ SDS_EXTENSIONS = {".pdf", ".docx", ".xlsx", ".xls", ".txt", ".html", ".htm"}
 # Score / grade helpers
 # ---------------------------------------------------------------------------
 
-def _compute_score(crit: int, high: int, med: int) -> float:
-    total = max(1, crit + high + med)
-    penalty = crit * 40 + high * 5 + med
-    return max(0.0, 100.0 - penalty / total * 100.0)
+def _compute_score(crit: int, high: int, med: int, low: int = 0) -> float:
+    return max(0.0, 100.0 - crit * 35 - high * 8 - med * 1.5 - low * 0.3)
 
 def _compute_grade(score: float, crit: int, high: int) -> str:
-    if crit == 0 and high == 0 and score >= 90:
-        return "A"
-    if crit == 0 and high <= 3 and score >= 80:
-        return "B"
-    if crit == 0 and high <= 10 and score >= 65:
-        return "C"
+    if crit == 0 and high == 0  and score >= 90: return "A"
+    if crit == 0 and high <= 3  and score >= 80: return "B"
+    if crit == 0 and high <= 10 and score >= 65: return "C"
     return "D"
+
+# ---------------------------------------------------------------------------
+# Source-text feature extraction (regex, no LLM)
+# ---------------------------------------------------------------------------
+
+def _count_unique(pattern: str, text: str) -> int:
+    return len(set(re.findall(pattern, text, re.IGNORECASE)))
+
+def _count_cas(text: str) -> int:
+    return _count_unique(r'\b\d{2,7}-\d{2}-\d\b', text)
+
+def _count_h_codes(text: str) -> int:
+    return _count_unique(r'\bH[23456]\d{2}\b', text)
+
+def _count_p_codes(text: str) -> int:
+    return _count_unique(r'\bP[123456]\d{2}\b', text)
+
+def _count_un_numbers(text: str) -> int:
+    return _count_unique(r'\bUN\s*\d{4}\b', text)
 
 # ---------------------------------------------------------------------------
 # Single-file evaluation
@@ -87,6 +102,16 @@ def eval_one(
 
     t0 = time.monotonic()
     try:
+        try:
+            raw_text = sdsconv.extract_text(str(path))
+        except Exception:
+            raw_text = ""
+        record["text_length_chars"]      = len(raw_text)
+        record["cas_count_in_source"]    = _count_cas(raw_text)
+        record["h_code_count_in_source"] = _count_h_codes(raw_text)
+        record["p_code_count_in_source"] = _count_p_codes(raw_text)
+        record["un_count_in_source"]     = _count_un_numbers(raw_text)
+
         data, report = sdsconv.to_json_with_report(
             path,
             backend=backend, api_key=api_key, model=model,
@@ -135,6 +160,10 @@ def eval_one(
         record["overall_score"]        = 0.0
         record["grade"]                = "D"
         record["error"]                = str(exc)
+        for k in ("text_length_chars", "cas_count_in_source",
+                  "h_code_count_in_source", "p_code_count_in_source",
+                  "un_count_in_source"):
+            record.setdefault(k, 0)
 
     return record
 
@@ -224,6 +253,7 @@ def eval_corpus(
     if _HAS_PANDAS:
         df = pd.DataFrame(records)
         df.to_csv(output_dir / "summary.csv", index=False)
+        _write_causasv_features(output_dir, df)
         _write_summary_md(output_dir, df)
         _write_failures_csv(output_dir)
         print(f"\n=== Summary ===")
@@ -233,6 +263,20 @@ def eval_corpus(
     else:
         print(f"Done. {sum(r.get('json_ok', False) for r in records)}/{len(records)} ok")
         return records
+
+
+_CAUSASV_COLS = [
+    "filename", "file_type", "file_size_kb", "text_length_chars",
+    "source_language", "populated_section_count", "empty_section_count",
+    "cas_count_in_source", "h_code_count_in_source",
+    "p_code_count_in_source", "un_count_in_source",
+    "critical_count", "high_count", "medium_count",
+    "overall_score", "grade",
+]
+
+def _write_causasv_features(output_dir: Path, df) -> None:
+    cols = [c for c in _CAUSASV_COLS if c in df.columns]
+    df[cols].to_csv(output_dir / "causasv_features.csv", index=False)
 
 
 def _write_summary_md(output_dir: Path, df) -> None:

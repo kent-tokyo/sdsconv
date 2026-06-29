@@ -61,6 +61,7 @@ jobs:
           findings = sdsconv.validate(data)
           print(f"smoke OK — validate() returned {len(findings)} findings")
           PY
+          python examples/mhlw_allyl_chloride/test_fixture.py
 
       - name: Upload wheel artifact
         uses: actions/upload-artifact@v4
