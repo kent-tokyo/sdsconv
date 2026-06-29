@@ -389,19 +389,19 @@ async fn run_cli() -> anyhow::Result<()> {
         }
 
         Commands::Validate { input, json, strict_mhlw } => {
-            let warnings = tasks::run_validate(input, Arc::clone(&log)).await?;
+            let findings = tasks::run_validate(input, Arc::clone(&log)).await?;
             if json {
-                println!("{}", serde_json::to_string_pretty(&warnings)?);
+                println!("{}", serde_json::to_string_pretty(&findings)?);
             }
             if strict_mhlw {
-                let has_high_or_crit = warnings
+                let has_high_or_crit = findings
                     .iter()
-                    .any(|w| w.contains("[HIGH]") || w.contains("[CRIT]"));
+                    .any(|f| f.level == "HIGH" || f.level == "CRIT");
                 if has_high_or_crit {
                     eprintln!("strict-mhlw: HIGH/CRIT findings present — see warnings above.");
                     std::process::exit(1);
                 }
-            } else if !warnings.is_empty() && !json {
+            } else if !findings.is_empty() && !json {
                 std::process::exit(1);
             }
         }

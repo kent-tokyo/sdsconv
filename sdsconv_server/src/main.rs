@@ -35,7 +35,7 @@ use tower_http::trace::TraceLayer;
 
 use sdsconv_core::{
     convert_bytes_to_json, convert_from_json, converter::html::generate_html,
-    enrich_composition, openai_compat_url, prune_empty_fields, validate,
+    enrich_composition, openai_compat_url, prune_empty_fields, validate_typed, Finding,
     AnthropicBackend, ConvertConfig, Language, LlmBackend, LlmConfig,
     OpenAiCompatBackend, SdsError, SdsRoot,
 };
@@ -378,11 +378,11 @@ async fn to_html(
 // ---------------------------------------------------------------------------
 // Route: POST /api/validate
 // Accepts: application/json (SdsRoot)
-// Returns: application/json (array of warning strings)
+// Returns: application/json (array of Finding objects)
 // ---------------------------------------------------------------------------
 
-async fn validate_handler(Json(sds): Json<SdsRoot>) -> Json<Vec<String>> {
-    Json(validate(&sds))
+async fn validate_handler(Json(sds): Json<SdsRoot>) -> Json<Vec<Finding>> {
+    Json(validate_typed(&sds))
 }
 
 // ---------------------------------------------------------------------------

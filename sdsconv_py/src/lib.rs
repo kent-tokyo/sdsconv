@@ -3,12 +3,11 @@ use std::sync::OnceLock;
 
 use pyo3::exceptions::{PyRuntimeError, PyValueError};
 use pyo3::prelude::*;
-use serde_json::Value;
 
 use sdsconv_core::{
     build_any_backend, convert_bytes_to_json_with_report, convert_to_json_with_report,
-    convert_url_to_json, enrich_composition, extract_text_limited, prune_empty_fields, validate,
-    ConvertConfig, Language, LlmConfig, SourceCountry, SdsRoot,
+    convert_url_to_json, enrich_composition, extract_text_limited, prune_empty_fields,
+    validate_typed, ConvertConfig, Language, LlmConfig, SourceCountry, SdsRoot,
 };
 use sdsconv_core::converter::CorrectionConfig;
 
@@ -66,39 +65,6 @@ fn make_config(
     }
 }
 
-/// Parse warnings from `validate()` into structured JSON objects.
-/// Formats recognised:
-///   [HIGH][S2-GHS-INCOMPLETE] Section 2: ...
-///   [SourceVerify] Section 1 (...): ...
-///   Section 1 (Identification): ...  (structural)
-fn parse_warnings(warnings: Vec<String>) -> Value {
-    use serde_json::json;
-    let items: Vec<Value> = warnings
-        .into_iter()
-        .map(|w| {
-            // [LEVEL][RULE] message
-            if let Some(rest) = w.strip_prefix('[') {
-                if let Some(level_end) = rest.find(']') {
-                    let level = &rest[..level_end];
-                    let after_level = &rest[level_end + 1..];
-                    if let Some(rule_part) = after_level.strip_prefix('[') {
-                        if let Some(rule_end) = rule_part.find(']') {
-                            let rule = &rule_part[..rule_end];
-                            let message = rule_part[rule_end + 2..].trim().to_string();
-                            return json!({"level": level, "rule": rule, "message": message});
-                        }
-                    }
-                    // [SourceVerify] ...
-                    let message = after_level.trim_start_matches(']').trim().to_string();
-                    return json!({"level": "WARN", "rule": level, "message": message});
-                }
-            }
-            // plain structural warning
-            json!({"level": "WARN", "rule": "STRUCTURAL", "message": w})
-        })
-        .collect();
-    Value::Array(items)
-}
 
 // ---------------------------------------------------------------------------
 // Exposed Python functions
@@ -273,8 +239,7 @@ fn to_json_url_with_report(
 fn validate_json(json_text: &str) -> PyResult<String> {
     let sds: SdsRoot = serde_json::from_str(json_text)
         .map_err(|e| PyValueError::new_err(format!("invalid JSON: {e}")))?;
-    let warnings = validate(&sds);
-    let findings = parse_warnings(warnings);
+    let findings = validate_typed(&sds);
     serde_json::to_string_pretty(&findings).map_err(|e| PyRuntimeError::new_err(e.to_string()))
 }
 

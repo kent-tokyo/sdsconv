@@ -13,7 +13,7 @@ use sdsconv_core::{
     convert_from_json, convert_from_template, convert_pdf_to_json_vision,
     convert_to_json_with_report, convert_url_to_json,
     detect_language, detect_language_from_file, detect_language_from_url,
-    enrich_composition, prune_empty_fields, validate,
+    enrich_composition, prune_empty_fields, validate_typed, Finding,
     extract_text, extract_text_from_url,
     ConversionReport, ConvertConfig, Language, SourceCountry, SdsError, SdsRoot,
 };
@@ -483,25 +483,25 @@ pub async fn run_to_html(params: ToHtmlParams, log: LogFn) -> anyhow::Result<()>
     Ok(())
 }
 
-pub async fn run_validate(input: PathBuf, log: LogFn) -> anyhow::Result<Vec<String>> {
-    let warnings = tokio::task::spawn_blocking(move || -> anyhow::Result<Vec<String>> {
+pub async fn run_validate(input: PathBuf, log: LogFn) -> anyhow::Result<Vec<Finding>> {
+    let findings = tokio::task::spawn_blocking(move || -> anyhow::Result<Vec<Finding>> {
         check_json_file_size(&input)?;
         let raw = std::fs::read_to_string(&input)
             .with_context(|| format!("reading {}", input.display()))?;
         let sds: SdsRoot = serde_json::from_str(&raw)?;
-        Ok(validate(&sds))
+        Ok(validate_typed(&sds))
     })
     .await
     .unwrap_or_else(|e| Err(anyhow::anyhow!("task panicked: {e}")))?;
 
-    if warnings.is_empty() {
+    if findings.is_empty() {
         log("OK: no issues found".to_string());
     } else {
-        for w in &warnings {
-            log(format!("WARN: {w}"));
+        for f in &findings {
+            log(format!("WARN: {f}"));
         }
     }
-    Ok(warnings)
+    Ok(findings)
 }
 
 pub async fn run_to_pdf(params: ToPdfParams, log: LogFn) -> anyhow::Result<()> {

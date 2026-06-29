@@ -2,6 +2,67 @@ use crate::country::SourceCountry;
 use crate::ghs_codes;
 use crate::schema::{HazardIdentificationClassification, SdsRoot};
 
+// ---------------------------------------------------------------------------
+// Typed finding
+// ---------------------------------------------------------------------------
+
+/// A structured validation finding.
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct Finding {
+    pub level:   String,   // "CRIT" | "HIGH" | "MED" | "LOW" | "WARN"
+    pub rule:    String,   // e.g. "S2-GHS-INCOMPLETE", "STRUCTURAL", "SourceVerify"
+    pub message: String,
+}
+
+impl std::fmt::Display for Finding {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.rule.as_str() {
+            "STRUCTURAL" => write!(f, "{}", self.message),
+            rule if self.level == "WARN" && !rule.starts_with('S') => {
+                write!(f, "[{}] {}", rule, self.message)
+            }
+            _ => write!(f, "[{}][{}] {}", self.level, self.rule, self.message),
+        }
+    }
+}
+
+/// Parse a single warning string into a typed [`Finding`].
+fn parse_finding(w: &str) -> Finding {
+    // [LEVEL][RULE] message
+    if let Some(rest) = w.strip_prefix('[') {
+        if let Some(level_end) = rest.find(']') {
+            let level = &rest[..level_end];
+            let after = &rest[level_end + 1..];
+            if let Some(rule_part) = after.strip_prefix('[') {
+                if let Some(rule_end) = rule_part.find(']') {
+                    return Finding {
+                        level:   level.to_string(),
+                        rule:    rule_part[..rule_end].to_string(),
+                        message: rule_part[rule_end + 2..].trim().to_string(),
+                    };
+                }
+            }
+            // [SourceVerify] / [China] / [Korea] / [Taiwan]
+            return Finding {
+                level:   "WARN".to_string(),
+                rule:    level.to_string(),
+                message: after.trim_start_matches(']').trim().to_string(),
+            };
+        }
+    }
+    // plain structural warning
+    Finding {
+        level:   "WARN".to_string(),
+        rule:    "STRUCTURAL".to_string(),
+        message: w.to_string(),
+    }
+}
+
+/// Typed variant of [`validate`]. Returns structured [`Finding`]s instead of raw strings.
+pub fn validate_typed(sds: &SdsRoot) -> Vec<Finding> {
+    validate(sds).iter().map(|s| parse_finding(s)).collect()
+}
+
 // ── Phase 1 helpers ──────────────────────────────────────────────────────────
 
 /// Returns true if `s` looks like a date (contains a 4-digit year or a Japanese era year).

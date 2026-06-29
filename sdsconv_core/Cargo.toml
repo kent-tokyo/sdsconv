@@ -1,6 +1,6 @@
 [package]
 name = "sdsconv-core"
-version = "0.3.8"
+version = "0.3.9"
 edition = "2021"
 description = "Convert chemical safety SDS documents (PDF/DOCX) ↔ MHLW/JIS Z 7253 standard JSON via LLM. Supports Claude, GPT, Gemini. Multilingual (ja/en/zh)."
 license = "MIT OR Apache-2.0"

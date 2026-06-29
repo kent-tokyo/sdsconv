@@ -63,7 +63,7 @@ pub use converter::extractor::{
     detect_format_str, detect_language_from_file, detect_language_from_url,
     extract_text, extract_text_from_url, extract_text_limited,
 };
-pub use converter::validator::validate;
+pub use converter::validator::{validate, validate_typed, Finding};
 pub use enrichment::{CasInfo, CasWarning, enrich_composition, lookup_cas};
 pub use error::SdsError;
 pub use ghs_codes::{h_code_description, is_valid_h_code, is_valid_p_code, p_code_description};
